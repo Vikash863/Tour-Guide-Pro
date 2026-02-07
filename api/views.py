@@ -1,18 +1,18 @@
-"""
-Production-Level Views with Full CRUD Operations
-Supports both Django ORM and MongoDB
-"""
-from rest_framework import viewsets, status
-from rest_framework.decorators import action
-from rest_framework.response import Response
-from rest_framework.permissions import IsAuthenticated, AllowAny
-from rest_framework.filters import SearchFilter, OrderingFilter
-from rest_framework.authtoken.models import Token
+from datetime import datetime
+
 from django.contrib.auth import authenticate
 from django.contrib.auth.models import User
-from django.shortcuts import get_object_or_404, render
 from django.db.models import Q
-from datetime import datetime
+from django.shortcuts import render, redirect, get_object_or_404
+
+from rest_framework import viewsets, status
+from rest_framework.decorators import action
+from rest_framework.permissions import IsAuthenticated, AllowAny
+from rest_framework.response import Response
+from rest_framework.filters import SearchFilter, OrderingFilter
+from rest_framework.authtoken.models import Token
+
+from .models import HotelBooking
 
 from .db import (
     db, tours_collection, users_collection, bookings_collection, 
@@ -177,6 +177,7 @@ class DestinationViewSet(viewsets.ModelViewSet):
         serializer = self.get_serializer(instance, data=request.data, partial=True)
         serializer.is_valid(raise_exception=True)
         instance = serializer.save()
+        
         
         # Update in MongoDB
         tours_collection.update_one(
@@ -602,7 +603,7 @@ class BookingViewSet(viewsets.ModelViewSet):
         return Response(serializer.data)
 
 
-# ==================== CONTACT VIEWSETS ====================
+# # ==================== CONTACT VIEWSETS ====================
 class ContactViewSet(viewsets.ModelViewSet):
     """CRUD operations for Contact Messages"""
     queryset = Contact.objects.all()
@@ -652,10 +653,32 @@ class ContactViewSet(viewsets.ModelViewSet):
 
     @action(detail=False, methods=['get'])
     def unread(self, request):
-        """Get unread messages"""
         messages = Contact.objects.filter(status='new').order_by('-created_at')
         serializer = self.get_serializer(messages, many=True)
         return Response(serializer.data)
+
+# ==================== BOOK HOTEL PAGE ====================
+def book_hotel(request):
+    hotel_name = request.GET.get('name')
+
+    if request.method == "POST":
+        HotelBooking.objects.create(
+            hotel_name=request.POST.get("hotel_name"),
+            name=request.POST.get("name"),
+            checkin=request.POST.get("checkin"),
+            checkout=request.POST.get("checkout"),
+            guests=request.POST.get("guests"),
+            rooms=request.POST.get("rooms"),
+        )
+        return redirect("booking_success")
+
+    return render(request, "book_hotel.html", {"hotel_name": hotel_name})
+
+
+# ==================== BOOKING SUCCESS PAGE ====================
+def booking_success(request):
+    return render(request, "booking_success.html")
+
 
 
 # ==================== HOME PAGE ====================

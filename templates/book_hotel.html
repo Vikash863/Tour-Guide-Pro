@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Hotel Booking</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f4f6f9;
+            display: flex;
+            justify-content: center;
+            padding: 40px;
+        }
+        .card {
+            background: white;
+            width: 420px;
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,.2);
+        }
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        label {
+            display: block;
+            margin-top: 12px;
+            font-weight: bold;
+        }
+        input, select, button {
+            width: 100%;
+            padding: 10px;
+            margin-top: 6px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+        button {
+            background: #0d6efd;
+            color: white;
+            font-size: 16px;
+            margin-top: 18px;
+            cursor: pointer;
+        }
+        button:hover {
+            background: #084298;
+        }
+        .price {
+            margin-top: 15px;
+            font-size: 18px;
+            text-align: center;
+            font-weight: bold;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="card">
+    <h1>Booking for {{ hotel_name }}</h1>
+
+    <form method="POST">
+        {% csrf_token %}
+        <input type="hidden" name="hotel_name" value="{{ hotel_name }}">
+
+        <label>Your Name</label>
+        <input type="text" name="name" placeholder="Enter your name" required>
+
+        <label>Check In</label>
+        <input type="date" name="checkin" id="checkin" required>
+
+        <label>Check Out</label>
+        <input type="date" name="checkout" id="checkout" required>
+
+        <label>Guests</label>
+        <input type="number" name="guests" id="guests" value="1" min="1" required>
+
+        <label>Rooms</label>
+        <select name="rooms" id="rooms">
+            <option value="1">1 Room</option>
+            <option value="2">2 Rooms</option>
+            <option value="3">3 Rooms</option>
+        </select>
+
+        <div class="price" id="totalPrice">
+            Total: ₹0
+        </div>
+
+        <button type="submit">Confirm Booking</button>
+    </form>
+</div>
+
+<script>
+    const checkin = document.getElementById("checkin");
+    const checkout = document.getElementById("checkout");
+    const rooms = document.getElementById("rooms");
+    const priceBox = document.getElementById("totalPrice");
+
+    const pricePerNight = 2000;
+
+    function calculate() {
+        if (checkin.value && checkout.value) {
+            const d1 = new Date(checkin.value);
+            const d2 = new Date(checkout.value);
+            const days = (d2 - d1) / (1000 * 60 * 60 * 24);
+            if (days > 0) {
+                let total = days * pricePerNight * rooms.value;
+                priceBox.innerText = "Total: ₹" + total;
+            }
+        }
+    }
+
+    checkin.addEventListener("change", calculate);
+    checkout.addEventListener("change", calculate);
+    rooms.addEventListener("change", calculate);
+</script>
+
+</body>
+</html>

@@ -2,6 +2,7 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.core.validators import MinValueValidator, MaxValueValidator
 
+
 class Destination(models.Model):
     name = models.CharField(max_length=100, unique=True)
     description = models.TextField()
@@ -12,10 +13,7 @@ class Destination(models.Model):
     best_time_to_visit = models.CharField(max_length=100)
     attractions = models.JSONField(default=list)
     average_cost = models.IntegerField()
-    rating = models.FloatField(
-        default=0,
-        validators=[MinValueValidator(0), MaxValueValidator(5)]
-    )
+    rating = models.FloatField(default=0, validators=[MinValueValidator(0), MaxValueValidator(5)])
     created_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:
@@ -32,10 +30,7 @@ class Hotel(models.Model):
     description = models.TextField()
     image = models.ImageField(upload_to='hotels/', blank=True, null=True)
     price_per_night = models.IntegerField()
-    rating = models.FloatField(
-        default=0,
-        validators=[MinValueValidator(0), MaxValueValidator(5)]
-    )
+    rating = models.FloatField(default=0, validators=[MinValueValidator(0), MaxValueValidator(5)])
     amenities = models.JSONField(default=list)
     available_rooms = models.IntegerField()
     total_rooms = models.IntegerField()
@@ -64,10 +59,7 @@ class Cab(models.Model):
     price_per_hour = models.IntegerField()
     capacity = models.IntegerField()
     image = models.ImageField(upload_to='cabs/', blank=True, null=True)
-    rating = models.FloatField(
-        default=0,
-        validators=[MinValueValidator(0), MaxValueValidator(5)]
-    )
+    rating = models.FloatField(default=0, validators=[MinValueValidator(0), MaxValueValidator(5)])
     available_cars = models.IntegerField()
     description = models.TextField(blank=True)
     phone = models.CharField(max_length=20, blank=True)
@@ -114,6 +106,20 @@ class Booking(models.Model):
 
     def __str__(self):
         return f"{self.user.username} - {self.booking_type}"
+
+
+# ✅ SEPARATE MODEL (NOT INSIDE Booking)
+class HotelBooking(models.Model):
+    hotel_name = models.CharField(max_length=200)
+    name = models.CharField(max_length=100)
+    checkin = models.DateField()
+    checkout = models.DateField()
+    guests = models.IntegerField()
+    rooms = models.IntegerField()
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.hotel_name
 
 
 class Contact(models.Model):

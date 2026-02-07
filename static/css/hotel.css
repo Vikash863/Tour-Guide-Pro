@@ -42,21 +42,44 @@ form {
 
 input {
   flex: 1;
-  padding: 0.5rem;
+  padding: 0.6rem;
   border-radius: 4px;
   border: 1px solid #ccc;
 }
 
-button {
-  padding: 0.5rem 1rem;
+/* SEARCH BUTTON */
+form button {
+  padding: 0.6rem 1rem;
   background: #2e8b57;
   color: white;
   border: none;
-  border-radius: 4px;
+  border-radius: 5px;
   cursor: pointer;
 }
 
-.hotel-cards {
+form button:hover {
+  background: #256b45;
+}
+
+/* BOOK BUTTON */
+.book-btn {
+  display: inline-block;
+  margin-top: 10px;
+  padding: 8px 14px;
+  background: #28a745;
+  color: white;
+  border: none;
+  cursor: pointer;
+  border-radius: 5px;
+  font-size: 14px;
+}
+
+.book-btn:hover {
+  background: #218838;
+}
+
+.hotel-cards,
+#hotelResults {
   display: grid;
   gap: 1rem;
   grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
@@ -84,9 +107,13 @@ button {
   background: #0066cc;
   color: white;
   border: none;
-  padding: 0.4rem 0.8rem;
+  padding: 0.45rem 0.9rem;
   border-radius: 4px;
   cursor: pointer;
+}
+
+.card button:hover {
+  background: #004c99;
 }
 
 .spinner {
@@ -99,7 +126,9 @@ button {
   margin: 2rem auto;
 }
 
-@keyframes spin { to { transform: rotate(360deg); } }
+@keyframes spin { 
+  to { transform: rotate(360deg); } 
+}
 
 .error {
   color: #c0392b;
@@ -107,7 +136,7 @@ button {
 }
 
 footer {
-  background: #2e8b57;          /* same green as navbar */
+  background: #2e8b57;
   color: white;
   padding: 2rem 1rem;
   text-align: center;
@@ -132,7 +161,6 @@ footer p {
 }
 
 .social-links a:hover {
-  color: #ffd700;               /* gold highlight on hover */
+  color: #ffd700;
   text-decoration: underline;
 }
-

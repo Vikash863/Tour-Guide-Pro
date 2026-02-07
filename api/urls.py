@@ -1,6 +1,8 @@
 from django.urls import path, include
 from rest_framework.routers import DefaultRouter
-from .views import home
+from .views import home, book_hotel
+from .views import home, book_hotel, booking_success
+
 
 from .views import (
     UserViewSet, DestinationViewSet, HotelViewSet,
@@ -14,12 +16,12 @@ router.register(r'hotels', HotelViewSet)
 router.register(r'cabs', CabViewSet)
 router.register(r'bookings', BookingViewSet, basename='booking')
 router.register(r'contacts', ContactViewSet)
-
 urlpatterns = [
-    # Homepage (MongoDB)
     path('', home, name='home'),
 
-    # All APIs (router automatically prefixed with /api/ from main urls.py)
+    path('book-hotel/', book_hotel, name='book_hotel'),
+    path('booking-success/', booking_success, name='booking_success'),
+
     path('', include(router.urls)),
 ]
 
