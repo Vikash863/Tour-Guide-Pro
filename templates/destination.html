@@ -1,0 +1,43 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Destination Info | TourGuidePro</title>
+  <link rel="stylesheet" href="{% static 'css/destination.css' %}" />
+</head>
+<body>
+  <header>
+    <nav class="navbar">
+      <div class="logo">TourGuidePro</div>
+      <ul class="nav-links">
+        <li><a href="/">Home</a></li>
+        <li><a href="/cab/">Cab Booking</a></li>
+        <li><a href="/hotel/">Hotels</a></li>
+        <li><a href="/itinerary/">Itinerary</a></li>
+        <li><a href="/contact/">Contact</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main class="destination-section">
+    <section class="destination-search">
+      <h2>Search Destination</h2>
+      <input type="text" id="destinationInput" placeholder="Enter a city..." />
+      <button onclick="searchDestination()">Search</button>
+      <div id="destinationResult"></div>
+    </section>
+
+    <section id="weather" class="info-box hidden"></section>
+    <section id="attractions" class="info-box hidden"></section>
+    <section id="restaurants" class="info-box hidden"></section>
+  </main>
+
+  <footer>
+    <p>&copy; 2025 TourGuidePro</p>
+  </footer>
+
+  <script src="{% static 'js/destination.js' %}" defer></script>
+</body>
+</html>

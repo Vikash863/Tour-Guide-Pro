@@ -1,0 +1,62 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Cabs | TourGuidePro</title>
+  <link rel="stylesheet" href="{% static 'css/cab.css' %}" />
+</head>
+<body>
+  <header>
+    <nav class="navbar">
+      <div class="logo">TourGuidePro</div>
+      <ul class="nav-links">
+        <li><a href="/">Home</a></li>
+        <li><a href="/hotel/">Hotels</a></li>
+        <li><a href="/destination/">Destinations</a></li>
+        <li><a href="/itinerary/">Itinerary</a></li>
+        <li><a href="/contact/">Contact</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main class="booking-section">
+    <h1>Book Your Cab</h1>
+    <form id="cabForm">
+      <label for="cabType">Cab Type:</label>
+      <select id="cabType" required>
+        <option value="">Select</option>
+        <option value="hourly">Hourly</option>
+        <option value="daily">Daily</option>
+        <option value="km">Per Kilometer</option>
+      </select>
+
+      <label for="pickup">Pickup Location:</label>
+      <input type="text" id="pickup" placeholder="Enter pickup location" required />
+
+      <label for="drop">Drop Location:</label>
+      <input type="text" id="drop" placeholder="Enter drop location" required />
+
+      <label for="date">Date:</label>
+      <input type="date" id="date" required />
+
+      <label for="time">Time:</label>
+      <input type="time" id="time" required />
+
+      <button type="submit">Book Now</button>
+    </form>
+
+    <div id="confirmation" class="hidden">
+      <h2>✅ Booking Confirmed!</h2>
+      <p>Your cab has been scheduled. Check your itinerary for details.</p>
+    </div>
+  </main>
+
+  <footer>
+    <p>&copy; 2025 TourGuidePro</p>
+  </footer>
+
+  <script src="{% static 'js/cab.js' %}" defer></script>
+</body>
+</html>

@@ -1,0 +1,110 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Sign Up - TourGuidePro</title>
+  <link rel="stylesheet" href="{% static 'css/Home.css' %}" />
+  <link rel="stylesheet" href="{% static 'css/signup.css' %}"
+</head>
+<body>
+  <!-- Header -->
+  <header>
+    <nav class="navbar">
+      <div class="logo">TourGuidePro</div>
+      <ul class="nav-links">
+        <li><a href="/">Home</a></li>
+        <li><a href="/cab/">Cab Booking</a></li>
+        <li><a href="/hotel/">Hotels</a></li>
+        <li><a href="/destination/">Destinations</a></li>
+        <li><a href="/itinerary/">Itinerary</a></li>
+        <li><a href="/contact/">Contact</a></li>
+      </ul>
+      <button class="login-btn" onclick="location.href='/login/'">Login</button>
+    </nav>
+  </header>
+
+  <!-- Signup Form -->
+  <section class="auth-form">
+    <h2>Create Your Account</h2>
+    <form id="signupForm">
+      <input type="text" id="name" placeholder="Full Name" required />
+      <input type="email" id="email" placeholder="Email" required />
+      <input type="tel" id="phone" placeholder="Phone Number" />
+      <input type="password" id="password" placeholder="Password" required />
+      <input type="password" id="confirmPassword" placeholder="Confirm Password" required />
+      <button type="submit">Sign Up</button>
+      <div id="errorMessage" style="color: red; margin-top: 10px; display: none;"></div>
+    </form>
+    <p>Already have an account? <a href="/login/">Login here</a></p>
+  </section>
+
+  <!-- Footer -->
+  <footer>
+    <p>&copy; 2025 TourGuidePro. All rights reserved.</p>
+    <div class="social-links">
+      <a href="#">Instagram</a>
+      <a href="#">Twitter</a>
+      <a href="#">Facebook</a>
+    </div>
+  </footer>
+
+  <script>
+    document.getElementById('signupForm').addEventListener('submit', async function(e) {
+      e.preventDefault();
+      const name = document.getElementById('name').value.trim();
+      const email = document.getElementById('email').value.trim();
+      const password = document.getElementById('password').value;
+      const confirmPassword = document.getElementById('confirmPassword').value;
+      const errorDiv = document.getElementById('errorMessage');
+      
+      if (!name || !email || !password || !confirmPassword) {
+        errorDiv.textContent = 'Please fill in all required fields';
+        errorDiv.style.display = 'block';
+        return;
+      }
+      
+      if (password !== confirmPassword) {
+        errorDiv.textContent = 'Passwords do not match';
+        errorDiv.style.display = 'block';
+        return;
+      }
+      
+      if (password.length < 6) {
+        errorDiv.textContent = 'Password must be at least 6 characters';
+        errorDiv.style.display = 'block';
+        return;
+      }
+      
+      try {
+        const [firstName, lastName] = name.includes(' ') ? name.split(' ', 2) : [name, ''];
+        const result = await fetch('/api/users/register/', {
+          method: 'POST',
+          headers: {'Content-Type': 'application/json'},
+          body: JSON.stringify({
+            username: email.split('@')[0],
+            email: email,
+            password: password,
+            password_confirm: confirmPassword,
+            first_name: firstName,
+            last_name: lastName
+          })
+        }).then(r => r.json());
+        
+        if (result.user) {
+          alert('Account created! Please login.');
+          window.location.href = '/login/';
+        } else {
+          const errors = Object.values(result).flat();
+          errorDiv.textContent = errors.join(' ');
+          errorDiv.style.display = 'block';
+        }
+      } catch (error) {
+        errorDiv.textContent = 'Error: ' + error.message;
+        errorDiv.style.display = 'block';
+      }
+    });
+  </script>
+</body>
+</html>

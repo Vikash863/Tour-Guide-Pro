@@ -1,0 +1,60 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Contact & Help | TourGuidePro</title>
+  <link rel="stylesheet" href="{% static 'css/contact.css' %}" />
+</head>
+<body>
+  <header>
+    <nav class="navbar">
+      <div class="logo">TourGuidePro</div>
+      <ul class="nav-links">
+        <li><a href="/">Home</a></li>
+        <li><a href="/cab/">Cab Booking</a></li>
+        <li><a href="/hotel/">Hotels</a></li>
+        <li><a href="/destination/">Destinations</a></li>
+        <li><a href="/itinerary/">Itinerary</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main class="contact-section">
+    <h1>Need Help? Contact Us</h1>
+
+    <form id="contactForm">
+      <input type="text" id="name" placeholder="Your Name" required />
+      <input type="email" id="email" placeholder="Your Email" required />
+      <input type="tel" id="phone" placeholder="Your Phone (optional)" />
+      <input type="text" id="subject" placeholder="Subject" required />
+      <textarea id="message" placeholder="Your Message" rows="5" required></textarea>
+      <button type="submit">Send Message</button>
+      <div id="responseMessage" style="color: green; margin-top: 10px; display: none;"></div>
+      <div id="errorMessage" style="color: red; margin-top: 10px; display: none;"></div>
+    </form>
+
+    <section class="faq">
+      <h2>Frequently Asked Questions</h2>
+      <div class="faq-item">
+        <h3>How do I cancel a booking?</h3>
+        <p>You can cancel via your itinerary page. Look for the “Cancel” button next to each item.</p>
+      </div>
+      <div class="faq-item">
+        <h3>Can I edit my itinerary?</h3>
+        <p>Yes! You can drag and drop activities or click “Edit” on any card.</p>
+      </div>
+      <div class="faq-item">
+        <h3>Is my data secure?</h3>
+        <p>Absolutely. We use encrypted connections and secure authentication for all user data.</p>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <p>&copy; 2025 TourGuidePro</p>
+  </footer>
+  <script src="{% static 'js/api.js' %}"></script>  <script src="{% static 'js/contact.js' %}" defer></script>
+</body>
+</html>

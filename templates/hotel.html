@@ -1,0 +1,46 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Hotels | TourGuidePro</title>
+  <link rel="stylesheet" href="{% static 'css/hotel.css' %}" />
+</head>
+<body>
+  <header>
+    <nav class="navbar">
+      <div class="logo">TourGuidePro</div>
+      <ul class="nav-links">
+        <li><a href="/">Home</a></li>
+        <li><a href="/cab/">Cab Booking</a></li>
+        <li><a href="/destination/">Destinations</a></li>
+        <li><a href="/itinerary/">Itinerary</a></li>
+        <li><a href="/contact/">Contact</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main class="hotel-section">
+    <h1>Find Hotels Near a Tourist Spot</h1>
+    <form id="hotelSearchForm">
+      <input type="text" id="location" placeholder="Enter a place (e.g. Manali)" required />
+      <button type="submit">Search Hotels</button>
+    </form>
+
+    <section id="hotelResults" class="hotel-cards"></section>
+    <section id="restaurantResults" class="hotel-cards"></section>
+  </main>
+
+   <footer>
+    <p>&copy; 2025 TourGuidePro. All rights reserved.</p>
+    <div class="social-links">
+      <a href="#">Instagram</a>
+      <a href="#">Twitter</a>
+      <a href="#">Facebook</a>
+    </div>
+  </footer>
+
+  <script src="{% static 'js/hotel.js' %}" defer></script>
+</body>
+</html>
