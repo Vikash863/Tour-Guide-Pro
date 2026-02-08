@@ -1,0 +1,188 @@
+# Marathi translations for TourGuidePro
+# Copyright (C) 2026 TourGuidePro
+# This file is distributed under the same license as the PACKAGE package.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: TourGuidePro 1.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-02-08 22:00+0530\n"
+"PO-Revision-Date: 2026-02-08 22:00+0530\n"
+"Last-Translator: TourGuidePro\n"
+"Language-Team: Marathi\n"
+"Language: mr\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+# Navigation
+msgid "Home"
+msgstr "होम"
+
+msgid "Cab Booking"
+msgstr "कॅब बुकिंग"
+
+msgid "Hotels"
+msgstr "हॉटेल्स"
+
+msgid "Destinations"
+msgstr "गंतव्य"
+
+msgid "Itinerary"
+msgstr "यात्रा कार्यक्रम"
+
+msgid "Contact"
+msgstr "संपर्क"
+
+msgid "Login / Sign Up"
+msgstr "लॉगिन / साइन अप"
+
+msgid "My Bookings"
+msgstr "माझी बुकिंग्स"
+
+msgid "Logout"
+msgstr "लॉग आउट"
+
+msgid "Quick Links"
+msgstr "त्वरित लिंक"
+
+msgid "Services"
+msgstr "सेवाएं"
+
+msgid "Testimonials"
+msgstr "ग्राहक प्रतिक्रिया"
+
+msgid "Hotel Booking"
+msgstr "हॉटेल बुकिंग"
+
+msgid "Cab Services"
+msgstr "कॅब सेवाएं"
+
+msgid "Travel Guides"
+msgstr "यात्रा मार्गदर्शक"
+
+msgid "Travel Insurance"
+msgstr "यात्रा विमा"
+
+msgid "Weather Updates"
+msgstr "हवामान अपडेट"
+
+msgid "Newsletter"
+msgstr "न्यूज़लेटर"
+
+msgid "Subscribe to get special offers and travel tips."
+msgstr "विशेष ऑफ़र आणि यात्रा टिप्स मिळवण्यासाठी सबस्क्राइब करा."
+
+msgid "Your email"
+msgstr "आपला ईमेल"
+
+msgid "Subscribe"
+msgstr "सबस्क्राइब करा"
+
+msgid "Privacy Policy"
+msgstr "गोपनीयता धोरण"
+
+msgid "Terms of Service"
+msgstr "सेवेची अटी"
+
+# Languages
+msgid "English"
+msgstr "इंग्रजी"
+
+msgid "Hindi"
+msgstr "हिंदी"
+
+msgid "Tamil"
+msgstr "तमिल"
+
+msgid "Punjabi"
+msgstr "पंजाबी"
+
+msgid "Bengali"
+msgstr "बंगाली"
+
+msgid "Marathi"
+msgstr "मराठी"
+
+msgid "Gujarati"
+msgstr "गुजराती"
+
+msgid "Telugu"
+msgstr "तेलुगु"
+
+msgid "Kannada"
+msgstr "कन्नड़"
+
+msgid "Malayalam"
+msgstr "मलयालम"
+
+msgid "Urdu"
+msgstr "उर्दू"
+
+# Home page
+msgid "Plan Your Perfect Trip"
+msgstr "आपली परिपूर्ण यात्रा नियोजित करा"
+
+msgid "Explore destinations, book cabs and hotels, and build your itinerary—all in one place."
+msgstr "गंतव्य शोधा, कॅब आणि हॉटेल बुक करा, आणि एकाच ठिकाणी आपला यात्रा कार्यक्रम तयार करा."
+
+msgid "Start Planning"
+msgstr "नियोजन सुरू करा"
+
+msgid "Explore Destinations"
+msgstr "गंतव्य शोधा"
+
+msgid "🚕 Cab Booking"
+msgstr "🚕 कॅब बुकिंग"
+
+msgid "🏨 Hotel Finder"
+msgstr "🏨 हॉटेल शोधक"
+
+msgid "🌍 Destination Info"
+msgstr "🌍 गंतव्य माहिती"
+
+msgid "🗓️ Smart Itinerary"
+msgstr "🗓️ स्मार्ट यात्रा कार्यक्रम"
+
+msgid "Popular Destinations"
+msgstr "लोकप्रिय गंतव्य"
+
+msgid "View More"
+msgstr "अधिक पाहा"
+
+msgid "How It Works"
+msgstr "हे कसे काम करते"
+
+msgid "Choose Destination"
+msgstr "गंतव्य निवडा"
+
+msgid "Pick your dream location from curated travel spots."
+msgstr "क्यूरेट केलेल्या यात्रा ठिकाणांमधून आपले स्वप्नातील गंतव्य निवडा."
+
+msgid "Book Cab & Hotel"
+msgstr "कॅब आणि हॉटेल बुक करा"
+
+msgid "Reserve transportation and stay with trusted partners."
+msgstr "विश्वसनीय भागीदारांसोबत वाहतूक आरक्षित करा आणि राहा."
+
+msgid "Weather & Food Info"
+msgstr "हवामान आणि अन्न माहिती"
+
+msgid "Check forecasts and discover local cuisine highlights."
+msgstr "अंदाज तपासा आणि स्थानीय पाककला शोधा."
+
+msgid "View Trip Plan"
+msgstr "यात्रा कार्यक्रम पाहा"
+
+msgid "Access your personalized travel plan anytime."
+msgstr "कधीही आपल्या वैयक्तिक यात्रा कार्यक्रमात प्रवेश करा."
+
+msgid "What Our Users Say"
+msgstr "आमचे वापरकर्ते काय म्हणतात"
+
+msgid "Your trusted partner for unforgettable travel experiences. We make travel planning simple and enjoyable."
+msgstr "अविस्मरणीय यात्रा अनुभवांसाठी आपला विश्वसनीय भागीदार. आम्ही यात्रा नियोजन सोपे आणि आनंदी बनवतो."
+
+msgid "FAQ"
+msgstr "वारंवार विचारले जाणारे प्रश्न"

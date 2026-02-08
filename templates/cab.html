@@ -4,13 +4,30 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Cabs | TourGuidePro</title>
+  <title>Book Your Ride | TourGuidePro</title>
+  
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@500;600;700&display=swap" rel="stylesheet">
+  
+  <!-- Tabler Icons -->
+  <link href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont/tabler-icons.min.css" rel="stylesheet">
+  
+  <!-- Custom Styles -->
   <link rel="stylesheet" href="{% static 'css/cab.css' %}" />
 </head>
 <body>
+  <!-- Animated Background -->
+  <div class="animated-bg"></div>
+
+  <!-- Navigation -->
   <header>
-    <nav class="navbar">
-      <div class="logo">TourGuidePro</div>
+    <nav class="navbar" id="navbar">
+      <div class="logo">
+        <i class="ti ti-car"></i>
+        TourGuidePro
+      </div>
       <ul class="nav-links">
         <li><a href="/">Home</a></li>
         <li><a href="/hotel/">Hotels</a></li>
@@ -21,40 +38,244 @@
     </nav>
   </header>
 
-  <main class="booking-section">
-    <h1>Book Your Cab</h1>
-    <form id="cabForm">
-      <label for="cabType">Cab Type:</label>
-      <select id="cabType" required>
-        <option value="">Select</option>
-        <option value="hourly">Hourly</option>
-        <option value="daily">Daily</option>
-        <option value="km">Per Kilometer</option>
-      </select>
+  <!-- Hero Section -->
+  <section class="hero-section">
+    <div class="hero-content">
+      <div class="hero-badge">
+        <i class="ti ti-route"></i>
+        Premium Rides
+      </div>
+      <h1 class="hero-title">Book Your Ride</h1>
+      <p class="hero-subtitle">Choose your perfect ride for your journey</p>
+    </div>
+  </section>
 
-      <label for="pickup">Pickup Location:</label>
-      <input type="text" id="pickup" placeholder="Enter pickup location" required />
+  <!-- Main Content -->
+  <main class="main-content">
+    <div class="content-wrapper">
+      <div class="content-grid">
+        
+        <!-- Left Column: Cab Selection & Form -->
+        <div class="booking-column">
+          
+          <!-- Cab Type Selection -->
+          <h2 class="section-heading">
+            <i class="ti ti-car"></i>
+            Choose Cab Type
+          </h2>
+          
+          <div class="cab-types-grid">
+            <div class="cab-type-card" data-type="hourly" data-rate="15">
+              <div class="cab-type-icon">
+                <i class="ti ti-car"></i>
+              </div>
+              <h3 class="cab-type-name">Hourly</h3>
+              <p class="cab-type-desc">Perfect for city tours</p>
+              <p class="cab-type-price">₹15/hour</p>
+            </div>
+            
+            <div class="cab-type-card" data-type="daily" data-rate="1200">
+              <div class="cab-type-icon">
+                <i class="ti ti-car-suv"></i>
+              </div>
+              <h3 class="cab-type-name">Daily</h3>
+              <p class="cab-type-desc">Best for long trips</p>
+              <p class="cab-type-price">₹1200/day</p>
+            </div>
+            
+            <div class="cab-type-card" data-type="km" data-rate="12">
+              <div class="cab-type-icon">
+                <i class="ti ti-route"></i>
+              </div>
+              <h3 class="cab-type-name">Per Kilometer</h3>
+              <p class="cab-type-desc">Pay only for distance</p>
+              <p class="cab-type-price">₹12/km</p>
+            </div>
+          </div>
 
-      <label for="drop">Drop Location:</label>
-      <input type="text" id="drop" placeholder="Enter drop location" required />
+          <!-- Booking Form -->
+          <h2 class="section-heading">
+            <i class="ti ti-calendar"></i>
+            Booking Details
+          </h2>
+          
+          <div class="booking-form-card">
+            <form id="cabForm">
+              
+              <!-- Pickup Location -->
+              <div class="form-group">
+                <label for="pickup">Pickup Location</label>
+                <div class="input-wrapper">
+                  <i class="ti ti-map-pin input-icon"></i>
+                  <input 
+                    type="text" 
+                    id="pickup" 
+                    class="form-input" 
+                    placeholder="Enter pickup location" 
+                    required 
+                  />
+                </div>
+              </div>
 
-      <label for="date">Date:</label>
-      <input type="date" id="date" required />
+              <!-- Drop Location -->
+              <div class="form-group">
+                <label for="drop">Drop Location</label>
+                <div class="input-wrapper">
+                  <i class="ti ti-location-pin input-icon"></i>
+                  <input 
+                    type="text" 
+                    id="drop" 
+                    class="form-input" 
+                    placeholder="Enter drop location" 
+                    required 
+                  />
+                </div>
+              </div>
 
-      <label for="time">Time:</label>
-      <input type="time" id="time" required />
+              <!-- Date & Time Row -->
+              <div class="form-row">
+                <div class="form-group">
+                  <label for="date">Date</label>
+                  <div class="input-wrapper">
+                    <i class="ti ti-calendar input-icon"></i>
+                    <input 
+                      type="date" 
+                      id="date" 
+                      class="form-input" 
+                      required 
+                    />
+                  </div>
+                </div>
 
-      <button type="submit">Book Now</button>
-    </form>
+                <div class="form-group">
+                  <label for="time">Time</label>
+                  <div class="input-wrapper">
+                    <i class="ti ti-clock input-icon"></i>
+                    <input 
+                      type="time" 
+                      id="time" 
+                      class="form-input" 
+                      required 
+                    />
+                  </div>
+                </div>
+              </div>
 
-    <div id="confirmation" class="hidden">
-      <h2>✅ Booking Confirmed!</h2>
-      <p>Your cab has been scheduled. Check your itinerary for details.</p>
+              <!-- Passengers & Duration Row -->
+              <div class="form-row">
+                <div class="form-group">
+                  <label for="passengers">Number of Passengers</label>
+                  <div class="input-wrapper">
+                    <i class="ti ti-user input-icon"></i>
+                    <select id="passengers" class="form-input" required>
+                      <option value="">Select</option>
+                      <option value="1">1 Passenger</option>
+                      <option value="2">2 Passengers</option>
+                      <option value="3">3 Passengers</option>
+                      <option value="4">4 Passengers</option>
+                      <option value="5">5+ Passengers</option>
+                    </select>
+                  </div>
+                </div>
+
+                <div class="form-group" id="durationGroup">
+                  <label for="duration" id="durationLabel">Duration/Distance</label>
+                  <div class="input-wrapper">
+                    <i class="ti ti-route input-icon"></i>
+                    <input 
+                      type="number" 
+                      id="duration" 
+                      class="form-input" 
+                      placeholder="Enter value" 
+                      min="1"
+                      required 
+                    />
+                  </div>
+                </div>
+              </div>
+
+              <!-- Submit Button -->
+              <button type="submit" class="submit-btn" id="submitBtn">
+                <i class="ti ti-circle-check-filled"></i>
+                Book Now
+              </button>
+            </form>
+          </div>
+        </div>
+
+        <!-- Right Column: Pricing Card -->
+        <div class="pricing-column">
+          <div class="pricing-card">
+            <div class="pricing-header">
+              <div class="pricing-icon">
+                <i class="ti ti-currency-rupee"></i>
+              </div>
+              <h3 class="pricing-title">Estimated Fare</h3>
+            </div>
+            
+            <div class="pricing-row">
+              <span class="pricing-label">Cab Type</span>
+              <span class="pricing-value" id="selectedTypeDisplay">Not selected</span>
+            </div>
+            
+            <div class="pricing-row">
+              <span class="pricing-label">Base Fare</span>
+              <span class="pricing-value" id="baseFareDisplay">₹0</span>
+            </div>
+            
+            <div class="pricing-row">
+              <span class="pricing-label" id="chargeLabel">Duration/Distance</span>
+              <span class="pricing-value" id="chargeValueDisplay">-</span>
+            </div>
+            
+            <div class="pricing-row pricing-total">
+              <span class="pricing-label">Total Estimate</span>
+              <span class="pricing-value" id="totalFareDisplay">₹0</span>
+            </div>
+            
+            <div class="pricing-note">
+              * Final fare may vary based on actual distance and time
+            </div>
+          </div>
+        </div>
+        
+      </div>
     </div>
   </main>
 
+  <!-- Success Modal -->
+  <div class="modal-overlay" id="successModal">
+    <div class="modal-content">
+      <div class="modal-icon">
+        <i class="ti ti-circle-check-filled"></i>
+      </div>
+      <h2 class="modal-title">Booking Confirmed!</h2>
+      <p class="modal-message">Your cab has been successfully scheduled</p>
+      
+      <div class="modal-details" id="bookingDetails">
+        <!-- Details will be inserted by JavaScript -->
+      </div>
+      
+      <div class="modal-actions">
+        <button class="modal-btn modal-btn-secondary" onclick="closeModal()">
+          Book Another Ride
+        </button>
+        <button class="modal-btn modal-btn-primary" onclick="window.location.href='/itinerary/'">
+          View Itinerary
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
   <footer>
-    <p>&copy; 2025 TourGuidePro</p>
+    <div class="footer-content">
+      <div class="footer-logo">
+        <i class="ti ti-car"></i>
+        TourGuidePro
+      </div>
+      <p class="footer-text">&copy; 2025 TourGuidePro. All rights reserved. Travel with confidence.</p>
+    </div>
   </footer>
 
   <script src="{% static 'js/cab.js' %}" defer></script>

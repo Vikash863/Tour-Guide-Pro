@@ -4,13 +4,30 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Destination Info | TourGuidePro</title>
+  <title>Discover Destinations | TourGuidePro</title>
+  
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@500;600;700&display=swap" rel="stylesheet">
+  
+  <!-- Lucide Icons -->
+  <link href="https://cdn.jsdelivr.net/npm/lucide-static/font/lucide.css" rel="stylesheet">
+  
+  <!-- Custom Styles -->
   <link rel="stylesheet" href="{% static 'css/destination.css' %}" />
 </head>
 <body>
+  <!-- Animated Background -->
+  <div class="animated-bg"></div>
+
+  <!-- Navigation -->
   <header>
-    <nav class="navbar">
-      <div class="logo">TourGuidePro</div>
+    <nav class="navbar" id="navbar">
+      <div class="logo">
+        <i class="icon-compass"></i>
+        TourGuidePro
+      </div>
       <ul class="nav-links">
         <li><a href="/">Home</a></li>
         <li><a href="/cab/">Cab Booking</a></li>
@@ -21,21 +38,149 @@
     </nav>
   </header>
 
-  <main class="destination-section">
-    <section class="destination-search">
-      <h2>Search Destination</h2>
-      <input type="text" id="destinationInput" placeholder="Enter a city..." />
-      <button onclick="searchDestination()">Search</button>
-      <div id="destinationResult"></div>
-    </section>
+  <!-- Hero Section with Search -->
+  <section class="hero-section">
+    <div class="hero-content">
+      <div class="hero-badge">
+        <i class="icon-map-pin"></i>
+        Explore the World
+      </div>
+      <h1 class="heading-xl hero-title">Discover Amazing Places</h1>
+      <p class="hero-subtitle">Find weather, attractions & restaurants for any destination around the globe</p>
+      
+      <!-- Search Box -->
+      <div class="search-container">
+        <div class="search-box">
+          <div class="search-input-wrapper">
+            <i class="icon-search"></i>
+            <input 
+              type="text" 
+              id="destinationInput" 
+              class="search-input"
+              placeholder="Enter a city or destination..."
+              autocomplete="off"
+            />
+          </div>
+          <button class="search-btn" onclick="searchDestination()">
+            <i class="icon-compass"></i>
+            Explore
+          </button>
+        </div>
+      </div>
+    </div>
+  </section>
 
-    <section id="weather" class="info-box hidden"></section>
-    <section id="attractions" class="info-box hidden"></section>
-    <section id="restaurants" class="info-box hidden"></section>
+  <!-- Main Content -->
+  <main class="main-content" id="resultsSection">
+    <div class="content-wrapper">
+      
+      <!-- Empty State (shown initially) -->
+      <div class="empty-state" id="emptyState">
+        <i class="icon-map-pinned"></i>
+        <h3>Ready to Explore?</h3>
+        <p class="text-body">Search for any city to discover its weather, attractions, and popular restaurants</p>
+      </div>
+
+      <!-- Loading State -->
+      <div class="loading-container hidden" id="loadingState">
+        <div class="loading-spinner"></div>
+        <p class="loading-text">Discovering amazing places...</p>
+      </div>
+
+      <!-- Error State -->
+      <div class="error-container hidden" id="errorState">
+        <i class="icon-alert-circle"></i>
+        <p class="error-message" id="errorMessage">Unable to fetch destination data. Please try again.</p>
+      </div>
+
+      <!-- Destination Result -->
+      <div class="destination-result hidden" id="destinationResult">
+        <div class="destination-hero-card">
+          <img id="destinationImage" src="" alt="Destination" />
+          <div class="destination-overlay">
+            <h2 class="destination-name">
+              <i class="icon-map-pin"></i>
+              <span id="destinationName"></span>
+            </h2>
+          </div>
+        </div>
+      </div>
+
+      <!-- Info Grid -->
+      <div class="info-grid hidden" id="infoGrid">
+        
+        <!-- Weather Card -->
+        <div class="weather-card" id="weatherCard">
+          <div class="card-header">
+            <div class="card-icon">
+              <i class="icon-cloud-sun"></i>
+            </div>
+            <h3 class="card-title">Current Weather</h3>
+          </div>
+          <div class="weather-main">
+            <div class="weather-temp">
+              <span id="tempValue">--</span>°<span>C</span>
+            </div>
+            <div class="weather-condition" id="weatherCondition">--</div>
+          </div>
+          <div class="weather-stats">
+            <div class="weather-stat">
+              <i class="icon-thermometer"></i>
+              <div class="weather-stat-value" id="feelsLike">--°</div>
+              <div class="weather-stat-label">Feels Like</div>
+            </div>
+            <div class="weather-stat">
+              <i class="icon-droplet"></i>
+              <div class="weather-stat-value" id="humidity">--%</div>
+              <div class="weather-stat-label">Humidity</div>
+            </div>
+            <div class="weather-stat">
+              <i class="icon-wind"></i>
+              <div class="weather-stat-value" id="windSpeed">-- km/h</div>
+              <div class="weather-stat-label">Wind</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Attractions Card -->
+        <div class="info-card attractions" id="attractionsCard">
+          <div class="card-header">
+            <div class="card-icon">
+              <i class="icon-landmark"></i>
+            </div>
+            <h3 class="card-title">Top Attractions</h3>
+          </div>
+          <ul class="info-list" id="attractionsList">
+            <!-- Attractions will be dynamically inserted -->
+          </ul>
+        </div>
+
+        <!-- Restaurants Card -->
+        <div class="info-card restaurants" id="restaurantsCard">
+          <div class="card-header">
+            <div class="card-icon">
+              <i class="icon-utensils"></i>
+            </div>
+            <h3 class="card-title">Popular Restaurants</h3>
+          </div>
+          <ul class="info-list" id="restaurantsList">
+            <!-- Restaurants will be dynamically inserted -->
+          </ul>
+        </div>
+
+      </div>
+    </div>
   </main>
 
+  <!-- Footer -->
   <footer>
-    <p>&copy; 2025 TourGuidePro</p>
+    <div class="footer-content">
+      <div class="footer-logo">
+        <i class="icon-compass"></i>
+        TourGuidePro
+      </div>
+      <p class="footer-text">&copy; 2025 TourGuidePro. All rights reserved. Explore the world with us.</p>
+    </div>
   </footer>
 
   <script src="{% static 'js/destination.js' %}" defer></script>

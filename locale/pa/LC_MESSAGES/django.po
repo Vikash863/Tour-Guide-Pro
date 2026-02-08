@@ -1,0 +1,188 @@
+# Punjabi translations for TourGuidePro
+# Copyright (C) 2026 TourGuidePro
+# This file is distributed under the same license as the PACKAGE package.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: TourGuidePro 1.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-02-08 22:00+0530\n"
+"PO-Revision-Date: 2026-02-08 22:00+0530\n"
+"Last-Translator: TourGuidePro\n"
+"Language-Team: Punjabi\n"
+"Language: pa\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+# Navigation
+msgid "Home"
+msgstr "ਹੋਮ"
+
+msgid "Cab Booking"
+msgstr "ਕੈਬ ਬੁਕਿੰਗ"
+
+msgid "Hotels"
+msgstr "ਹੋਟਲ"
+
+msgid "Destinations"
+msgstr "ਮੰਜ਼ੇ"
+
+msgid "Itinerary"
+msgstr "ਯਾਤਰਾ ਯੋਜਨਾ"
+
+msgid "Contact"
+msgstr "ਸੰਪਰਕ"
+
+msgid "Login / Sign Up"
+msgstr "ਲੌਗਇਨ / ਸਾਈਨ ਅਪ"
+
+msgid "My Bookings"
+msgstr "ਮੇਰੀਆਂ ਬੁਕਿੰਗਾਂ"
+
+msgid "Logout"
+msgstr "ਲੌਗਆਉਟ"
+
+msgid "Quick Links"
+msgstr "ਤੁਰਤ ਲਿੰਕ"
+
+msgid "Services"
+msgstr "ਸੇਵਾਵਾਂ"
+
+msgid "Testimonials"
+msgstr "ਗਾਹਕਾਂ ਦੇ ਬਿਆਨ"
+
+msgid "Hotel Booking"
+msgstr "ਹੋਟਲ ਬੁਕਿੰਗ"
+
+msgid "Cab Services"
+msgstr "ਕੈਬ ਸੇਵਾਵਾਂ"
+
+msgid "Travel Guides"
+msgstr "ਯਾਤਰਾ ਗਾਈਡ"
+
+msgid "Travel Insurance"
+msgstr "ਯਾਤਰਾ ਬੀਮਾ"
+
+msgid "Weather Updates"
+msgstr "ਮੌਸਮ ਅਪਡੇਟ"
+
+msgid "Newsletter"
+msgstr "ਨਿਊਜ਼ਲੈਟਰ"
+
+msgid "Subscribe to get special offers and travel tips."
+msgstr "ਵਿਸ਼ੇਸ਼ ਪੇਸ਼ਕਾਵਾਂ ਅਤੇ ਯਾਤਰਾ ਸੁਝਾਅ ਪ੍ਰਾਪਤ ਕਰਨ ਲਈ ਸਬਸਕਰਾਈਬ ਕਰੋ."
+
+msgid "Your email"
+msgstr "ਤੁਹਾਡਾ ਈਮੇਲ"
+
+msgid "Subscribe"
+msgstr "ਸਬਸਕਰਾਈਬ ਕਰੋ"
+
+msgid "Privacy Policy"
+msgstr "ਗੋਪਨੀਯਤਾ ਨੀਤੀ"
+
+msgid "Terms of Service"
+msgstr "ਸੇਵਾ ਦੀਆਂ ਸ਼ਰਤਾਂ"
+
+# Languages
+msgid "English"
+msgstr "ਅੰਗਰੇਜ਼ੀ"
+
+msgid "Hindi"
+msgstr "ਹਿੰਦੀ"
+
+msgid "Tamil"
+msgstr "ਤਮਿਲ"
+
+msgid "Punjabi"
+msgstr "ਪੰਜਾਬੀ"
+
+msgid "Bengali"
+msgstr "ਬੰਗਾਲੀ"
+
+msgid "Marathi"
+msgstr "ਮਰਾਠੀ"
+
+msgid "Gujarati"
+msgstr "ਗੁਜਰਾਤੀ"
+
+msgid "Telugu"
+msgstr "ਤੇਲੁਗੁ"
+
+msgid "Kannada"
+msgstr "ਕੰਨੜ"
+
+msgid "Malayalam"
+msgstr "ਮਲਿਆਲਮ"
+
+msgid "Urdu"
+msgstr "ਉਰਦੂ"
+
+# Home page
+msgid "Plan Your Perfect Trip"
+msgstr "ਆਪਣੀ ਸਪੱਸ਼ਟ ਯਾਤਰਾ ਯੋਜਨਾ ਬਣਾਓ"
+
+msgid "Explore destinations, book cabs and hotels, and build your itinerary—all in one place."
+msgstr "ਮੰਜੇ ਖੋਜੋ, ਕੈਬ ਅਤੇ ਹੋਟਲ ਬੁਕ ਕਰੋ, ਅਤੇ ਇੱਕ ਜਗ੍ਹਾ ਤੇ ਆਪਣੀ ਯਾਤਰਾ ਯੋਜਨਾ ਬਣਾਓ."
+
+msgid "Start Planning"
+msgstr "ਯੋਜਨਾ ਬਣਾਉਣੀ ਸ਼ੁਰੂ ਕਰੋ"
+
+msgid "Explore Destinations"
+msgstr "ਮੰਜੇ ਖੋਜੋ"
+
+msgid "🚕 Cab Booking"
+msgstr "🚕 ਕੈਬ ਬੁਕਿੰਗ"
+
+msgid "🏨 Hotel Finder"
+msgstr "🏨 ਹੋਟਲ ਖੋਜਕਾਰ"
+
+msgid "🌍 Destination Info"
+msgstr "🌍 ਮੰਜਾ ਜਾਣਕਾਰੀ"
+
+msgid "🗓️ Smart Itinerary"
+msgstr "🗓️ ਸਮਾਰਟ ਯਾਤਰਾ ਯੋਜਨਾ"
+
+msgid "Popular Destinations"
+msgstr "ਪ੍ਰਸਿੱਧ ਮੰਜੇ"
+
+msgid "View More"
+msgstr "ਹੋਰ ਦੇਖੋ"
+
+msgid "How It Works"
+msgstr "ਇਹ ਕਿਵੇਂ ਕੰਮ ਕਰਦਾ ਹੈ"
+
+msgid "Choose Destination"
+msgstr "ਮੰਜਾ ਚੁਣੋ"
+
+msgid "Pick your dream location from curated travel spots."
+msgstr "ਚੁਣੇ ਹੋਏ ਯਾਤਰਾ ਸਥਾਨਾਂ ਵਿੱਚੋਂ ਆਪਣਾ ਸੁਪਨਾ ਮੰਜਾ ਚੁਣੋ."
+
+msgid "Book Cab & Hotel"
+msgstr "ਕੈਬ ਅਤੇ ਹੋਟਲ ਬੁਕ ਕਰੋ"
+
+msgid "Reserve transportation and stay with trusted partners."
+msgstr "ਭਰੋਸੇਮੰਦ ਸਾਥੀਆਂ ਨਾਲ ਆਵਾਜਾਈ ਬੁਕ ਕਰੋ ਅਤੇ ਠਹਿਰੋ."
+
+msgid "Weather & Food Info"
+msgstr "ਮੌਸਮ ਅਤੇ ਭੋਜਨ ਜਾਣਕਾਰੀ"
+
+msgid "Check forecasts and discover local cuisine highlights."
+msgstr "ਮੌਸਮ ਦੀ ਭਵਿੱਖਬਾਣੀ ਦੇਖੋ ਅਤੇ ਸਥਾਨਕ ਭੋਜਨ ਵਿਸ਼ੇਸ਼ਤਾਵਾਂ ਖੋਜੋ."
+
+msgid "View Trip Plan"
+msgstr "ਯਾਤਰਾ ਯੋਜਨਾ ਦੇਖੋ"
+
+msgid "Access your personalized travel plan anytime."
+msgstr "ਕਿਸੇ ਵੀ ਸਮੇਂ ਆਪਣੀ ਨਿੱਜੀ ਯਾਤਰਾ ਯੋਜਨਾ ਐਕਸੈਸ ਕਰੋ."
+
+msgid "What Our Users Say"
+msgstr "ਸਾਡੇ ਉਪਯੋਗਕਰਤਾ ਕੀ ਕਹਿੰਦੇ ਹਨ"
+
+msgid "Your trusted partner for unforgettable travel experiences. We make travel planning simple and enjoyable."
+msgstr "ਯਾਦਗਾਰ ਯਾਤਰਾ ਅਨੁਭਵਾਂ ਲਈ ਤੁਹਾਡਾ ਭਰੋਸੇਮੰਦ ਸਾਥੀ. ਅਸੀਂ ਯਾਤਰਾ ਯੋਜਨਾ ਨੂੰ ਸੌਖਾ ਅਤੇ ਮਜ਼ਾ ਬਣਾਉਂਦੇ ਹਾਂ."
+
+msgid "FAQ"
+msgstr "ਅਕਸਰ ਪੁੱਛੇ ਜਾਂਦੇ ਪ੍ਰਸ਼ਨ"

@@ -701,3 +701,9 @@ def home(request):
         return render(request, "Home.html", context)
     except Exception as e:
         return render(request, "Home.html", {"error": str(e)})
+
+
+# ==================== PROFILE PAGE ====================
+def profile(request):
+    """User profile page"""
+    return render(request, "profile.html")

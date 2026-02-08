@@ -1,0 +1,238 @@
+# Hindi translations for TourGuidePro
+# Copyright (C) 2026 TourGuidePro
+# This file is distributed under the same license as the PACKAGE package.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: TourGuidePro 1.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-02-08 22:00+0530\n"
+"PO-Revision-Date: 2026-02-08 22:00+0530\n"
+"Last-Translator: TourGuidePro\n"
+"Language-Team: Hindi\n"
+"Language: hi\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+# Navigation
+msgid "Home"
+msgstr "होम"
+
+msgid "Cab Booking"
+msgstr "कैब बुकिंग"
+
+msgid "Hotels"
+msgstr "होटल्स"
+
+msgid "Destinations"
+msgstr "गंतव्य"
+
+msgid "Itinerary"
+msgstr "यात्रा कार्यक्रम"
+
+msgid "Contact"
+msgstr "संपर्क"
+
+msgid "Login / Sign Up"
+msgstr "लॉगिन / साइन अप"
+
+msgid "My Bookings"
+msgstr "मेरी बुकिंग्स"
+
+msgid "Logout"
+msgstr "लॉग आउट"
+
+msgid "Quick Links"
+msgstr "त्वरित लिंक"
+
+msgid "Services"
+msgstr "सेवाएँ"
+
+msgid "Testimonials"
+msgstr "समीक्षाएँ"
+
+msgid "Hotel Booking"
+msgstr "होटल बुकिंग"
+
+msgid "Cab Services"
+msgstr "कैब सेवाएँ"
+
+msgid "Travel Guides"
+msgstr "यात्रा गाइड"
+
+msgid "Travel Insurance"
+msgstr "यात्रा बीमा"
+
+msgid "Weather Updates"
+msgstr "मौसम अपडेट"
+
+msgid "Newsletter"
+msgstr "न्यूज़लेटर"
+
+msgid "Subscribe to get special offers and travel tips."
+msgstr "विशेष ऑफ़र और यात्रा सुझाव पाने के लिए सब्सक्राइब करें।"
+
+msgid "Your email"
+msgstr "आपका ईमेल"
+
+msgid "Subscribe"
+msgstr "सब्सक्राइब करें"
+
+msgid "Privacy Policy"
+msgstr "गोपनीयता नीति"
+
+msgid "Terms of Service"
+msgstr "सेवा की शर्तें"
+
+# Languages
+msgid "English"
+msgstr "अंग्रेज़ी"
+
+msgid "Hindi"
+msgstr "हिंदी"
+
+msgid "Tamil"
+msgstr "तमिल"
+
+msgid "Punjabi"
+msgstr "पंजाबी"
+
+msgid "Bengali"
+msgstr "बंगाली"
+
+msgid "Marathi"
+msgstr "मराठी"
+
+msgid "Gujarati"
+msgstr "गुजराती"
+
+msgid "Telugu"
+msgstr "तेलुगु"
+
+msgid "Kannada"
+msgstr "कन्नड़"
+
+msgid "Malayalam"
+msgstr "मलयालम"
+
+msgid "Urdu"
+msgstr "उर्दू"
+
+# Home page
+msgid "Plan Your Perfect Trip"
+msgstr "अपनी परफेक्ट यात्रा की योजना बनाएं"
+
+msgid "Explore destinations, book cabs and hotels, and build your itinerary—all in one place."
+msgstr "गंतव्यों की खोज करें, कैब और होटल बुक करें, और एक ही जगह पर अपना यात्रा कार्यक्रम बनाएं।"
+
+msgid "Start Planning"
+msgstr "योजना बनाना शुरू करें"
+
+msgid "Explore Destinations"
+msgstr "गंतव्यों की खोज करें"
+
+msgid "🚕 Cab Booking"
+msgstr "🚕 कैब बुकिंग"
+
+msgid "🏨 Hotel Finder"
+msgstr "🏨 होटल खोजक"
+
+msgid "🌍 Destination Info"
+msgstr "🌍 गंतव्य जानकारी"
+
+msgid "🗓️ Smart Itinerary"
+msgstr "🗓️ स्मार्ट यात्रा कार्यक्रम"
+
+msgid "Popular Destinations"
+msgstr "लोकप्रिय गंतव्य"
+
+msgid "View More"
+msgstr "और देखें"
+
+msgid "How It Works"
+msgstr "यह कैसे काम करता है"
+
+msgid "Choose Destination"
+msgstr "गंतव्य चुनें"
+
+msgid "Pick your dream location from curated travel spots."
+msgstr "क्यूरेटेड यात्रा स्पॉट्स में से अपना ड्रीम लोकेशन चुनें।"
+
+msgid "Book Cab & Hotel"
+msgstr "कैब और होटल बुक करें"
+
+msgid "Reserve transportation and stay with trusted partners."
+msgstr "विश्वसनीय साथियों के साथ परिवहन बुक करें और ठहरें।"
+
+msgid "Weather & Food Info"
+msgstr "मौसम और भोजन जानकारी"
+
+msgid "Check forecasts and discover local cuisine highlights."
+msgstr "मौसम का पूर्वानुमान देखें और स्थानीय व्यंजनों की खोज करें।"
+
+msgid "View Trip Plan"
+msgstr "यात्रा योजना देखें"
+
+msgid "Access your personalized travel plan anytime."
+msgstr "कभी भी अपनी व्यक्तिगत यात्रा योजना एक्सेस करें।"
+
+msgid "What Our Users Say"
+msgstr "हमारे उपयोगकर्ता क्या कहते हैं"
+
+msgid "Your trusted partner for unforgettable travel experiences. We make travel planning simple and enjoyable."
+msgstr "यादगार यात्रा अनुभवों के लिए आपका विश्वसनीय साथी। हम यात्रा की योजना बनाने को सरल और आनंददायक बनाते हैं।"
+
+msgid "FAQ"
+msgstr "अक्सर पूछे जाने वाले प्रश्न"
+
+# Django Forms & Validation
+msgid "This field is required."
+msgstr "यह फ़ील्ड आवश्यक है।"
+
+msgid "Enter a valid value."
+msgstr "मान्य मान दर्ज करें।"
+
+msgid "Enter a valid email address."
+msgstr "मान्य ईमेल पता दर्ज करें।"
+
+msgid "Enter a valid URL."
+msgstr "मान्य URL दर्ज करें।"
+
+msgid "Enter a number."
+msgstr "एक संख्या दर्ज करें।"
+
+msgid "Enter a whole number."
+msgstr "एक पूर्ण संख्या दर्ज करें।"
+
+msgid "Enter a valid date."
+msgstr "मान्य तिथि दर्ज करें।"
+
+msgid "Enter a valid time."
+msgstr "मान्य समय दर्ज करें।"
+
+msgid "Enter a valid date/time."
+msgstr "मान्य तिथि/समय दर्ज करें।"
+
+msgid "Enter a valid JSON."
+msgstr "मान्य JSON दर्ज करें।"
+
+msgid "Select a valid choice. %(value)s is not one of the available choices."
+msgstr "मान्य विकल्प चुनें। %(value)s उपलब्ध विकल्पों में से नहीं है।"
+
+msgid "No file was submitted."
+msgstr "कोई फ़ाइल प्रस्तुत नहीं की गई।"
+
+msgid "The submitted file is empty."
+msgstr "प्रस्तुत फ़ाइल खाली है।"
+
+msgid "Upload a valid image. The file you uploaded was either not an image or a corrupted image."
+msgstr "मान्य छवि अपलोड करें। अपलोड की गई फ़ाइल छवि नहीं है या क्षतिग्रस्त है।"
+
+# CSRF Messages
+msgid "Forbidden"
+msgstr "प्रतिबंधित"
+
+msgid "CSRF verification failed. Request aborted."
+msgstr "CSRF सत्यापन विफल। अनुरोध रद्द कर दिया गया।"

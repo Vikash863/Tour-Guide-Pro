@@ -4,13 +4,30 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Itinerary | TourGuidePro</title>
+  <title>My Itinerary | TourGuidePro</title>
+  
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@500;600;700&display=swap" rel="stylesheet">
+  
+  <!-- Tabler Icons -->
+  <link href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont/tabler-icons.min.css" rel="stylesheet">
+  
+  <!-- Custom Styles -->
   <link rel="stylesheet" href="{% static 'css/iterenary.css' %}" />
 </head>
 <body>
+  <!-- Animated Background -->
+  <div class="animated-bg"></div>
+
+  <!-- Navigation -->
   <header>
-    <nav class="navbar">
-      <div class="logo">TourGuidePro</div>
+    <nav class="navbar" id="navbar">
+      <div class="logo">
+        <i class="ti ti-calendar-event"></i>
+        TourGuidePro
+      </div>
       <ul class="nav-links">
         <li><a href="/">Home</a></li>
         <li><a href="/cab/">Cab Booking</a></li>
@@ -21,14 +38,101 @@
     </nav>
   </header>
 
-  <main class="itinerary-section">
-    <h1>Your Trip Itinerary</h1>
-    <div id="timeline" class="timeline"></div>
-    <button id="exportBtn">Export as PDF</button>
+  <!-- Hero Section -->
+  <section class="hero-section">
+    <div class="hero-content">
+      <div class="hero-badge">
+        <i class="ti ti-luggage"></i>
+        Travel Plans
+      </div>
+      <h1 class="hero-title">My Itinerary</h1>
+      <p class="hero-subtitle">Your complete travel schedule at a glance</p>
+    </div>
+  </section>
+
+  <!-- Main Content -->
+  <main class="main-content">
+    <div class="content-wrapper">
+      
+      <!-- Filter Bar -->
+      <div class="filter-bar">
+        <div class="filter-tabs">
+          <button class="filter-tab active" data-filter="all">
+            <i class="ti ti-list"></i>
+            All
+          </button>
+          <button class="filter-tab" data-filter="hotel">
+            <i class="ti ti-bed"></i>
+            Hotels
+          </button>
+          <button class="filter-tab" data-filter="cab">
+            <i class="ti ti-car"></i>
+            Cabs
+          </button>
+          <button class="filter-tab" data-filter="destination">
+            <i class="ti ti-map-pin"></i>
+            Destinations
+          </button>
+        </div>
+        
+        <div class="filter-actions">
+          <button class="action-btn" onclick="shareItinerary()">
+            <i class="ti ti-share"></i>
+            Share
+          </button>
+          <button class="action-btn" onclick="exportItinerary()">
+            <i class="ti ti-download"></i>
+            Export
+          </button>
+        </div>
+      </div>
+
+      <div class="content-grid">
+        
+        <!-- Timeline Column -->
+        <div class="timeline-container" id="timelineContainer">
+          <!-- Timeline will be dynamically inserted -->
+        </div>
+
+        <!-- Summary Sidebar -->
+        <div class="summary-card">
+          <div class="summary-header">
+            <div class="summary-icon">
+              <i class="ti ti-briefcase"></i>
+            </div>
+            <h3 class="summary-title">Trip Summary</h3>
+          </div>
+          
+          <div class="stat-grid">
+            <div class="stat-card">
+              <div class="stat-value" id="totalBookings">0</div>
+              <div class="stat-label">Bookings</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-value" id="totalDays">0</div>
+              <div class="stat-label">Days</div>
+            </div>
+          </div>
+          
+          <div class="total-section">
+            <div class="total-label">Total Estimated Cost</div>
+            <div class="total-value" id="totalCost">₹0</div>
+          </div>
+        </div>
+        
+      </div>
+    </div>
   </main>
 
+  <!-- Footer -->
   <footer>
-    <p>&copy; 2025 TourGuidePro</p>
+    <div class="footer-content">
+      <div class="footer-logo">
+        <i class="ti ti-calendar-event"></i>
+        TourGuidePro
+      </div>
+      <p class="footer-text">&copy; 2025 TourGuidePro. All rights reserved. Plan your perfect trip.</p>
+    </div>
   </footer>
 
   <script src="{% static 'js/iterenary.js' %}" defer></script>

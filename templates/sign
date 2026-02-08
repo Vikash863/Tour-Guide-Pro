@@ -58,6 +58,13 @@
   </section>
 
   <script>
+    // Get the base API URL (handles language prefix)
+    function getApiUrl(path) {
+      const langMatch = window.location.pathname.match(/^\/([a-z]{2})\//);
+      const lang = langMatch ? langMatch[1] : 'en';
+      return '/' + lang + path;
+    }
+
     async function signup() {
       const name = document.getElementById('name').value.trim();
       const email = document.getElementById('email').value.trim();
@@ -84,7 +91,7 @@
       const [firstName, lastName] = name.includes(' ') ? name.split(' ', 2) : [name, ''];
       
       try {
-        const response = await fetch('/api/register/', {
+        const response = await fetch(getApiUrl('/api/register/'), {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -94,23 +101,27 @@
             username: email.split('@')[0],
             email: email,
             password: password,
-            password_confirm: confirmPassword,
             first_name: firstName,
             last_name: lastName
           })
         });
         
+        console.log('Response status:', response.status);
+        
         const contentType = response.headers.get('content-type');
         if (!contentType || !contentType.includes('application/json')) {
+          const text = await response.text();
+          console.log('Non-JSON response:', text.substring(0, 200));
           errorDiv.textContent = 'Registration failed. Please try again.';
           errorDiv.style.display = 'block';
           return;
         }
         
         const result = await response.json();
+        console.log('Registration result:', result);
         
         if (result.user || result.message) {
-          successDiv.textContent = 'Account created successfully! Redirecting to login...';
+          successDiv.textContent = 'Account created! Redirecting to login...';
           successDiv.style.display = 'block';
           setTimeout(() => {
             window.location.href = '/login/';

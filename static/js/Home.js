@@ -7,23 +7,38 @@ function initializeAuth() {
   if (auth.isLoggedIn()) {
     const user = auth.getUser();
     if (user) {
-      userNameDisplay.textContent = `Hello, ${user.name}!`;
-      loginIcon.style.cursor = 'pointer';
-      loginIcon.addEventListener('click', () => {
-        userDropdown.classList.toggle('active');
-      });
+      const userDisplayName = user.first_name || user.name || user.username || 'User';
+      if (userNameDisplay) {
+        userNameDisplay.textContent = `Hello, ${userDisplayName}!`;
+      }
 
-      // Close dropdown when clicking outside
-      document.addEventListener('click', (e) => {
-        if (!e.target.closest('.auth-icon')) {
-          userDropdown.classList.remove('active');
-        }
-      });
+      if (loginIcon) {
+        loginIcon.style.cursor = 'pointer';
+        loginIcon.addEventListener('click', (e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          if (userDropdown) {
+            userDropdown.classList.toggle('active');
+          }
+        });
+      }
+
+      if (userDropdown) {
+        document.addEventListener('click', (e) => {
+          if (!e.target.closest('.user-menu')) {
+            userDropdown.classList.remove('active');
+          }
+        });
+      }
     }
   } else {
-    loginIcon.addEventListener('click', () => {
-      window.location.href = '/login/';
-    });
+    // Redirect to login if not logged in
+    if (loginIcon) {
+      loginIcon.style.cursor = 'pointer';
+      loginIcon.addEventListener('click', () => {
+        window.location.href = '/login/';
+      });
+    }
   }
 }
 
@@ -31,10 +46,9 @@ function initializeAuth() {
 document.querySelectorAll('.nav-links a').forEach(link => {
   link.addEventListener('click', function (e) {
     const href = this.getAttribute('href');
-    if (href.startsWith('#')) {
+    if (href && href.startsWith('#')) {
       e.preventDefault();
-      const targetId = href.substring(1);
-      const targetSection = document.getElementById(targetId);
+      const targetSection = document.getElementById(href.substring(1));
       if (targetSection) {
         targetSection.scrollIntoView({ behavior: 'smooth' });
       }
@@ -42,70 +56,43 @@ document.querySelectorAll('.nav-links a').forEach(link => {
   });
 });
 
-// === Mobile menu toggle (optional) ===
-const navToggle = document.querySelector('.login-btn');
-if (navToggle) {
-  navToggle.addEventListener('click', () => {
-    document.querySelector('.nav-links').classList.toggle('active');
-  });
+// === Auto-slideshow for hero section ===
+const heroSection = document.querySelector('.hero-section');
+const heroImages = [
+  '/static/images/kerala1.jpg',
+  '/static/images/ladakh8.jpg',
+  '/static/images/kerala3.jpg',
+  '/static/images/ladakh4.jpg',
+  '/static/images/kerala5.jpg',
+  '/static/images/goa1.jpg',
+  '/static/images/goa2.jpg',
+  '/static/images/goa3.jpg',
+  '/static/images/varanasi4.jpg',
+  '/static/images/jaipur5.jpg',
+  '/static/images/goa10.jpg',
+  '/static/images/jaipur2.jpg',
+  '/static/images/varanasi3.jpg',
+  '/static/images/varanasi2.jpg',
+  '/static/images/ladakh1.jpg'
+];
+
+let currentHero = 0;
+
+function changeHeroBackground() {
+  if (heroSection) {
+    heroSection.style.background = `url('${heroImages[currentHero]}') no-repeat center center / cover`;
+    heroSection.style.backgroundAttachment = 'fixed';
+    currentHero = (currentHero + 1) % heroImages.length;
+  }
 }
 
-// === Auto-slideshow for destination cards ===
-document.querySelectorAll(".card").forEach((card) => {
-  const img = card.querySelector("img");
-  const imagesAttr = card.getAttribute("data-images");
+// Initial hero background
+changeHeroBackground();
+// Change every 5 seconds
+setInterval(changeHeroBackground, 5000);
 
-  if (!img || !imagesAttr) return;
-
-  const images = JSON.parse(imagesAttr);
-  let index = 0;
-
-  setInterval(() => {
-    index = (index + 1) % images.length;
-    img.src = images[index];
-  }, 1000); // Change image every 3 seconds
-});
-
-
-
-  const heroSection = document.querySelector('.hero-section');
-  const images = [
-    '/static/images/kerala1.jpg',
-    '/static/images/ladakh8.jpg',
-    '/static/images/kerala3.jpg',
-    '/static/images/ladakh4.jpg',
-    '/static/images/kerala5.jpg',
-    '/static/images/goa1.jpg',
-    '/static/images/goa2.jpg',
-    '/static/images/goa3.jpg',
-    '/static/images/varanasi4.jpg',
-    '/static/images/jaipur5.jpg',
-    '/static/images/goa10.jpg',
-    '/static/images/jaipur2.jpg',
-    '/static/images/varanasi3.jpg',
-    '/static/images/varanasi2.jpg',
-    '/static/images/ladakh1.jpg'
-  ];
-
-  let current = 0;
-
-  function changeBackground() {
-    heroSection.style.background = `url('${images[current]}') no-repeat center center / cover`;
-    heroSection.style.backgroundAttachment = 'fixed';
-    current = (current + 1) % images.length;
-  }
-
-  // Initial load
-  changeBackground();
-
-  // Change every 5 seconds
-  setInterval(changeBackground, 5000);
-
-
-  // how it works section animation
-const stepCards = document.querySelectorAll('.step-card');
-
-stepCards.forEach((card, index) => {
+// === Step cards animation ===
+document.querySelectorAll('.step-card').forEach((card, index) => {
   card.style.opacity = 0;
   card.style.transform = 'translateY(30px)';
   setTimeout(() => {
@@ -115,9 +102,7 @@ stepCards.forEach((card, index) => {
   }, 300 * index);
 });
 
-
 // === Testimonials Carousel ===
-
 const testimonialCards = document.querySelectorAll('.testimonial-card');
 let currentTestimonial = 0;
 
@@ -127,38 +112,65 @@ function showTestimonial(index) {
   });
 }
 
-document.getElementById('nextTestimonial').addEventListener('click', () => {
+const nextBtn = document.getElementById('nextTestimonial');
+const prevBtn = document.getElementById('prevTestimonial');
+
+if (nextBtn) nextBtn.addEventListener('click', () => {
   currentTestimonial = (currentTestimonial + 1) % testimonialCards.length;
   showTestimonial(currentTestimonial);
 });
 
-document.getElementById('prevTestimonial').addEventListener('click', () => {
+if (prevBtn) prevBtn.addEventListener('click', () => {
   currentTestimonial = (currentTestimonial - 1 + testimonialCards.length) % testimonialCards.length;
   showTestimonial(currentTestimonial);
 });
 
+// === Chatbot (with null checks) ===
+const chatbotToggle = document.getElementById('chatbot-toggle');
+const chatbotPanel = document.getElementById('chatbot-panel');
+const messagesDiv = document.getElementById('chatbot-messages');
+const userInput = document.getElementById('chatbot-user-input');
 
-//for header section
-
-// Smooth scroll for internal links
-document.querySelectorAll('.nav-links a').forEach(link => {
-  link.addEventListener('click', function (e) {
-    const href = this.getAttribute('href');
-    if (href.startsWith('#')) {
-      e.preventDefault();
-      const targetId = href.substring(1);
-      const targetSection = document.getElementById(targetId);
-      if (targetSection) {
-        targetSection.scrollIntoView({ behavior: 'smooth' });
-      }
-    }
+// Toggle chatbot panel
+if (chatbotToggle && chatbotPanel) {
+  chatbotToggle.addEventListener('click', () => {
+    chatbotPanel.style.display = chatbotPanel.style.display === 'flex' ? 'none' : 'flex';
   });
+}
+
+// Add message to chat
+function addChatMessage(text, sender) {
+  if (!messagesDiv) return;
+  const div = document.createElement('div');
+  div.classList.add('chat-message', sender);
+  div.textContent = text;
+  messagesDiv.appendChild(div);
+  messagesDiv.scrollTop = messagesDiv.scrollHeight;
+}
+
+// Send message
+async function sendChatbotMessage() {
+  if (!userInput || !messagesDiv) return;
+  const text = userInput.value.trim();
+  if (!text) return;
+  addChatMessage(text, 'user-message');
+  userInput.value = '';
+  addChatMessage('Thanks for your message! Our team will respond shortly.', 'bot-message');
+}
+
+// === Destination cards slideshow ===
+document.querySelectorAll(".card[data-images]").forEach(card => {
+  const img = card.querySelector("img");
+  const images = JSON.parse(card.getAttribute("data-images"));
+  let index = 0;
+
+  if (!img || !images) return;
+
+  setInterval(() => {
+    index = (index + 1) % images.length;
+    img.src = images[index];
+  }, 3000);
 });
 
-// Redirect on login icon click
-document.getElementById('loginIcon').addEventListener('click', () => {
-  window.location.href = '/login/';
-});
-
-// Initialize auth on page load
+// === Initialize on DOM load ===
 document.addEventListener('DOMContentLoaded', initializeAuth);

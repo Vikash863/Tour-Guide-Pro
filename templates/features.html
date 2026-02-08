@@ -1,0 +1,439 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Tour Guide Pro - All Features{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/features.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="features-container">
+    <header class="features-header">
+        <h1>🎯 Tour Guide Pro - All Features</h1>
+        <p>Your complete travel companion with 15+ powerful features</p>
+    </header>
+
+    <!-- Feature Navigation Tabs -->
+    <nav class="feature-tabs">
+        <button class="tab-btn active" data-tab="ai-trip">🤖 AI Trip Planner</button>
+        <button class="tab-btn" data-tab="budget">💰 Budget</button>
+        <button class="tab-btn" data-tab="nearby">🗺️ Nearby</button>
+        <button class="tab-btn" data-tab="weather">🌦️ Weather</button>
+        <button class="tab-btn" data-tab="memories">📸 Memories</button>
+        <button class="tab-btn" data-tab="group">👥 Group</button>
+        <button class="tab-btn" data-tab="gamification">🏆 Gamification</button>
+        <button class="tab-btn" data-tab="community">💬 Community</button>
+    </nav>
+
+    <!-- 1) SMART TRIP ASSISTANT (AI) -->
+    <section id="ai-trip" class="feature-section active">
+        <div class="feature-card">
+            <h2>🤖 Smart Trip Assistant (AI)</h2>
+            <p>AI-powered trip planning based on your budget, interests, and preferences</p>
+            
+            <form id="ai-trip-form" class="feature-form">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Destination</label>
+                        <input type="text" id="destination" placeholder="e.g., Goa, Jaipur, Kerala" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Trip Type</label>
+                        <select id="trip-type">
+                            <option value="solo">Solo</option>
+                            <option value="couple">Couple</option>
+                            <option value="family">Family</option>
+                            <option value="group">Group</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Start Date</label>
+                        <input type="date" id="start-date" required>
+                    </div>
+                    <div class="form-group">
+                        <label>End Date</label>
+                        <input type="date" id="end-date" required>
+                    </div>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Budget (₹)</label>
+                        <input type="number" id="budget" placeholder="50000" required>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label>Interests</label>
+                    <div class="checkbox-group">
+                        <label><input type="checkbox" name="interest" value="adventure"> Adventure</label>
+                        <label><input type="checkbox" name="interest" value="culture"> Culture</label>
+                        <label><input type="checkbox" name="interest" value="food"> Food</label>
+                        <label><input type="checkbox" name="interest" value="relaxation"> Relaxation</label>
+                        <label><input type="checkbox" name="interest" value="shopping"> Shopping</label>
+                    </div>
+                </div>
+                
+                <button type="submit" class="btn btn-primary">🚀 Generate AI Trip Plan</button>
+            </form>
+
+            <div id="ai-result" class="result-container"></div>
+        </div>
+    </section>
+
+    <!-- 2) TRIP BUDGET CALCULATOR -->
+    <section id="budget" class="feature-section">
+        <div class="feature-card">
+            <h2>💰 Trip Budget Calculator</h2>
+            <p>Track expenses, convert currencies, and stay within budget</p>
+            
+            <form id="budget-form" class="feature-form">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Trip Name</label>
+                        <input type="text" id="trip-name" placeholder="Goa Vacation 2024" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Total Budget (₹)</label>
+                        <input type="number" id="total-budget" placeholder="50000" required>
+                    </div>
+                </div>
+                
+                <div class="cost-breakdown">
+                    <h4>Estimated Costs</h4>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>🚗 Transport</label>
+                            <input type="number" id="transport-cost" value="0">
+                        </div>
+                        <div class="form-group">
+                            <label>🏨 Hotel</label>
+                            <input type="number" id="hotel-cost" value="0">
+                        </div>
+                        <div class="form-group">
+                            <label>🍽️ Food</label>
+                            <input type="number" id="food-cost" value="0">
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>🎭 Activities</label>
+                            <input type="number" id="activities-cost" value="0">
+                        </div>
+                        <div class="form-group">
+                            <label>🛍️ Shopping</label>
+                            <input type="number" id="shopping-cost" value="0">
+                        </div>
+                        <div class="form-group">
+                            <label>📦 Misc</label>
+                            <input type="number" id="misc-cost" value="0">
+                        </div>
+                    </div>
+                </div>
+                
+                <button type="submit" class="btn btn-primary">📊 Calculate Budget</button>
+            </form>
+
+            <div id="budget-result" class="budget-summary">
+                <div class="budget-card total">
+                    <span>Total Budget</span>
+                    <strong id="display-total">₹0</strong>
+                </div>
+                <div class="budget-card spent">
+                    <span>Total Spent</span>
+                    <strong id="display-spent">₹0</strong>
+                </div>
+                <div class="budget-card remaining">
+                    <span>Remaining</span>
+                    <strong id="display-remaining">₹0</strong>
+                </div>
+            </div>
+
+            <div class="currency-converter">
+                <h4>💱 Currency Converter</h4>
+                <div class="form-row">
+                    <input type="number" id="convert-amount" placeholder="Amount" value="1000">
+                    <select id="from-currency">
+                        <option value="INR">INR</option>
+                        <option value="USD">USD</option>
+                        <option value="EUR">EUR</option>
+                        <option value="GBP">GBP</option>
+                    </select>
+                    <span>to</span>
+                    <select id="to-currency">
+                        <option value="USD">USD</option>
+                        <option value="INR">INR</option>
+                        <option value="EUR">EUR</option>
+                        <option value="GBP">GBP</option>
+                    </select>
+                    <button onclick="convertCurrency()" class="btn btn-secondary">Convert</button>
+                </div>
+                <p id="conversion-result"></p>
+            </div>
+        </div>
+    </section>
+
+    <!-- 3) NEARBY PLACES FINDER -->
+    <section id="nearby" class="feature-section">
+        <div class="feature-card">
+            <h2>🗺️ Nearby Places Finder</h2>
+            <p>Discover attractions, restaurants, and hotels near your location</p>
+            
+            <div class="location-input">
+                <button onclick="getCurrentLocation()" class="btn btn-primary">📍 Use My Location</button>
+                <span id="location-status"></span>
+            </div>
+            
+            <div class="place-types">
+                <button class="type-btn active" data-type="tourist_attraction">🏛️ Attractions</button>
+                <button class="type-btn" data-type="restaurant">🍽️ Restaurants</button>
+                <button class="type-btn" data-type="hotel">🏨 Hotels</button>
+                <button class="type-btn" data-type="shopping_mall">🛍️ Shopping</button>
+            </div>
+
+            <div id="nearby-results" class="places-grid"></div>
+        </div>
+    </section>
+
+    <!-- 9) WEATHER INTEGRATION -->
+    <section id="weather" class="feature-section">
+        <div class="feature-card">
+            <h2>🌦️ Weather & Best Time to Visit</h2>
+            
+            <div class="weather-search">
+                <input type="text" id="weather-city" placeholder="Enter city name">
+                <button onclick="getWeather()" class="btn btn-primary">🔍 Get Weather</button>
+            </div>
+
+            <div id="weather-display" class="weather-widget">
+                <div class="weather-main">
+                    <span class="weather-icon">☀️</span>
+                    <div class="weather-temp">
+                        <strong>28°C</strong>
+                        <span>Partly Cloudy</span>
+                    </div>
+                </div>
+                <div class="weather-details">
+                    <div class="detail">
+                        <span>💧 Humidity</span>
+                        <strong>65%</strong>
+                    </div>
+                    <div class="detail">
+                        <span>💨 Wind</span>
+                        <strong>12 km/h</strong>
+                    </div>
+                    <div class="detail">
+                        <span>👁️ Visibility</span>
+                        <strong>10 km</strong>
+                    </div>
+                </div>
+                <div class="best-time">
+                    <h4>🌸 Best Time to Visit</h4>
+                    <p>October to March</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 5) TRAVEL MEMORY SCRAPBOOK -->
+    <section id="memories" class="feature-section">
+        <div class="feature-card">
+            <h2>📸 Travel Memory Scrapbook</h2>
+            <p>Upload photos, add notes, and create shareable travel diaries</p>
+            
+            <button onclick="openMemoryModal()" class="btn btn-primary">➕ Add New Memory</button>
+            
+            <div id="memories-gallery" class="memories-grid">
+                <!-- Memories will be loaded here -->
+            </div>
+        </div>
+    </section>
+
+    <!-- 6) GROUP TRIP PLANNER -->
+    <section id="group" class="feature-section">
+        <div class="feature-card">
+            <h2>👥 Group Trip Planner</h2>
+            <p>Plan trips with friends, create polls, and split expenses</p>
+            
+            <form id="group-trip-form" class="feature-form">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Destination</label>
+                        <input type="text" id="group-destination" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Start Date</label>
+                        <input type="date" id="group-start" required>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>End Date</label>
+                        <input type="date" id="group-end" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Invite Friends</label>
+                        <input type="text" id="group-invite" placeholder="Enter email addresses">
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-primary">👥 Create Group Trip</button>
+            </form>
+
+            <div id="group-polls" class="polls-container">
+                <h4>🗳️ Active Polls</h4>
+                <!-- Polls will be displayed here -->
+            </div>
+        </div>
+    </section>
+
+    <!-- 12) GAMIFICATION -->
+    <section id="gamification" class="feature-section">
+        <div class="feature-card">
+            <h2>🏆 Gamification</h2>
+            <p>Earn badges, climb the leaderboard, and unlock achievements</p>
+            
+            <div class="user-stats">
+                <div class="level-badge">
+                    <span class="level-number" id="user-level">1</span>
+                    <span class="level-label">Level</span>
+                </div>
+                <div class="points-display">
+                    <strong id="user-points">0</strong>
+                    <span>Total Points</span>
+                </div>
+            </div>
+
+            <div class="badges-section">
+                <h4>🎖️ Your Badges</h4>
+                <div id="user-badges" class="badges-grid">
+                    <div class="badge locked">
+                        <span>🔒</span>
+                        <p>First Trip</p>
+                    </div>
+                    <div class="badge locked">
+                        <span>🔒</span>
+                        <p>Explorer</p>
+                    </div>
+                    <div class="badge locked">
+                        <span>🔒</span>
+                        <p>Budget Master</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="leaderboard">
+                <h4>🏅 Leaderboard</h4>
+                <table class="leaderboard-table">
+                    <thead>
+                        <tr>
+                            <th>Rank</th>
+                            <th>Traveler</th>
+                            <th>Points</th>
+                        </tr>
+                    </thead>
+                    <tbody id="leaderboard-body">
+                        <!-- Leaderboard data -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </section>
+
+    <!-- 13) COMMUNITY FORUM -->
+    <section id="community" class="feature-section">
+        <div class="feature-card">
+            <h2>💬 Community Forum</h2>
+            <p>Ask questions, share experiences, and connect with travelers</p>
+            
+            <div class="forum-actions">
+                <input type="text" id="forum-search" placeholder="Search discussions...">
+                <select id="forum-category">
+                    <option value="">All Categories</option>
+                    <option value="question">Questions</option>
+                    <option value="discussion">Discussions</option>
+                    <option value="tips">Travel Tips</option>
+                    <option value="review">Reviews</option>
+                </select>
+                <button onclick="createPost()" class="btn btn-primary">✏️ New Post</button>
+            </div>
+
+            <div id="forum-posts" class="forum-posts">
+                <!-- Forum posts will be loaded here -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Quick Feature Access Grid -->
+    <section class="quick-access">
+        <h2>🚀 Quick Access</h2>
+        <div class="quick-grid">
+            <a href="#" onclick="switchTab('ai-trip')" class="quick-item">
+                <span class="icon">🤖</span>
+                <span>AI Trip Planner</span>
+            </a>
+            <a href="#" onclick="switchTab('budget')" class="quick-item">
+                <span class="icon">💰</span>
+                <span>Budget</span>
+            </a>
+            <a href="#" onclick="switchTab('nearby')" class="quick-item">
+                <span class="icon">🗺️</span>
+                <span>Nearby Places</span>
+            </a>
+            <a href="#" onclick="switchTab('weather')" class="quick-item">
+                <span class="icon">🌦️</span>
+                <span>Weather</span>
+            </a>
+            <a href="#" onclick="switchTab('memories')" class="quick-item">
+                <span class="icon">📸</span>
+                <span>Memories</span>
+            </a>
+            <a href="#" onclick="switchTab('group')" class="quick-item">
+                <span class="icon">👥</span>
+                <span>Group Trip</span>
+            </a>
+            <a href="#" onclick="switchTab('gamification')" class="quick-item">
+                <span class="icon">🏆</span>
+                <span>Achievements</span>
+            </a>
+            <a href="#" onclick="switchTab('community')" class="quick-item">
+                <span class="icon">💬</span>
+                <span>Community</span>
+            </a>
+        </div>
+    </section>
+</div>
+
+<!-- Modals and Templates -->
+<div id="modal-overlay" class="modal-overlay" onclick="closeModal()"></div>
+
+<script src="{% static 'js/features.js' %}"></script>
+<script>
+// Tab Navigation
+document.querySelectorAll('.tab-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+        document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+        document.querySelectorAll('.feature-section').forEach(s => s.classList.remove('active'));
+        btn.classList.add('active');
+        document.getElementById(btn.dataset.tab).classList.add('active');
+    });
+});
+
+function switchTab(tabId) {
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    document.querySelectorAll('.feature-section').forEach(s => s.classList.remove('active'));
+    document.querySelector(`[data-tab="${tabId}"]`).classList.add('active');
+    document.getElementById(tabId).classList.add('active');
+}
+
+// AI Trip Form
+document.getElementById('ai-trip-form').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const interests = Array.from(document.querySelectorAll('input[name="interest"]:checked')).map(cb => cb.value);
+    
+    const data = {
+        destination_name: document.getElementById('destination').value,
+        trip_type: document.getElementById

@@ -1,6 +1,7 @@
-{% load static %}
+{% load static i18n %}
+{% get_current_language as LANGUAGE_CODE %}
 <!DOCTYPE html>
-<html lang="en">
+<html lang="{{ LANGUAGE_CODE }}">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -36,121 +37,153 @@
 </head>
 <body>
 <header>
-  <nav class="navbar animated-header">
-    <div class="logo-container">
+  <nav class="navbar animated-header d-flex justify-content-between align-items-center px-3 py-2">
+    
+    <!-- Logo -->
+    <div class="logo-container d-flex align-items-center gap-2">
       <img src="{% static 'images/TourGuidePrologo.jpg' %}" alt="TourGuidePro Logo" class="logo-img" />
       <span class="logo-text">TourGuidePro</span>
     </div>
-    <ul class="nav-links">
-      <li><a href="/">Home</a></li>
-      <li><a href="/cab/">Cab Booking</a></li>
-      <li><a href="/hotel/">Hotels</a></li>
-      <li><a href="/destination/">Destinations</a></li>
-      <li><a href="/itinerary/">Itinerary</a></li>
-      <li><a href="/contact/">Contact</a></li>
+
+    <!-- Navigation Links -->
+    <ul class="nav-links d-flex gap-3 list-unstyled mb-0">
+      <li><a href="/">{% trans "Home" %}</a></li>
+      <li><a href="/cab/">{% trans "Cab Booking" %}</a></li>
+      <li><a href="/hotel/">{% trans "Hotels" %}</a></li>
+      <li><a href="/destination/">{% trans "Destinations" %}</a></li>
+      <li><a href="/itinerary/">{% trans "Itinerary" %}</a></li>
+      <li><a href="/contact/">{% trans "Contact" %}</a></li>
     </ul>
-    <div class="auth-icon" id="authIcon">
-      <img src="{% static 'images/user.png' %}" alt="Login Icon" id="loginIcon" class="login-img" title="Login / Sign Up" />
-      <div class="user-dropdown" id="userDropdown">
-        <span id="userNameDisplay" style="padding: 10px 15px; display: block;"></span>
-        <a href="iterenary.html">My Bookings</a>
-        <a href="#" onclick="auth.logout(); return false;">Logout</a>
+
+    <!-- Auth & Language Section -->
+    <div class="d-flex align-items-center gap-3">
+
+      <!-- User Icon & Dropdown -->
+      <div class="auth-icon position-relative" id="authIcon">
+        <img src="{% static 'images/user.png' %}" alt="Login Icon" id="loginIcon" class="login-img" title="{% trans 'Login / Sign Up' %}" />
+        <div class="user-dropdown position-absolute end-0 mt-2" id="userDropdown">
+          <span id="userNameDisplay" style="padding: 10px 15px; display: block;"></span>
+          <a href="/itinerary/">{% trans "My Bookings" %}</a>
+          <a href="#" onclick="auth.logout(); return false;">{% trans "Logout" %}</a>
+        </div>
       </div>
+
+      <!-- Language Switcher -->
+      <!-- Language Switcher -->
+<form action="{% url 'set_language' %}" method="post" class="d-inline">
+  {% csrf_token %}
+  <select name="language" onchange="this.form.submit()" class="form-select form-select-sm">
+    <option value="en" {% if LANGUAGE_CODE == 'en' %}selected{% endif %}>English</option>
+    <option value="hi" {% if LANGUAGE_CODE == 'hi' %}selected{% endif %}>हिन्दी</option>
+    <option value="ta" {% if LANGUAGE_CODE == 'ta' %}selected{% endif %}>தமிழ்</option>
+    <option value="pa" {% if LANGUAGE_CODE == 'pa' %}selected{% endif %}>ਪੰਜਾਬੀ</option>
+    <option value="bn" {% if LANGUAGE_CODE == 'bn' %}selected{% endif %}>বাংলা</option>
+    <option value="mr" {% if LANGUAGE_CODE == 'mr' %}selected{% endif %}>मराठी</option>
+    <option value="gu" {% if LANGUAGE_CODE == 'gu' %}selected{% endif %}>ગુજરાતી</option>
+    <option value="te" {% if LANGUAGE_CODE == 'te' %}selected{% endif %}>తెలుగు</option>
+    <option value="kn" {% if LANGUAGE_CODE == 'kn' %}selected{% endif %}>ಕನ್ನಡ</option>
+    <option value="ml" {% if LANGUAGE_CODE == 'ml' %}selected{% endif %}>മലയാളം</option>
+    <option value="ur" {% if LANGUAGE_CODE == 'ur' %}selected{% endif %}>اردو</option>
+  </select>
+</form>
+
+
     </div>
   </nav>
 </header>
 
+
 <section class="hero-section">
-  <h1>Plan Your Perfect Trip</h1>
-  <p>Explore destinations, book cabs and hotels, and build your itinerary—all in one place.</p>
+  <h1>{% trans "Plan Your Perfect Trip" %}</h1>
+  <p>{% trans "Explore destinations, book cabs and hotels, and build your itinerary—all in one place." %}</p>
   <div class="cta-buttons">
-    <button class="primary"><a href="/itinerary/">Start Planning</a></button>
-    <button class="secondary"><a href="/destination/">Explore Destinations</a></button>
+    <button class="primary"><a href="/itinerary/">{% trans "Start Planning" %}</a></button>
+    <button class="secondary"><a href="/destination/">{% trans "Explore Destinations" %}</a></button>
   </div>
 </section>
 
   <section class="features">
-    <div class="feature-card"><a href="/cab/">🚕 Cab Booking</a> </div>
-    <div class="feature-card"><a href="/hotel/">🏨 Hotel Finder</a></div>
-    <div class="feature-card"><a href="/destination/">🌍 Destination Info</a></div>
-    <div class="feature-card"><a href="/itinerary/">🗓️ Smart Itinerary</a></div>
+    <div class="feature-card"><a href="/cab/">{% trans "🚕 Cab Booking" %}</a> </div>
+    <div class="feature-card"><a href="/hotel/">{% trans "🏨 Hotel Finder" %}</a></div>
+    <div class="feature-card"><a href="/destination/">{% trans "🌍 Destination Info" %}</a></div>
+    <div class="feature-card"><a href="/itinerary/">{% trans "🗓️ Smart Itinerary" %}</a></div>
   </section>
 
   <section class="carousel">
-  <h2>Popular Destinations</h2>
+  <h2>{% trans "Popular Destinations" %}</h2>
   <div class="destination-grid">
     <!-- Agra (Taj Mahal) -->
     <div class="card" data-images='["{% static 'images/tajmahal.png' %}","{% static 'images/tajmahal2.png' %}","{% static 'images/tajmahal3.png' %}","{% static 'images/tajmahal4.png' %}"]'>
       <img src="{% static 'images/tajmahal.png' %}" alt="Taj Mahal" />
       <h3>Agra (Taj Mahal)</h3>
-      <button>View More</button>
+      <button>{% trans "View More" %}</button>
     </div>
 
     <!-- Jaipur (Pink City) -->
     <div class="card" data-images='["{% static 'images/jaipur1.jpg' %}","{% static 'images/jaipur2.jpg' %}","{% static 'images/jaipur3.jpg' %}","{% static 'images/jaipur4.jpg' %}","{% static 'images/jaipur5.jpg' %}","{% static 'images/jaipur6.jpg' %}"]'>
       <img src="{% static 'images/jaipur1.jpg' %}" alt="Jaipur" />
       <h3>Jaipur (Pink City)</h3>
-      <button>View More</button>
+      <button>{% trans "View More" %}</button>
     </div>
 
     <!-- Goa (Beaches) -->
     <div class="card" data-images='["{% static 'images/goa1.jpg' %}","{% static 'images/goa2.jpg' %}","{% static 'images/goa3.jpg' %}","{% static 'images/goa4.jpg' %}","{% static 'images/goa5.jpg' %}","{% static 'images/goa6.jpg' %}","{% static 'images/goa7.jpg' %}","{% static 'images/goa8.jpg' %}","{% static 'images/goa9.jpg' %}","{% static 'images/goa10.jpg' %}","{% static 'images/goa11.jpg' %}","{% static 'images/goa12.jpg' %}","{% static 'images/goa5.jpg' %}"]'>
       <img src="{% static 'images/goa1.jpg' %}" alt="Goa" />
       <h3>Goa (Beaches)</h3>
-      <button>View More</button>
+      <button>{% trans "View More" %}</button>
     </div>
 
     <!-- Varanasi (Spiritual Capital) -->
     <div class="card" data-images='["{% static 'images/varanasi1.jpg' %}","{% static 'images/varanasi2.jpg' %}","{% static 'images/varanasi3.jpg' %}" ,"{% static 'images/varanasi4.jpg' %}","{% static 'images/varanasi5.jpg' %}","{% static 'images/varanasi6.jpg' %}","{% static 'images/varanasi7.jpg' %}"]'>
       <img src="{% static 'images/varanasi1.jpg' %}" alt="Varanasi" />
       <h3>Varanasi (Spiritual Capital)</h3>
-      <button>View More</button>
+      <button>{% trans "View More" %}</button>
     </div>
 
     <!-- Kerala (Backwaters) -->
     <div class="card" data-images='["{% static 'images/kerala1.jpg' %}","{% static 'images/kerala2.jpg' %}","{% static 'images/kerala3.jpg' %}","{% static 'images/kerala4.jpg' %}","{% static 'images/kerala5.jpg' %}","{% static 'images/kerala6.jpg' %}","{% static 'images/kerala3.jpg' %}"]'>
       <img src="{% static 'images/kerala1.jpg' %}" alt="Kerala" />
       <h3>Kerala (Backwaters)</h3>
-      <button>View More</button>
+      <button>{% trans "View More" %}</button>
     </div>
 
     <!-- Ladakh (Mountains) -->
     <div class="card" data-images='["{% static 'images/ladakh1.jpg' %}","{% static 'images/ladakh2.jpg' %}","{% static 'images/ladakh3.jpg' %}","{% static 'images/ladakh4.jpg' %}","{% static 'images/ladakh5.jpg' %}","{% static 'images/ladakh6.jpg' %}","{% static 'images/ladakh7.jpg' %}","{% static 'images/ladakh8.jpg' %}","{% static 'images/ladakh9.jpg' %}","{% static 'images/ladakh10.jpg' %}","{% static 'images/ladakh11.jpg' %}","{% static 'images/ladakh12.jpg' %}"]'>
       <img src="{% static 'images/ladakh1.jpg' %}" alt="Ladakh" />
       <h3>Ladakh (Mountains)</h3>
-      <button>View More</button>
+      <button>{% trans "View More" %}</button>
     </div>
   </div>
 </section>
 
 <section class="how-it-works">
-  <h2>How It Works</h2>
+  <h2>{% trans "How It Works" %}</h2>
   <div class="steps-container">
     <div class="step-card">
-      <img src="{% static 'images/destination.png' %}" alt="Choose Destination">
-      <h3>Choose Destination</h3>
-      <p>Pick your dream location from curated travel spots.</p>
+      <img src="{% static 'images/destination.png' %}" alt="{% trans 'Choose Destination' %}">
+      <h3>{% trans "Choose Destination" %}</h3>
+      <p>{% trans "Pick your dream location from curated travel spots." %}</p>
     </div>
     <div class="step-card">
-      <img src="{% static 'images/transport.png' %}" alt="Book Cab & Hotel">
-      <h3>Book Cab & Hotel</h3>
-      <p>Reserve transportation and stay with trusted partners.</p>
+      <img src="{% static 'images/transport.png' %}" alt="{% trans 'Book Cab & Hotel' %}">
+      <h3>{% trans "Book Cab & Hotel" %}</h3>
+      <p>{% trans "Reserve transportation and stay with trusted partners." %}</p>
     </div>
     <div class="step-card">
-      <img src="{% static 'images/atmospheric-conditions.png' %}" alt="Get Info">
-      <h3>Weather & Food Info</h3>
-      <p>Check forecasts and discover local cuisine highlights.</p>
+      <img src="{% static 'images/atmospheric-conditions.png' %}" alt="{% trans 'Weather & Food Info' %}">
+      <h3>{% trans "Weather & Food Info" %}</h3>
+      <p>{% trans "Check forecasts and discover local cuisine highlights." %}</p>
     </div>
     <div class="step-card">
-      <img src="{% static 'images/tripplan.png' %}" alt="View Itinerary">
-      <h3>View Trip Plan</h3>
-      <p>Access your personalized travel plan anytime.</p>
+      <img src="{% static 'images/tripplan.png' %}" alt="{% trans 'View Trip Plan' %}">
+      <h3>{% trans "View Trip Plan" %}</h3>
+      <p>{% trans "Access your personalized travel plan anytime." %}</p>
     </div>
   </div>
 </section>
 <!-- // for what users say -->
 <section class="testimonials">
-  <h2>What Our Users Say</h2>
+  <h2>{% trans "What Our Users Say" %}</h2>
   <div class="testimonial-carousel">
     <div class="testimonial-card active">
       <div class="quote-icon">“</div>
@@ -186,7 +219,7 @@
     <div class="row">
       <div class="col-lg-4 mb-4 mb-lg-0">
         <h4 class="mb-3"><i class="bi bi-compass me-2"></i>TourGuidePro</h4>
-        <p>Your trusted partner for unforgettable travel experiences. We make travel planning simple and enjoyable.</p>
+        <p>{% trans "Your trusted partner for unforgettable travel experiences. We make travel planning simple and enjoyable." %}</p>
         <div class="social-icons mt-4">
           <a href="#"><i class="bi bi-facebook"></i></a>
           <a href="#"><i class="bi bi-instagram"></i></a>
@@ -195,34 +228,34 @@
         </div>
       </div>
       <div class="col-lg-2 col-md-6 mb-4 mb-lg-0">
-        <h5 class="mb-3">Quick Links</h5>
+        <h5 class="mb-3">{% trans "Quick Links" %}</h5>
         <ul class="list-unstyled">
-          <li class="mb-2"><a href="#" class="text-white text-decoration-none">Home</a></li>
-          <li class="mb-2"><a href="#destinations" class="text-white text-decoration-none">Destinations</a></li>
-          <li class="mb-2"><a href="#services" class="text-white text-decoration-none">Services</a></li>
-          <li class="mb-2"><a href="#testimonials" class="text-white text-decoration-none">Testimonials</a></li>
-          <li><a href="#" class="text-white text-decoration-none">FAQ</a></li>
+          <li class="mb-2"><a href="#" class="text-white text-decoration-none">{% trans "Home" %}</a></li>
+          <li class="mb-2"><a href="#destinations" class="text-white text-decoration-none">{% trans "Destinations" %}</a></li>
+          <li class="mb-2"><a href="#services" class="text-white text-decoration-none">{% trans "Services" %}</a></li>
+          <li class="mb-2"><a href="#testimonials" class="text-white text-decoration-none">{% trans "Testimonials" %}</a></li>
+          <li><a href="#" class="text-white text-decoration-none">{% trans "FAQ" %}</a></li>
         </ul>
-          <li><a href="#contact" class="text-white text-decoration-none">Contact</a></li>
+          <li><a href="#contact" class="text-white text-decoration-none">{% trans "Contact" %}</a></li>
         </ul>
       </div>
       <div class="col-lg-3 col-md-6 mb-4 mb-lg-0">
-        <h5 class="mb-3">Services</h5>
+        <h5 class="mb-3">{% trans "Services" %}</h5>
         <ul class="list-unstyled">
-          <li class="mb-2"><a href="#" class="text-white text-decoration-none">Hotel Booking</a></li>
-          <li class="mb-2"><a href="#" class="text-white text-decoration-none">Cab Services</a></li>
-          <li class="mb-2"><a href="#" class="text-white text-decoration-none">Travel Guides</a></li>
-          <li class="mb-2"><a href="#" class="text-white text-decoration-none">Travel Insurance</a></li>
-          <li><a href="#" class="text-white text-decoration-none">Weather Updates</a></li>
+          <li class="mb-2"><a href="#" class="text-white text-decoration-none">{% trans "Hotel Booking" %}</a></li>
+          <li class="mb-2"><a href="#" class="text-white text-decoration-none">{% trans "Cab Services" %}</a></li>
+          <li class="mb-2"><a href="#" class="text-white text-decoration-none">{% trans "Travel Guides" %}</a></li>
+          <li class="mb-2"><a href="#" class="text-white text-decoration-none">{% trans "Travel Insurance" %}</a></li>
+          <li><a href="#" class="text-white text-decoration-none">{% trans "Weather Updates" %}</a></li>
         </ul>
       </div>
       <div class="col-lg-3">
-        <h5 class="mb-3">Newsletter</h5>
-        <p>Subscribe to get special offers and travel tips.</p>
+        <h5 class="mb-3">{% trans "Newsletter" %}</h5>
+        <p>{% trans "Subscribe to get special offers and travel tips." %}</p>
         <form class="mt-3">
           <div class="input-group">
-            <input type="email" class="form-control" placeholder="Your email">
-            <button class="btn btn-outline-light" type="button">Subscribe</button>
+            <input type="email" class="form-control" placeholder="{% trans 'Your email' %}">
+            <button class="btn btn-outline-light" type="button">{% trans "Subscribe" %}</button>
           </div>
         </form>
       </div>
@@ -233,8 +266,8 @@
         <p class="mb-0">&copy; 2025 TourGuidePro. All Rights Reserved.</p>
       </div>
       <div class="col-md-6 text-md-end">
-        <a href="#" class="text-white text-decoration-none me-3">Privacy Policy</a>
-        <a href="#" class="text-white text-decoration-none">Terms of Service</a>
+        <a href="#" class="text-white text-decoration-none me-3">{% trans "Privacy Policy" %}</a>
+        <a href="#" class="text-white text-decoration-none">{% trans "Terms of Service" %}</a>
       </div>
     </div>
   </div>
