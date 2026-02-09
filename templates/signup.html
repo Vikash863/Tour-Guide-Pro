@@ -2,135 +2,164 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Sign Up - TourGuidePro</title>
-  <link rel="stylesheet" href="{% static 'css/signup.css' %}" />
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-  <style>
-    body {
-      font-family: 'Poppins', sans-serif;
-      background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
-      min-height: 100vh;
-      margin: 0;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign Up - TourGuidePro</title>
+    <link rel="stylesheet" href="{% static 'css/signup.css' %}">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            margin: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+    </style>
 </head>
 <body>
-  <section class="auth-form">
-    <i class="fas fa-passport logo-icon"></i>
-    <h2>Create Your Account</h2>
-    <p class="subtitle">Join us and explore the world</p>
-    <form id="signupForm">
-      <div class="form-group">
-        <i class="fas fa-user"></i>
-        <input type="text" id="name" placeholder="Full Name" required />
-      </div>
-      <div class="form-group">
-        <i class="fas fa-envelope"></i>
-        <input type="email" id="email" placeholder="Email Address" required />
-      </div>
-      <div class="form-group">
-        <i class="fas fa-phone"></i>
-        <input type="tel" id="phone" placeholder="Phone Number" />
-      </div>
-      <div class="form-group">
-        <i class="fas fa-lock"></i>
-        <input type="password" id="password" placeholder="Password" required />
-      </div>
-      <div class="form-group">
-        <i class="fas fa-lock"></i>
-        <input type="password" id="confirmPassword" placeholder="Confirm Password" required />
-      </div>
-      <div class="terms">
-        <input type="checkbox" id="terms" required />
-        <label for="terms">I agree to Terms</label>
-      </div>
-      <button type="submit" id="signupBtn">Create Account</button>
-      <div id="errorMessage" style="color: red; margin-top: 10px; display: none;"></div>
-      <div id="successMessage" style="color: green; margin-top: 10px; display: none;"></div>
-    </form>
-    <p>Already have an account? <a href="/login/">Login here</a></p>
-  </section>
+    <div class="auth-container">
+        <div class="auth-form">
+            <a href="/" class="back-link"><i class="fas fa-arrow-left"></i> Back to Home</a>
+            <i class="fas fa-user-plus logo-icon"></i>
+            <h2>Create Account</h2>
+            <p class="subtitle">Join us and start your journey</p>
+            <form id="signupForm">
+                {% csrf_token %}
+                <div class="form-group">
+                    <i class="fas fa-user"></i>
+                    <input type="text" id="username" placeholder="Username" required />
+                </div>
+                <div class="form-group">
+                    <i class="fas fa-envelope"></i>
+                    <input type="email" id="email" placeholder="Email" required />
+                </div>
+                <div class="form-group">
+                    <i class="fas fa-lock"></i>
+                    <input type="password" id="password" placeholder="Password" required />
+                </div>
+                <div class="form-group">
+                    <i class="fas fa-lock"></i>
+                    <input type="password" id="password_confirm" placeholder="Confirm Password" required />
+                </div>
+                <button type="submit" id="signupBtn">Sign Up</button>
+                <div id="errorMessage" style="color: red; margin-top: 15px; display: none; text-align: center;"></div>
+                <div id="successMessage" style="color: green; margin-top: 15px; display: none; text-align: center;"></div>
+            </form>
+            <p>Already have an account? <a href="/login/">Login here</a></p>
+        </div>
+    </div>
 
-  <script>
-    async function signup() {
-      const name = document.getElementById('name').value.trim();
-      const email = document.getElementById('email').value.trim();
-      const password = document.getElementById('password').value;
-      const confirmPassword = document.getElementById('confirmPassword').value;
-      const errorDiv = document.getElementById('errorMessage');
-      const successDiv = document.getElementById('successMessage');
-      
-      errorDiv.style.display = 'none';
-      successDiv.style.display = 'none';
-      
-      if (password !== confirmPassword) {
-        errorDiv.textContent = 'Passwords do not match';
-        errorDiv.style.display = 'block';
-        return;
-      }
-      
-      if (password.length < 6) {
-        errorDiv.textContent = 'Password must be at least 6 characters';
-        errorDiv.style.display = 'block';
-        return;
-      }
-      
-      const [firstName, lastName] = name.includes(' ') ? name.split(' ', 2) : [name, ''];
-      
-      try {
-        const response = await fetch('/api/register/', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'Accept': 'application/json'
-          },
-          body: JSON.stringify({
-            username: email.split('@')[0],
-            email: email,
-            password: password,
-            password_confirm: confirmPassword,
-            first_name: firstName,
-            last_name: lastName
-          })
-        });
-        
-        const contentType = response.headers.get('content-type');
-        if (!contentType || !contentType.includes('application/json')) {
-          errorDiv.textContent = 'Registration failed. Please try again.';
-          errorDiv.style.display = 'block';
-          return;
+    <script>
+        async function signup(event) {
+            event.preventDefault();
+            
+            const username = document.getElementById('username').value.trim();
+            const email = document.getElementById('email').value.trim();
+            const password = document.getElementById('password').value;
+            const passwordConfirm = document.getElementById('password_confirm').value;
+            const errorDiv = document.getElementById('errorMessage');
+            const successDiv = document.getElementById('successMessage');
+            const signupBtn = document.getElementById('signupBtn');
+            
+            // Clear previous messages
+            errorDiv.style.display = 'none';
+            successDiv.style.display = 'none';
+            
+            // Basic validation
+            if (!username || !email || !password || !passwordConfirm) {
+                errorDiv.textContent = 'Please fill in all fields';
+                errorDiv.style.display = 'block';
+                return;
+            }
+            
+            if (password !== passwordConfirm) {
+                errorDiv.textContent = 'Passwords do not match';
+                errorDiv.style.display = 'block';
+                return;
+            }
+            
+            if (password.length < 8) {
+                errorDiv.textContent = 'Password must be at least 8 characters';
+                errorDiv.style.display = 'block';
+                return;
+            }
+            
+            // Show loading
+            signupBtn.textContent = 'Creating account...';
+            signupBtn.disabled = true;
+            
+            try {
+                const response = await fetch('/api/users/register/', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        username: username,
+                        email: email,
+                        password: password,
+                        password_confirm: passwordConfirm
+                    })
+                });
+                
+                // Check if response is HTML (error page) instead of JSON
+                const contentType = response.headers.get('content-type');
+                if (!contentType || !contentType.includes('application/json')) {
+                    const text = await response.text();
+                    errorDiv.textContent = 'Server error. Please try again or contact support.';
+                    errorDiv.style.display = 'block';
+                    signupBtn.textContent = 'Sign Up';
+                    signupBtn.disabled = false;
+                    console.error('Non-JSON response:', text.substring(0, 200));
+                    return;
+                }
+                
+                const data = await response.json();
+                
+                if (response.ok) {
+                    successDiv.textContent = 'Account created successfully! Redirecting to login...';
+                    successDiv.style.display = 'block';
+                    
+                    // Redirect to login after 1.5 seconds
+                    setTimeout(() => {
+                        window.location.href = '/login/';
+                    }, 1500);
+                } else {
+                    // Show error
+                    if (data.username) {
+                        errorDiv.textContent = data.username[0];
+                    } else if (data.email) {
+                        errorDiv.textContent = data.email[0];
+                    } else if (data.password) {
+                        errorDiv.textContent = data.password[0];
+                    } else if (data.error) {
+                        errorDiv.textContent = data.error;
+                    } else {
+                        errorDiv.textContent = data.message || 'Registration failed. Please try again.';
+                    }
+                    errorDiv.style.display = 'block';
+                    signupBtn.textContent = 'Sign Up';
+                    signupBtn.disabled = false;
+                }
+            } catch (e) {
+                errorDiv.textContent = 'Error: ' + e.message + '. Please check your connection.';
+                errorDiv.style.display = 'block';
+                signupBtn.textContent = 'Sign Up';
+                signupBtn.disabled = false;
+                console.error('Signup error:', e);
+            }
         }
         
-        const result = await response.json();
+        document.getElementById('signupForm').addEventListener('submit', signup);
         
-        if (result.user || result.message) {
-          successDiv.textContent = 'Account created successfully! Redirecting to login...';
-          successDiv.style.display = 'block';
-          setTimeout(() => {
-            window.location.href = '/login/';
-          }, 2000);
-        } else {
-          const errors = Object.values(result).flat();
-          errorDiv.textContent = errors.join(', ');
-          errorDiv.style.display = 'block';
+        // Check if already logged in
+        if (localStorage.getItem('authToken')) {
+            window.location.href = '/profile/';
         }
-      } catch (error) {
-        console.error('Signup error:', error);
-        errorDiv.textContent = 'Error: ' + error.message;
-        errorDiv.style.display = 'block';
-      }
-    }
-    
-    document.getElementById('signupForm').addEventListener('submit', function(e) {
-      e.preventDefault();
-      signup();
-    });
-  </script>
+    </script>
 </body>
 </html>

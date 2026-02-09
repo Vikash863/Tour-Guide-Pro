@@ -1,572 +1,285 @@
-/**
- * Tour Guide Pro - All Features API Integration
- * Complete JavaScript API for 15 Features + Bonus Features
- */
-
-const API_BASE = '/api';
-
-// ==================== AUTHENTICATION ====================
-const AuthAPI = {
-    async login(username, password) {
-        const response = await fetch(`${API_BASE}/auth/login/`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ username, password })
-        });
-        return response.json();
-    },
-
-    async register(userData) {
-        const response = await fetch(`${API_BASE}/register/`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(userData)
-        });
-        return response.json();
-    },
-
-    getToken() {
-        return localStorage.getItem('token');
-    },
-
-    setToken(token) {
-        localStorage.setItem('token', token);
-    },
-
-    logout() {
-        localStorage.removeItem('token');
-        window.location.href = '/login/';
-    },
-
-    isAuthenticated() {
-        return !!this.getToken();
-    }
-};
-
-// ==================== 1) SMART TRIP ASSISTANT (AI) ====================
-const TripAssistant = {
-    async generatePlan(data) {
-        const response = await fetch(`${API_BASE}/trip-plans/`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Token ${AuthAPI.getToken()}`
-            },
-            body: JSON.stringify(data)
-        });
-        return response.json();
-    },
-
-    async getPlans() {
-        const response = await fetch(`${API_BASE}/trip-plans/`, {
-            headers: { 'Authorization': `Token ${AuthAPI.getToken()}` }
-        });
-        return response.json();
-    },
-
-    async getPlan(id) {
-        const response = await fetch(`${API_BASE}/trip-plans/${id}/`, {
-            headers: { 'Authorization': `Token ${AuthAPI.getToken()}` }
-        });
-        return response.json();
-    },
-
-    async regenerate(id, interests) {
-        const response = await fetch(`${API_BASE}/trip-plans/${id}/regenerate/`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Token ${AuthAPI.getToken()}`
-            },
-            body: JSON.stringify({ interests })
-        });
-        return response.json();
-    },
-
-    async share(id) {
-        const response = await fetch(`${API_BASE}/trip-plans/${id}/share/`, {
-            headers: { 'Authorization': `Token ${AuthAPI.getToken()}` }
-        });
-        return response.json();
-    },
-
-    async savePreferences(prefs) {
-        const response = await fetch(`${API_BASE}/trip-preferences/`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Token ${AuthAPI.getToken()}`
-            },
-            body: JSON.stringify(prefs)
-        });
-        return response.json();
-    },
-
-    async getPreferences() {
-        const response = await fetch(`${API_BASE}/trip-preferences/my/`, {
-            headers: { 'Authorization': `Token ${AuthAPI.getToken()}` }
-        });
-        return response.json();
-    }
-};
-
-// ==================== 2) TRIP BUDGET CALCULATOR ====================
-const BudgetCalculator = {
-    async createTracker(data) {
-        const response = await fetch(`${API_BASE}/budget-trackers/`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Token ${AuthAPI.getToken()}`
-            },
-            body: JSON.stringify(data)
-        });
-        return response.json();
-    },
-
-    async getTrackers() {
-        const response = await fetch(`${API_BASE}/budget-trackers/`, {
-            headers: { 'Authorization': `Token ${AuthAPI.getToken()}` }
-        });
-        return response.json();
-    },
-
-    async getSummary(id) {
-        const response = await fetch(`${API_BASE}/budget-trackers/${id}/summary/`, {
-            headers: { 'Authorization': `Token ${AuthAPI.getToken()}` }
-        });
-        return response.json();
-    },
-
-    async updateCost(id, category, amount) {
-        const response = await fetch(`${API_BASE}/budget-trackers/${id}/update_cost/`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Token ${AuthAPI.getToken()}`
-            },
-            body: JSON.stringify({ category, amount })
-        });
-        return response.json();
-    },
-
-    getCurrencies() {
-        return [
-            { code: 'INR', name: 'Indian Rupee', symbol: '₹' },
-            { code: 'USD', name: 'US Dollar', symbol: '$' },
-            { code: 'EUR', name: 'Euro', symbol: '€' },
-            { code: 'GBP', name: 'British Pound', symbol: '£' }
-        ];
-    },
-
-    async convertCurrency(amount, fromCurrency, toCurrency) {
-        const response = await fetch(`${API_BASE}/currency/convert/`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ amount, from_currency: fromCurrency, to_currency: toCurrency })
-        });
-        return response.json();
-    }
-};
-
-// ==================== 3) NEARBY PLACES FINDER ====================
-const NearbyPlaces = {
-    async searchPlaces(lat, lng, type = 'tourist_attraction') {
-        const response = await fetch(
-            `${API_BASE}/nearby-places/search/?latitude=${lat}&longitude=${lng}&type=${type}`,
-            { headers: { 'Authorization': `Token ${AuthAPI.getToken()}` } }
-        );
-        return response.json();
-    },
-
-    async savePlace(placeData) {
-        const response = await fetch(`${API_BASE}/nearby-places/`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Token ${AuthAPI.getToken()}`
-            },
-            body: JSON.stringify(placeData)
-        });
-        return response.json();
-    },
-
-    async getSavedPlaces() {
-        const response = await fetch(`${API_BASE}/nearby-places/`, {
-            headers: { 'Authorization': `Token ${AuthAPI.getToken()}` }
-        });
-        return response.json();
-    },
-
-    // Google Maps integration helper
-    initGoogleMaps(apiKey) {
-        if (window.google) return;
-        const script = document.createElement('script');
-        script.src = `https://maps.googleapis.com/maps/api/js?key=${apiKey}&libraries=places`;
-        document.head.appendChild(script);
-    },
-
-    getPlaceTypes() {
-        return [
-            { id: 'tourist_attraction', name: 'Tourist Attractions' },
-            { id: 'restaurant', name: 'Restaurants' },
-            { id: 'hotel', name: 'Hotels' },
-            { id: 'shopping_mall', name: 'Shopping Malls' },
-            { id: 'museum', name: 'Museums' },
-            { id: 'park', name: 'Parks' },
-            { id: 'hospital', name: 'Hospitals' }
-        ];
-    }
-};
-
-// ==================== 4) OFFLINE TRAVEL GUIDE ====================
-const OfflineGuide = {
-    async getGuides(destinationId) {
-        const response = await fetch(`${API_BASE}/offline-guides/by_destination/?destination_id=${destinationId}`);
-        return response.json();
-    },
-
-    async createGuide(data) {
-        const response = await fetch(`${API_BASE}/offline-guides/`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(data)
-        });
-        return response.json();
-    },
-
-    async downloadPDF(guideId) {
-        window.open(`${API_BASE}/offline-guides/${guideId}/download/`, '_blank');
-    }
-};
-
-const TripChecklist = {
-    async create(data) {
-        const response = await fetch(`${API_BASE}/trip-checklists/`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Token ${AuthAPI.getToken()}`
-            },
-            body: JSON.stringify(data)
-        });
-        return response.json();
-    },
-
-    async getChecklists() {
-        const response = await fetch(`${API_BASE}/trip-checklists/`, {
-            headers: { 'Authorization': `Token ${AuthAPI.getToken()}` }
-        });
-        return response.json();
-    },
-
-    async updateItems(id, items) {
-        const response = await fetch(`${API_BASE}/trip-checklists/${id}/update_items/`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Token ${AuthAPI.getToken()}`
-            },
-            body: JSON.stringify({ items })
-        });
-        return response.json();
-    },
-
-    getDefaultItems() {
-        return {
-            documents: ['Passport', 'Visa', 'ID Proof', 'Booking Confirmations', 'Travel Insurance'],
-            clothing: ['T-Shirts', 'Jeans', 'Jackets', 'Comfortable Shoes', 'Swimwear'],
-            electronics: ['Phone Charger', 'Power Bank', 'Camera', 'Adapter'],
-            toiletries: ['Toothbrush', 'Toothpaste', 'Shampoo', 'Sunscreen', 'Medicines'],
-            miscellaneous: ['Cash', 'Credit Cards', 'sunglasses', 'Hat']
-        };
-    }
-};
-
-// ==================== 5) TRAVEL MEMORY SCRAPBOOK ====================
-const TravelMemory = {
-    async create(data) {
-        const response = await fetch(`${API_BASE}/travel-memories/`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Token ${AuthAPI.getToken()}`
-            },
-            body: JSON.stringify(data)
-        });
-        return response.json();
-    },
-
-    async getMemories() {
-        const response = await fetch(`${API_BASE}/travel-memories/`, {
-            headers: { 'Authorization': `Token ${AuthAPI.getToken()}` }
-        });
-        return response.json();
-    },
-
-    async addPhoto(memoryId, photo, caption = '') {
-        const formData = new FormData();
-        formData.append('photo', photo);
-        formData.append('caption', caption);
-        const response = await fetch(`${API_BASE}/travel-memories/${memoryId}/add_photo/`, {
-            method: 'POST',
-            headers: { 'Authorization': `Token ${AuthAPI.getToken()}` },
-            body: formData
-        });
-        return response.json();
-    },
-
-    async addNote(memoryId, content) {
-        const response = await fetch(`${API_BASE}/travel-memories/${memoryId}/add_note/`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Token ${AuthAPI.getToken()}`
-            },
-            body: JSON.stringify({ content })
-        });
-        return response.json();
-    },
-
-    async share(memoryId) {
-        const response = await fetch(`${API_BASE}/travel-memories/${memoryId}/share/`, {
-            headers: { 'Authorization': `Token ${AuthAPI.getToken()}` }
-        });
-        return response.json();
-    }
-};
-
-// ==================== 6) GROUP TRIP PLANNER ====================
-const GroupTrip = {
-    async create(data) {
-        const response = await fetch(`${API_BASE}/group-trips/`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Token ${AuthAPI.getToken()}`
-            },
-            body: JSON.stringify(data)
-        });
-        return response.json();
-    },
-
-    async getTrips() {
-        const response = await fetch(`${API_BASE}/group-trips/`, {
-            headers: { 'Authorization': `Token ${AuthAPI.getToken()}` }
-        });
-        return response.json();
-    },
-
-    async inviteMember(tripId, userId) {
-        const response = await fetch(`${API_BASE}/group-trips/${tripId}/invite/`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Token ${AuthAPI.getToken()}`
-            },
-            body: JSON.stringify({ user_id: userId })
-        });
-        return response.json();
-    },
-
-    async createPoll(tripId, pollData) {
-        const response = await fetch(`${API_BASE}/group-trips/${tripId}/create_poll/`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Token ${AuthAPI.getToken()}`
-            },
-            body: JSON.stringify(pollData)
-        });
-        return response.json();
-    },
-
-    async getExpenses(tripId) {
-        const response = await fetch(`${API_BASE}/group-trips/${tripId}/expenses/`, {
-            headers: { 'Authorization': `Token ${AuthAPI.getToken()}` }
-        });
-        return response.json();
-    }
-};
-
-// ==================== 7) RECOMMENDATION ENGINE ====================
-const Recommendations = {
-    async getPersonalized() {
-        const response = await fetch(`${API_BASE}/recommendations/`, {
-            headers: { 'Authorization': `Token ${AuthAPI.getToken()}` }
-        });
-        return response.json();
-    },
-
-    async trackView(id) {
-        await fetch(`${API_BASE}/recommendations/${id}/view/`, {
-            method: 'POST',
-            headers: { 'Authorization': `Token ${AuthAPI.getToken()}` }
+// ==================== GPS MAP TRACKING ====================
+const GPSTracking = {
+    watchId: null,
+    trackData: [],
+    
+    async startTracking(tripName) {
+        if (!navigator.geolocation) {
+            alert('Geolocation is not supported by your browser');
+            return null;
+        }
+        
+        return new Promise((resolve, reject) => {
+            this.watchId = navigator.geolocation.watchPosition(
+                async (position) => {
+                    const location = {
+                        latitude: position.coords.latitude,
+                        longitude: position.coords.longitude,
+                        accuracy: position.coords.accuracy,
+                        altitude: position.coords.altitude,
+                        timestamp: new Date().toISOString()
+                    };
+                    
+                    this.trackData.push(location);
+                    await this.saveLocation(location);
+                    resolve(location);
+                },
+                (error) => { reject(error); },
+                { enableHighAccuracy: true, maximumAge: 30000, timeout: 27000 }
+            );
         });
     },
-
-    async trackClick(id) {
-        await fetch(`${API_BASE}/recommendations/${id}/click/`, {
-            method: 'POST',
-            headers: { 'Authorization': `Token ${AuthAPI.getToken()}` }
-        });
-    }
-};
-
-// ==================== 8) SMART NOTIFICATIONS ====================
-const Notifications = {
-    async getAll() {
-        const response = await fetch(`${API_BASE}/notifications/`, {
-            headers: { 'Authorization': `Token ${AuthAPI.getToken()}` }
-        });
-        return response.json();
-    },
-
-    async markAsRead(id) {
-        const response = await fetch(`${API_BASE}/notifications/${id}/mark_read/`, {
-            method: 'POST',
-            headers: { 'Authorization': `Token ${AuthAPI.getToken()}` }
-        });
-        return response.json();
-    },
-
-    async createPriceAlert(data) {
-        const response = await fetch(`${API_BASE}/notifications/create_price_alert/`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Token ${AuthAPI.getToken()}`
-            },
-            body: JSON.stringify(data)
-        });
-        return response.json();
-    },
-
-    initPushNotifications() {
-        if ('Notification' in window) {
-            Notification.requestPermission();
+    
+    stopTracking() {
+        if (this.watchId) {
+            navigator.geolocation.clearWatch(this.watchId);
+            this.watchId = null;
         }
     },
-
-    async subscribeToPush() {
-        if (!('serviceWorker' in navigator)) return;
-        // Service worker push notification setup
-    }
-};
-
-// ==================== 9) WEATHER INTEGRATION ====================
-const Weather = {
-    async getWeather(city, destinationId = null) {
-        const url = destinationId 
-            ? `${API_BASE}/weather/?destination_id=${destinationId}`
-            : `${API_BASE}/weather/?city=${encodeURIComponent(city)}`;
-        const response = await fetch(url);
-        return response.json();
-    },
-
-    async getForecast(city, days = 7) {
-        const response = await fetch(`${API_BASE}/weather/forecast/?city=${city}&days=${days}`);
-        return response.json();
-    },
-
-    getWeatherIcon(condition) {
-        const icons = {
-            'sunny': '☀️',
-            'cloudy': '☁️',
-            'partly_cloudy': '⛅',
-            'rain': '🌧️',
-            'storm': '⛈️',
-            'snow': '❄️',
-            'fog': '🌫️'
-        };
-        return icons[condition.toLowerCase()] || '🌤️';
-    },
-
-    getBestTimeToVisit(region) {
-        const recommendations = {
-            'goa': 'November to February',
-            'rajasthan': 'October to March',
-            'kerala': 'September to March',
-            'himachal': 'March to June, October to November',
-            'default': 'October to March'
-        };
-        const key = region.toLowerCase();
-        return recommendations[key] || recommendations['default'];
-    }
-};
-
-// ==================== 10) SAFETY & EMERGENCY ====================
-const Safety = {
-    async getInfo(destinationId) {
-        const response = await fetch(`${API_BASE}/safety/?destination_id=${destinationId}`);
-        return response.json();
-    },
-
-    getIndiaEmergencyNumbers() {
-        return {
-            police: '100',
-            ambulance: '102',
-            fire: '101',
-            women_helpline: '1091',
-            child_helpline: '1098',
-            general_emergency: '112',
-            tourist_police: '1363'
-        };
-    },
-
-    getSafetyTips() {
-        return [
-            'Keep copies of important documents',
-            'Share itinerary with family',
-            'Use authorized taxis and transportation',
-            'Keep valuables in hotel safe',
-            'Stay aware of surroundings',
-            'Avoid isolated areas at night',
-            'Keep emergency contacts saved',
-            'Register with embassy for international travel'
-        ];
-    }
-};
-
-// ==================== 11) QR BASED TICKETS ====================
-const QRTickets = {
-    async create(data) {
-        const response = await fetch(`${API_BASE}/qr-tickets/`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Token ${AuthAPI.getToken()}`
-            },
-            body: JSON.stringify(data)
-        });
-        return response.json();
-    },
-
-    async getMyTickets() {
-        const response = await fetch(`${API_BASE}/qr-tickets/`, {
-            headers: { 'Authorization': `Token ${AuthAPI.getToken()}` }
-        });
-        return response.json();
-    },
-
-    async verify(ticketId) {
-        const response = await fetch(`${API_BASE}/qr-tickets/${ticketId}/verify/`, {
-            headers: { 'Authorization': `Token ${AuthAPI.getToken()}` }
-        });
-        return response.json();
-    },
-
-    generateQRCode(data) {
-        // Using QRCode.js or similar library
-        if (typeof QRCode !== 'undefined') {
-            return new QRCode(document.createElement('div'), {
-                text: data,
-                width: 200,
-                height: 200
+    
+    async saveLocation(location) {
+        try {
+            const response = await fetch('/api/gps/track/', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(location)
             });
+            return response.json();
+        } catch (error) {
+            console.error('Error saving location:', error);
         }
-        return null;
+    },
+    
+    async startTrip(name, startLat, startLng) {
+        try {
+            return await fetch('/api/trips/start/', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ name: name, start_latitude: startLat, start_longitude: startLng })
+            }).then(r => r.json());
+        } catch (error) {
+            console.error('Error starting trip:', error);
+            throw error;
+        }
+    },
+    
+    async stopTrip(tripId, endLat, endLng) {
+        try {
+            return await fetch(`/api/trips/${tripId}/stop/`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ end_latitude: endLat, end_longitude: endLng })
+            }).then(r => r.json());
+        } catch (error) {
+            console.error('Error stopping trip:', error);
+            throw error;
+        }
     }
 };
 
-// =================
+// ==================== WEATHER API ====================
+const WeatherAPI = {
+    async getWeather(city) {
+        try {
+            return await fetch(`/api/weather/?city=${encodeURIComponent(city)}`).then(r => r.json());
+        } catch (error) {
+            console.error('Error fetching weather:', error);
+            throw error;
+        }
+    },
+    
+    async getForecast(city, days = 7) {
+        try {
+            return await fetch(`/api/weather/forecast/?city=${encodeURIComponent(city)}&days=${days}`).then(r => r.json());
+        } catch (error) {
+            console.error('Error fetching forecast:', error);
+            throw error;
+        }
+    },
+    
+    getWeatherIcon(condition) {
+        const icons = { 'Sunny': '☀️', 'Clear': '🌙', 'Partly Cloudy': '⛅', 'Cloudy': '☁️', 'Rainy': '🌧️', 'Light Rain': '🌦️' };
+        return icons[condition] || '🌤️';
+    }
+};
+
+// ==================== EXPENSE TRACKER ====================
+const ExpenseTracker = {
+    async loadCategories() {
+        try {
+            return await fetch('/api/expense-categories/default/').then(r => r.json());
+        } catch (error) {
+            return [];
+        }
+    },
+    
+    async addExpense(data) {
+        try {
+            return await fetch('/api/expenses/', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(data)
+            }).then(r => r.json());
+        } catch (error) {
+            console.error('Error adding expense:', error);
+            throw error;
+        }
+    },
+    
+    async getExpenses(tripId = null) {
+        try {
+            const url = tripId ? `/api/expenses/by_trip/?trip_id=${tripId}` : '/api/expenses/';
+            return await fetch(url).then(r => r.json());
+        } catch (error) {
+            return [];
+        }
+    },
+    
+    async getExpenseSummary(tripId = null) {
+        try {
+            const url = tripId ? `/api/expenses/summary/?trip_id=${tripId}` : '/api/expenses/summary/';
+            return await fetch(url).then(r => r.json());
+        } catch (error) {
+            return { categories: [], total: 0 };
+        }
+    },
+    
+    formatCurrency(amount, currency = 'INR') {
+        return new Intl.NumberFormat('en-IN', { style: 'currency', currency: currency }).format(amount);
+    }
+};
+
+// ==================== TRAVEL CHECKLIST ====================
+const TravelChecklist = {
+    async getTemplates() {
+        try {
+            return await fetch('/api/checklists/templates/').then(r => r.json());
+        } catch (error) {
+            return [];
+        }
+    },
+    
+    async createFromTemplate(templateId, name, destination, startDate, endDate) {
+        try {
+            return await fetch('/api/checklists/from_template/', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ template_id: templateId, name, destination, start_date: startDate, end_date: endDate })
+            }).then(r => r.json());
+        } catch (error) {
+            console.error('Error creating checklist:', error);
+            throw error;
+        }
+    },
+    
+    async getChecklists() {
+        try {
+            return await fetch('/api/checklists/').then(r => r.json());
+        } catch (error) {
+            return [];
+        }
+    },
+    
+    async toggleItem(checklistId, itemId) {
+        try {
+            return await fetch(`/api/checklists/${checklistId}/toggle_item/`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ item_id: itemId })
+            }).then(r => r.json());
+        } catch (error) {
+            console.error('Error toggling item:', error);
+            throw error;
+        }
+    },
+    
+    getDefaultTemplates() {
+        return [
+            { id: 1, name: 'Beach Vacation', items: [
+                { name: 'Swimsuit', category: 'clothing' }, { name: 'Sunscreen SPF 50+', category: 'toiletries' },
+                { name: 'Sunglasses', category: 'accessories' }, { name: 'Beach towel', category: 'accessories' },
+                { name: 'Flip flops', category: 'footwear' }, { name: 'Passport', category: 'documents' }
+            ]},
+            { id: 2, name: 'Mountain Trek', items: [
+                { name: 'Hiking boots', category: 'footwear' }, { name: 'Warm jacket', category: 'clothing' },
+                { name: 'Trekking poles', category: 'equipment' }, { name: 'Water bottle', category: 'equipment' },
+                { name: 'First aid kit', category: 'health' }, { name: 'Flashlight', category: 'equipment' }
+            ]},
+            { id: 3, name: 'Business Trip', items: [
+                { name: 'Laptop', category: 'electronics' }, { name: 'Business suits', category: 'clothing' },
+                { name: 'Business cards', category: 'documents' }, { name: 'Charger', category: 'electronics' }
+            ]}
+        ];
+    }
+};
+
+// ==================== REFERRAL SYSTEM ====================
+const ReferralSystem = {
+    async generateCode(discountPercent = 10, maxUses = 10) {
+        try {
+            return await fetch('/api/referral-codes/generate/', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ discount_percent: discountPercent, max_uses: maxUses })
+            }).then(r => r.json());
+        } catch (error) {
+            console.error('Error generating referral code:', error);
+            throw error;
+        }
+    },
+    
+    async getMyCode() {
+        try {
+            return await fetch('/api/referral-codes/my_code/').then(r => r.json());
+        } catch (error) {
+            return null;
+        }
+    },
+    
+    async getStats() {
+        try {
+            return await fetch('/api/referral-codes/stats/').then(r => r.json());
+        } catch (error) {
+            return null;
+        }
+    },
+    
+    async applyCode(code, email) {
+        try {
+            return await fetch('/api/referrals/apply/', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ code: code, email: email })
+            }).then(r => r.json());
+        } catch (error) {
+            console.error('Error applying referral code:', error);
+            throw error;
+        }
+    },
+    
+    shareViaWhatsApp(code) {
+        const message = `Join TourGuidePro! Use my referral code: ${code}`;
+        window.open(`https://wa.me/?text=${encodeURIComponent(message)}`, '_blank');
+    },
+    
+    shareViaEmail(code) {
+        const subject = 'Join TourGuidePro - Get Exclusive Discounts!';
+        const body = `Use my referral code "${code}" when signing up for TourGuidePro!`;
+        window.location.href = `mailto:?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+    },
+    
+    copyReferralCode(code) {
+        navigator.clipboard.writeText(code).then(() => {
+            alert('Referral code copied!');
+        }).catch(() => {
+            prompt('Copy this code:', code);
+        });
+    }
+};
+
+// Export all modules
+window.GPSTracking = GPSTracking;
+window.WeatherAPI = WeatherAPI;
+window.ExpenseTracker = ExpenseTracker;
+window.TravelChecklist = TravelChecklist;
+window.ReferralSystem = ReferralSystem;

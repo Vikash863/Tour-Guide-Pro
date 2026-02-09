@@ -347,10 +347,32 @@ body {
 
 
 footer {
-  background: var(--dark);
+  background: #1a1a2e;
   color: white;
   padding: 60px 0 30px;
-  text-align: center;
+}
+
+footer h4, footer h5 {
+  color: #ff4757;
+}
+
+footer a {
+  color: #bdc3c7;
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+footer a:hover {
+  color: #ff4757;
+}
+
+footer .social-icons a {
+  font-size: 1.5rem;
+  margin-right: 15px;
+}
+
+footer .social-icons a:hover {
+  color: #ff4757;
 }
 
 .testimonials {
@@ -716,6 +738,13 @@ for what our users say section */
   border-radius: 12px;
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
   overflow: hidden;
+  display: none;
+  min-width: 180px;
+  z-index: 1000;
+}
+
+.user-dropdown.show {
+  display: block;
 }
 
 .user-dropdown a {
@@ -723,12 +752,215 @@ for what our users say section */
   color: #333;
   font-weight: 500;
   transition: all 0.2s ease;
+  display: block;
 }
 
 .user-dropdown a:hover {
   background: #f0f7ff;
   color: #0077cc;
   padding-left: 25px;
+}
+
+.user-dropdown span {
+  padding: 12px 20px;
+  color: #333;
+  font-weight: 500;
+  display: block;
+  border-bottom: 1px solid #eee;
+}
+
+/* Hero Section */
+.hero-section {
+    background: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)), url('../images/goa1.jpg') center/cover no-repeat fixed;
+    min-height: 80vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    color: white;
+}
+
+.hero-content {
+    max-width: 700px;
+    padding: 20px;
+}
+
+.hero-title {
+    font-size: 3.5rem;
+    font-weight: bold;
+    margin-bottom: 1rem;
+    text-shadow: 2px 2px 8px rgba(0,0,0,0.5);
+}
+
+.hero-subtitle {
+    font-size: 1.4rem;
+    margin-bottom: 2rem;
+    text-shadow: 1px 1px 4px rgba(0,0,0,0.5);
+}
+
+.search-box {
+    display: flex;
+    max-width: 500px;
+    margin: 0 auto;
+    background: white;
+    border-radius: 50px;
+    overflow: hidden;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+}
+
+.search-input {
+    flex: 1;
+    padding: 15px 25px;
+    border: none;
+    font-size: 1rem;
+    outline: none;
+}
+
+.search-btn {
+    background: #0077cc;
+    color: white;
+    border: none;
+    padding: 15px 30px;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+.search-btn:hover {
+    background: #005fa3;
+}
+
+/* Section Titles */
+.section-title {
+    font-size: 2rem;
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 1rem;
+}
+
+/* Destination Cards */
+.destination-card {
+    position: relative;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    transition: transform 0.3s;
+    height: 250px;
+}
+
+.destination-card:hover {
+    transform: scale(1.03);
+}
+
+.destination-card img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.destination-info {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: linear-gradient(transparent, rgba(0,0,0,0.8));
+    color: white;
+    padding: 20px;
+}
+
+.destination-info h3 {
+    margin: 0 0 5px;
+    font-size: 1.3rem;
+}
+
+.destination-info p {
+    margin: 0;
+    font-size: 0.9rem;
+}
+
+/* How It Works Steps */
+.step-card {
+    background: white;
+    border-radius: 12px;
+    padding: 25px 15px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.step-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+}
+
+.step-icon {
+    width: 70px;
+    height: 70px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.8rem;
+    margin: 0 auto 15px;
+}
+
+.step-card h4 {
+    color: #333;
+    margin-bottom: 10px;
+}
+
+.step-card p {
+    color: #666;
+    font-size: 0.9rem;
+    margin: 0;
+}
+
+/* Testimonials */
+.testimonial-card {
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+}
+
+.testimonial-card .quote-icon {
+    font-size: 3rem;
+    color: #667eea;
+    line-height: 1;
+}
+
+.testimonial-card p {
+    font-size: 1.1rem;
+    color: #333;
+    margin: 15px 0;
+}
+
+.testimonial-card .author {
+    color: #667eea;
+    font-weight: 600;
+}
+
+.testimonial-card .stars {
+    color: #ffc107;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .hero-title {
+        font-size: 2.2rem;
+    }
+    
+    .hero-subtitle {
+        font-size: 1.1rem;
+    }
+    
+    .nav-links {
+        margin-left: 0;
+        font-size: 0.9rem;
+    }
+    
+    .nav-links li {
+        margin: 0 8px;
+    }
 }
 
 /* for icon */

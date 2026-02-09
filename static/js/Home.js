@@ -1,4 +1,4 @@
-// === Authentication Handler ===
+// === User Dropdown Handler ===
 function initializeAuth() {
   const loginIcon = document.getElementById('loginIcon');
   const userDropdown = document.getElementById('userDropdown');
@@ -7,39 +7,77 @@ function initializeAuth() {
   if (auth.isLoggedIn()) {
     const user = auth.getUser();
     if (user) {
-      const userDisplayName = user.first_name || user.name || user.username || 'User';
+      const displayName = user.first_name || user.name || user.username || 'User';
+      
+      // Update user name display
       if (userNameDisplay) {
-        userNameDisplay.textContent = `Hello, ${userDisplayName}!`;
+        userNameDisplay.textContent = displayName;
       }
 
-      if (loginIcon) {
-        loginIcon.style.cursor = 'pointer';
+      // Toggle dropdown on click
+      if (loginIcon && userDropdown) {
         loginIcon.addEventListener('click', (e) => {
           e.preventDefault();
           e.stopPropagation();
-          if (userDropdown) {
-            userDropdown.classList.toggle('active');
-          }
+          userDropdown.classList.toggle('show');
         });
       }
 
-      if (userDropdown) {
-        document.addEventListener('click', (e) => {
-          if (!e.target.closest('.user-menu')) {
-            userDropdown.classList.remove('active');
-          }
-        });
-      }
+      // Close dropdown when clicking outside
+      document.addEventListener('click', (e) => {
+        if (userDropdown && !e.target.closest('.auth-icon')) {
+          userDropdown.classList.remove('show');
+        }
+      });
     }
   } else {
-    // Redirect to login if not logged in
+    // Show login icon for non-logged in users - click goes to login page
     if (loginIcon) {
-      loginIcon.style.cursor = 'pointer';
-      loginIcon.addEventListener('click', () => {
+      loginIcon.addEventListener('click', (e) => {
+        e.preventDefault();
         window.location.href = '/login/';
       });
     }
   }
+}
+
+// === Mobile Menu Toggle ===
+function toggleMobileMenu() {
+  const navLinks = document.getElementById('navLinks');
+  if (navLinks) {
+    navLinks.classList.toggle('active');
+  }
+}
+
+// === User Dropdown Toggle ===
+function toggleUserDropdown() {
+  const userDropdown = document.getElementById('userDropdown');
+  if (userDropdown) {
+    userDropdown.classList.toggle('active');
+  }
+}
+
+// === Logout Handler ===
+// This is used by auth.logout() from the HTML
+const auth = {
+    isLoggedIn: () => !!localStorage.getItem('authToken'),
+    
+    getUser: () => {
+        const user = localStorage.getItem('user');
+        return user ? JSON.parse(user) : null;
+    },
+    
+    logout: () => {
+        localStorage.removeItem('authToken');
+        localStorage.removeItem('user');
+        sessionStorage.clear();
+        // Redirect to home
+        window.location.href = '/';
+    }
+};
+
+function handleLogout() {
+    auth.logout();
 }
 
 // === Smooth scroll for navigation links ===
@@ -174,3 +212,25 @@ document.querySelectorAll(".card[data-images]").forEach(card => {
 
 // === Initialize on DOM load ===
 document.addEventListener('DOMContentLoaded', initializeAuth);
+
+// === Close mobile menu when clicking outside ===
+document.addEventListener('click', (e) => {
+  const navLinks = document.getElementById('navLinks');
+  const mobileBtn = document.querySelector('.mobile-menu-btn');
+  
+  if (navLinks && navLinks.classList.contains('active')) {
+    if (!e.target.closest('.nav-links') && !e.target.closest('.mobile-menu-btn')) {
+      navLinks.classList.remove('active');
+    }
+  }
+});
+
+// === Close user dropdown when pressing Escape ===
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape') {
+    const userDropdown = document.getElementById('userDropdown');
+    if (userDropdown && userDropdown.classList.contains('active')) {
+      userDropdown.classList.remove('active');
+    }
+  }
+});

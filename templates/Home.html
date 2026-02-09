@@ -1,280 +1,228 @@
+{% load static %}
 {% load static i18n %}
 {% get_current_language as LANGUAGE_CODE %}
 <!DOCTYPE html>
 <html lang="{{ LANGUAGE_CODE }}">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>TourGuidePro</title>
-  <link rel="stylesheet" href="{% static 'css/Home.css' %}" />
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
-  <style>
-    .auth-buttons { display: flex; gap: 10px; }
-    .user-menu { position: relative; }
-    .user-dropdown { 
-      position: absolute; 
-      right: 0; 
-      top: 100%; 
-      background: white; 
-      border: 1px solid #ccc;
-      border-radius: 4px;
-      min-width: 150px;
-      display: none;
-      z-index: 1000;
-    }
-    .user-dropdown.active { display: block; }
-    .user-dropdown a { 
-      display: block; 
-      padding: 10px 15px; 
-      text-decoration: none; 
-      color: black;
-      border-bottom: 1px solid #eee;
-    }
-    .user-dropdown a:last-child { border: none; }
-    .user-dropdown a:hover { background: #f0f0f0; }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TourGuidePro</title>
+    <link rel="stylesheet" href="{% static 'css/Home.css' %}">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="{% static 'css/chatbot.css' %}">
 </head>
 <body>
-<header>
-  <nav class="navbar animated-header d-flex justify-content-between align-items-center px-3 py-2">
-    
-    <!-- Logo -->
-    <div class="logo-container d-flex align-items-center gap-2">
-      <img src="{% static 'images/TourGuidePrologo.jpg' %}" alt="TourGuidePro Logo" class="logo-img" />
-      <span class="logo-text">TourGuidePro</span>
-    </div>
+    <header>
+        <nav class="navbar animated-header d-flex justify-content-between align-items-center px-3 py-2">
+            <!-- Logo -->
+            <div class="logo-container d-flex align-items-center gap-2">
+                <img src="{% static 'images/TourGuidePrologo.jpg' %}" alt="TourGuidePro Logo" class="logo-img" />
+                <span class="logo-text">TourGuidePro</span>
+            </div>
+            
+            <!-- Navigation Links -->
+            <ul class="nav-links d-flex gap-3 list-unstyled mb-0">
+                <li><a href="/">{% trans "Home" %}</a></li>
+                <li><a href="/cab/">{% trans "Cab Booking" %}</a></li>
+                <li><a href="/hotel/">{% trans "Hotels" %}</a></li>
+                <li><a href="/destination/">{% trans "Destinations" %}</a></li>
+                <li><a href="/itinerary/">{% trans "Itinerary" %}</a></li>
+                <li><a href="/contact/">{% trans "Contact" %}</a></li>
+            </ul>
+            
+            <!-- Auth & Language Section -->
+            <div class="d-flex align-items-center gap-3">
+                <!-- User Icon & Dropdown -->
+                <div class="auth-icon position-relative" id="authIcon">
+                    <img src="{% static 'images/user.png' %}" alt="Login Icon" id="loginIcon" class="login-img" title="{% trans 'Login / Sign Up' %}" />
+                    <div class="user-dropdown position-absolute end-0 mt-2" id="userDropdown">
+                        <span id="userNameDisplay" style="padding: 10px 15px; display: block;"></span>
+                        <a href="/itinerary/">{% trans "My Bookings" %}</a>
+                        <a href="#" onclick="auth.logout(); return false;">{% trans "Logout" %}</a>
+                    </div>
+                </div>
+                
+                <!-- Language Switcher -->
+                <form action="{% url 'set_language' %}" method="post" class="d-inline">
+                    {% csrf_token %}
+                    <select name="language" onchange="this.form.submit()" class="form-select form-select-sm">
+                        <option value="en" {% if LANGUAGE_CODE == 'en' %}selected{% endif %}>English</option>
+                        <option value="hi" {% if LANGUAGE_CODE == 'hi' %}selected{% endif %}>हिन्दी</option>
+                        <option value="ta" {% if LANGUAGE_CODE == 'ta' %}selected{% endif %}>தமிழ்</option>
+                        <option value="pa" {% if LANGUAGE_CODE == 'pa' %}selected{% endif %}>ਪੰਜਾਬੀ</option>
+                        <option value="bn" {% if LANGUAGE_CODE == 'bn' %}selected{% endif %}>বাংলা</option>
+                        <option value="mr" {% if LANGUAGE_CODE == 'mr' %}selected{% endif %}>मराठी</option>
+                        <option value="gu" {% if LANGUAGE_CODE == 'gu' %}selected{% endif %}>ગુજરાતી</option>
+                        <option value="te" {% if LANGUAGE_CODE == 'te' %}selected{% endif %}>తెలుగు</option>
+                        <option value="kn" {% if LANGUAGE_CODE == 'kn' %}selected{% endif %}>ಕನ್ನಡ</option>
+                        <option value="ml" {% if LANGUAGE_CODE == 'ml' %}selected{% endif %}>മലയാളം</option>
+                        <option value="ur" {% if LANGUAGE_CODE == 'ur' %}selected{% endif %}>اردو</option>
+                    </select>
+                </form>
+            </div>
+        </nav>
+    </header>
 
-    <!-- Navigation Links -->
-    <ul class="nav-links d-flex gap-3 list-unstyled mb-0">
-      <li><a href="/">{% trans "Home" %}</a></li>
-      <li><a href="/cab/">{% trans "Cab Booking" %}</a></li>
-      <li><a href="/hotel/">{% trans "Hotels" %}</a></li>
-      <li><a href="/destination/">{% trans "Destinations" %}</a></li>
-      <li><a href="/itinerary/">{% trans "Itinerary" %}</a></li>
-      <li><a href="/contact/">{% trans "Contact" %}</a></li>
-    </ul>
-
-    <!-- Auth & Language Section -->
-    <div class="d-flex align-items-center gap-3">
-
-      <!-- User Icon & Dropdown -->
-      <div class="auth-icon position-relative" id="authIcon">
-        <img src="{% static 'images/user.png' %}" alt="Login Icon" id="loginIcon" class="login-img" title="{% trans 'Login / Sign Up' %}" />
-        <div class="user-dropdown position-absolute end-0 mt-2" id="userDropdown">
-          <span id="userNameDisplay" style="padding: 10px 15px; display: block;"></span>
-          <a href="/itinerary/">{% trans "My Bookings" %}</a>
-          <a href="#" onclick="auth.logout(); return false;">{% trans "Logout" %}</a>
+    <section class="hero-section">
+        <h1>{% trans "Plan Your Perfect Trip" %}</h1>
+        <p>{% trans "Explore destinations, book cabs and hotels, and build your itinerary—all in one place." %}</p>
+        <div class="cta-buttons">
+            <button class="primary"><a href="/itinerary/">{% trans "Start Planning" %}</a></button>
+            <button class="secondary"><a href="/destination/">{% trans "Explore Destinations" %}</a></button>
         </div>
-      </div>
+    </section>
 
-      <!-- Language Switcher -->
-      <!-- Language Switcher -->
-<form action="{% url 'set_language' %}" method="post" class="d-inline">
-  {% csrf_token %}
-  <select name="language" onchange="this.form.submit()" class="form-select form-select-sm">
-    <option value="en" {% if LANGUAGE_CODE == 'en' %}selected{% endif %}>English</option>
-    <option value="hi" {% if LANGUAGE_CODE == 'hi' %}selected{% endif %}>हिन्दी</option>
-    <option value="ta" {% if LANGUAGE_CODE == 'ta' %}selected{% endif %}>தமிழ்</option>
-    <option value="pa" {% if LANGUAGE_CODE == 'pa' %}selected{% endif %}>ਪੰਜਾਬੀ</option>
-    <option value="bn" {% if LANGUAGE_CODE == 'bn' %}selected{% endif %}>বাংলা</option>
-    <option value="mr" {% if LANGUAGE_CODE == 'mr' %}selected{% endif %}>मराठी</option>
-    <option value="gu" {% if LANGUAGE_CODE == 'gu' %}selected{% endif %}>ગુજરાતી</option>
-    <option value="te" {% if LANGUAGE_CODE == 'te' %}selected{% endif %}>తెలుగు</option>
-    <option value="kn" {% if LANGUAGE_CODE == 'kn' %}selected{% endif %}>ಕನ್ನಡ</option>
-    <option value="ml" {% if LANGUAGE_CODE == 'ml' %}selected{% endif %}>മലയാളം</option>
-    <option value="ur" {% if LANGUAGE_CODE == 'ur' %}selected{% endif %}>اردو</option>
-  </select>
-</form>
+    <section class="features">
+        <div class="feature-card"><a href="/cab/">{% trans "🚕 Cab Booking" %}</a> </div>
+        <div class="feature-card"><a href="/hotel/">{% trans "🏨 Hotel Finder" %}</a></div>
+        <div class="feature-card"><a href="/destination/">{% trans "🌍 Destination Info" %}</a></div>
+        <div class="feature-card"><a href="/itinerary/">{% trans "🗓️ Smart Itinerary" %}</a></div>
+    </section>
 
-
-    </div>
-  </nav>
-</header>
-
-
-<section class="hero-section">
-  <h1>{% trans "Plan Your Perfect Trip" %}</h1>
-  <p>{% trans "Explore destinations, book cabs and hotels, and build your itinerary—all in one place." %}</p>
-  <div class="cta-buttons">
-    <button class="primary"><a href="/itinerary/">{% trans "Start Planning" %}</a></button>
-    <button class="secondary"><a href="/destination/">{% trans "Explore Destinations" %}</a></button>
-  </div>
-</section>
-
-  <section class="features">
-    <div class="feature-card"><a href="/cab/">{% trans "🚕 Cab Booking" %}</a> </div>
-    <div class="feature-card"><a href="/hotel/">{% trans "🏨 Hotel Finder" %}</a></div>
-    <div class="feature-card"><a href="/destination/">{% trans "🌍 Destination Info" %}</a></div>
-    <div class="feature-card"><a href="/itinerary/">{% trans "🗓️ Smart Itinerary" %}</a></div>
-  </section>
-
-  <section class="carousel">
-  <h2>{% trans "Popular Destinations" %}</h2>
-  <div class="destination-grid">
-    <!-- Agra (Taj Mahal) -->
-    <div class="card" data-images='["{% static 'images/tajmahal.png' %}","{% static 'images/tajmahal2.png' %}","{% static 'images/tajmahal3.png' %}","{% static 'images/tajmahal4.png' %}"]'>
-      <img src="{% static 'images/tajmahal.png' %}" alt="Taj Mahal" />
-      <h3>Agra (Taj Mahal)</h3>
-      <button>{% trans "View More" %}</button>
-    </div>
-
-    <!-- Jaipur (Pink City) -->
-    <div class="card" data-images='["{% static 'images/jaipur1.jpg' %}","{% static 'images/jaipur2.jpg' %}","{% static 'images/jaipur3.jpg' %}","{% static 'images/jaipur4.jpg' %}","{% static 'images/jaipur5.jpg' %}","{% static 'images/jaipur6.jpg' %}"]'>
-      <img src="{% static 'images/jaipur1.jpg' %}" alt="Jaipur" />
-      <h3>Jaipur (Pink City)</h3>
-      <button>{% trans "View More" %}</button>
-    </div>
-
-    <!-- Goa (Beaches) -->
-    <div class="card" data-images='["{% static 'images/goa1.jpg' %}","{% static 'images/goa2.jpg' %}","{% static 'images/goa3.jpg' %}","{% static 'images/goa4.jpg' %}","{% static 'images/goa5.jpg' %}","{% static 'images/goa6.jpg' %}","{% static 'images/goa7.jpg' %}","{% static 'images/goa8.jpg' %}","{% static 'images/goa9.jpg' %}","{% static 'images/goa10.jpg' %}","{% static 'images/goa11.jpg' %}","{% static 'images/goa12.jpg' %}","{% static 'images/goa5.jpg' %}"]'>
-      <img src="{% static 'images/goa1.jpg' %}" alt="Goa" />
-      <h3>Goa (Beaches)</h3>
-      <button>{% trans "View More" %}</button>
-    </div>
-
-    <!-- Varanasi (Spiritual Capital) -->
-    <div class="card" data-images='["{% static 'images/varanasi1.jpg' %}","{% static 'images/varanasi2.jpg' %}","{% static 'images/varanasi3.jpg' %}" ,"{% static 'images/varanasi4.jpg' %}","{% static 'images/varanasi5.jpg' %}","{% static 'images/varanasi6.jpg' %}","{% static 'images/varanasi7.jpg' %}"]'>
-      <img src="{% static 'images/varanasi1.jpg' %}" alt="Varanasi" />
-      <h3>Varanasi (Spiritual Capital)</h3>
-      <button>{% trans "View More" %}</button>
-    </div>
-
-    <!-- Kerala (Backwaters) -->
-    <div class="card" data-images='["{% static 'images/kerala1.jpg' %}","{% static 'images/kerala2.jpg' %}","{% static 'images/kerala3.jpg' %}","{% static 'images/kerala4.jpg' %}","{% static 'images/kerala5.jpg' %}","{% static 'images/kerala6.jpg' %}","{% static 'images/kerala3.jpg' %}"]'>
-      <img src="{% static 'images/kerala1.jpg' %}" alt="Kerala" />
-      <h3>Kerala (Backwaters)</h3>
-      <button>{% trans "View More" %}</button>
-    </div>
-
-    <!-- Ladakh (Mountains) -->
-    <div class="card" data-images='["{% static 'images/ladakh1.jpg' %}","{% static 'images/ladakh2.jpg' %}","{% static 'images/ladakh3.jpg' %}","{% static 'images/ladakh4.jpg' %}","{% static 'images/ladakh5.jpg' %}","{% static 'images/ladakh6.jpg' %}","{% static 'images/ladakh7.jpg' %}","{% static 'images/ladakh8.jpg' %}","{% static 'images/ladakh9.jpg' %}","{% static 'images/ladakh10.jpg' %}","{% static 'images/ladakh11.jpg' %}","{% static 'images/ladakh12.jpg' %}"]'>
-      <img src="{% static 'images/ladakh1.jpg' %}" alt="Ladakh" />
-      <h3>Ladakh (Mountains)</h3>
-      <button>{% trans "View More" %}</button>
-    </div>
-  </div>
-</section>
-
-<section class="how-it-works">
-  <h2>{% trans "How It Works" %}</h2>
-  <div class="steps-container">
-    <div class="step-card">
-      <img src="{% static 'images/destination.png' %}" alt="{% trans 'Choose Destination' %}">
-      <h3>{% trans "Choose Destination" %}</h3>
-      <p>{% trans "Pick your dream location from curated travel spots." %}</p>
-    </div>
-    <div class="step-card">
-      <img src="{% static 'images/transport.png' %}" alt="{% trans 'Book Cab & Hotel' %}">
-      <h3>{% trans "Book Cab & Hotel" %}</h3>
-      <p>{% trans "Reserve transportation and stay with trusted partners." %}</p>
-    </div>
-    <div class="step-card">
-      <img src="{% static 'images/atmospheric-conditions.png' %}" alt="{% trans 'Weather & Food Info' %}">
-      <h3>{% trans "Weather & Food Info" %}</h3>
-      <p>{% trans "Check forecasts and discover local cuisine highlights." %}</p>
-    </div>
-    <div class="step-card">
-      <img src="{% static 'images/tripplan.png' %}" alt="{% trans 'View Trip Plan' %}">
-      <h3>{% trans "View Trip Plan" %}</h3>
-      <p>{% trans "Access your personalized travel plan anytime." %}</p>
-    </div>
-  </div>
-</section>
-<!-- // for what users say -->
-<section class="testimonials">
-  <h2>{% trans "What Our Users Say" %}</h2>
-  <div class="testimonial-carousel">
-    <div class="testimonial-card active">
-      <div class="quote-icon">“</div>
-      <p>TourGuidePro made my trip planning effortless and fun!</p>
-      <span class="author">– Priya S.</span>
-      <div class="stars">★★★★★</div>
-    </div>
-    <div class="testimonial-card">
-      <div class="quote-icon">“</div>
-      <p>A must-have for every traveler. Beautiful UI and super helpful!</p>
-      <span class="author">– Arjun M.</span>
-      <div class="stars">★★★★★</div>
-    </div>
-    <div class="testimonial-card">
-      <div class="quote-icon">“</div>
-      <p>I loved how easy it was to customize my itinerary. Great job!</p>
-      <span class="author">– Neha R.</span>
-      <div class="stars">★★★★★</div>
-    </div>
-    <div class="testimonial-nav">
-      <button id="prevTestimonial">❮</button>
-      <button id="nextTestimonial">❯</button>
-    </div>
-    <div class="trustpilot-badge">
-      <p>Rated <strong>4.4 / 5</strong> based on 13,949 reviews</p>
-      <span>Trustpilot</span>
-    </div>
-  </div>
-</section>
-
-<footer class="bg-dark text-white py-5">
-  <div class="container">
-    <div class="row">
-      <div class="col-lg-4 mb-4 mb-lg-0">
-        <h4 class="mb-3"><i class="bi bi-compass me-2"></i>TourGuidePro</h4>
-        <p>{% trans "Your trusted partner for unforgettable travel experiences. We make travel planning simple and enjoyable." %}</p>
-        <div class="social-icons mt-4">
-          <a href="#"><i class="bi bi-facebook"></i></a>
-          <a href="#"><i class="bi bi-instagram"></i></a>
-          <a href="#"><i class="bi bi-twitter"></i></a>
-          <a href="#"><i class="bi bi-linkedin"></i></a>
+    <section class="carousel">
+        <h2>{% trans "Popular Destinations" %}</h2>
+        <div class="destination-grid">
+            <!-- Agra (Taj Mahal) -->
+            <div class="card" data-images='["{% static 'images/tajmahal.png' %}","{% static 'images/tajmahal2.png' %}","{% static 'images/tajmahal3.png' %}","{% static 'images/tajmahal4.png' %}"]'>
+                <img src="{% static 'images/tajmahal.png' %}" alt="Taj Mahal" />
+                <h3>{% trans "Agra (Taj Mahal)" %}</h3>
+                <button>{% trans "View More" %}</button>
+            </div>
+            <!-- Jaipur (Pink City) -->
+            <div class="card" data-images='["{% static 'images/jaipur1.jpg' %}","{% static 'images/jaipur2.jpg' %}","{% static 'images/jaipur3.jpg' %}","{% static 'images/jaipur4.jpg' %}","{% static 'images/jaipur5.jpg' %}","{% static 'images/jaipur6.jpg' %}"]'>
+                <img src="{% static 'images/jaipur1.jpg' %}" alt="Jaipur" />
+                <h3>{% trans "Jaipur (Pink City)" %}</h3>
+                <button>{% trans "View More" %}</button>
+            </div>
+            <!-- Goa (Beaches) -->
+            <div class="card" data-images='["{% static 'images/goa1.jpg' %}","{% static 'images/goa2.jpg' %}","{% static 'images/goa3.jpg' %}","{% static 'images/goa4.jpg' %}","{% static 'images/goa5.jpg' %}","{% static 'images/goa6.jpg' %}","{% static 'images/goa7.jpg' %}","{% static 'images/goa8.jpg' %}","{% static 'images/goa9.jpg' %}","{% static 'images/goa10.jpg' %}","{% static 'images/goa11.jpg' %}","{% static 'images/goa12.jpg' %}","{% static 'images/goa5.jpg' %}"]'>
+                <img src="{% static 'images/goa1.jpg' %}" alt="Goa" />
+                <h3>{% trans "Goa (Beaches)" %}</h3>
+                <button>{% trans "View More" %}</button>
+            </div>
+            <!-- Varanasi (Spiritual Capital) -->
+            <div class="card" data-images='["{% static 'images/varanasi1.jpg' %}","{% static 'images/varanasi2.jpg' %}","{% static 'images/varanasi3.jpg' %}" ,"{% static 'images/varanasi4.jpg' %}","{% static 'images/varanasi5.jpg' %}","{% static 'images/varanasi6.jpg' %}","{% static 'images/varanasi7.jpg' %}"]'>
+                <img src="{% static 'images/varanasi1.jpg' %}" alt="Varanasi" />
+                <h3>{% trans "Varanasi (Spiritual Capital)" %}</h3>
+                <button>{% trans "View More" %}</button>
+            </div>
+            <!-- Kerala (Backwaters) -->
+            <div class="card" data-images='["{% static 'images/kerala1.jpg' %}","{% static 'images/kerala2.jpg' %}","{% static 'images/kerala3.jpg' %}","{% static 'images/kerala4.jpg' %}","{% static 'images/kerala5.jpg' %}","{% static 'images/kerala6.jpg' %}","{% static 'images/kerala3.jpg' %}"]'>
+                <img src="{% static 'images/kerala1.jpg' %}" alt="Kerala" />
+                <h3>{% trans "Kerala (Backwaters)" %}</h3>
+                <button>{% trans "View More" %}</button>
+            </div>
+            <!-- Ladakh (Mountains) -->
+            <div class="card" data-images='["{% static 'images/ladakh1.jpg' %}","{% static 'images/ladakh2.jpg' %}","{% static 'images/ladakh3.jpg' %}","{% static 'images/ladakh4.jpg' %}","{% static 'images/ladakh5.jpg' %}","{% static 'images/ladakh6.jpg' %}","{% static 'images/ladakh7.jpg' %}","{% static 'images/ladakh8.jpg' %}","{% static 'images/ladakh9.jpg' %}","{% static 'images/ladakh10.jpg' %}","{% static 'images/ladakh11.jpg' %}","{% static 'images/ladakh12.jpg' %}"]'>
+                <img src="{% static 'images/ladakh1.jpg' %}" alt="Ladakh" />
+                <h3>{% trans "Ladakh (Mountains)" %}</h3>
+                <button>{% trans "View More" %}</button>
+            </div>
         </div>
-      </div>
-      <div class="col-lg-2 col-md-6 mb-4 mb-lg-0">
-        <h5 class="mb-3">{% trans "Quick Links" %}</h5>
-        <ul class="list-unstyled">
-          <li class="mb-2"><a href="#" class="text-white text-decoration-none">{% trans "Home" %}</a></li>
-          <li class="mb-2"><a href="#destinations" class="text-white text-decoration-none">{% trans "Destinations" %}</a></li>
-          <li class="mb-2"><a href="#services" class="text-white text-decoration-none">{% trans "Services" %}</a></li>
-          <li class="mb-2"><a href="#testimonials" class="text-white text-decoration-none">{% trans "Testimonials" %}</a></li>
-          <li><a href="#" class="text-white text-decoration-none">{% trans "FAQ" %}</a></li>
-        </ul>
-          <li><a href="#contact" class="text-white text-decoration-none">{% trans "Contact" %}</a></li>
-        </ul>
-      </div>
-      <div class="col-lg-3 col-md-6 mb-4 mb-lg-0">
-        <h5 class="mb-3">{% trans "Services" %}</h5>
-        <ul class="list-unstyled">
-          <li class="mb-2"><a href="#" class="text-white text-decoration-none">{% trans "Hotel Booking" %}</a></li>
-          <li class="mb-2"><a href="#" class="text-white text-decoration-none">{% trans "Cab Services" %}</a></li>
-          <li class="mb-2"><a href="#" class="text-white text-decoration-none">{% trans "Travel Guides" %}</a></li>
-          <li class="mb-2"><a href="#" class="text-white text-decoration-none">{% trans "Travel Insurance" %}</a></li>
-          <li><a href="#" class="text-white text-decoration-none">{% trans "Weather Updates" %}</a></li>
-        </ul>
-      </div>
-      <div class="col-lg-3">
-        <h5 class="mb-3">{% trans "Newsletter" %}</h5>
-        <p>{% trans "Subscribe to get special offers and travel tips." %}</p>
-        <form class="mt-3">
-          <div class="input-group">
-            <input type="email" class="form-control" placeholder="{% trans 'Your email' %}">
-            <button class="btn btn-outline-light" type="button">{% trans "Subscribe" %}</button>
-          </div>
-        </form>
-      </div>
-    </div>
-    <hr class="my-4">
-    <div class="row align-items-center">
-      <div class="col-md-6">
-        <p class="mb-0">&copy; 2025 TourGuidePro. All Rights Reserved.</p>
-      </div>
-      <div class="col-md-6 text-md-end">
-        <a href="#" class="text-white text-decoration-none me-3">{% trans "Privacy Policy" %}</a>
-        <a href="#" class="text-white text-decoration-none">{% trans "Terms of Service" %}</a>
-      </div>
-    </div>
-  </div>
-</footer>
+    </section>
 
-    <script src="{% static 'js/api.js' %}"></script>
-    <script src="{% static 'js/Home.js' %}"></script>
+    <section class="how-it-works">
+        <h2>{% trans "How It Works" %}</h2>
+        <div class="steps-container">
+            <div class="step-card">
+                <img src="{% static 'images/destination.png' %}" alt="{% trans 'Choose Destination' %}">
+                <h3>{% trans "Choose Destination" %}</h3>
+                <p>{% trans "Pick your dream location from curated travel spots." %}</p>
+            </div>
+            <div class="step-card">
+                <img src="{% static 'images/transport.png' %}" alt="{% trans 'Book Cab & Hotel' %}">
+                <h3>{% trans "Book Cab & Hotel" %}</h3>
+                <p>{% trans "Reserve transportation and stay with trusted partners." %}</p>
+            </div>
+            <div class="step-card">
+                <img src="{% static 'images/atmospheric-conditions.png' %}" alt="{% trans 'Weather & Food Info' %}">
+                <h3>{% trans "Weather & Food Info" %}</h3>
+                <p>{% trans "Check forecasts and discover local cuisine highlights." %}</p>
+            </div>
+            <div class="step-card">
+                <img src="{% static 'images/tripplan.png' %}" alt="{% trans 'View Itinerary' %}">
+                <h3>{% trans "View Trip Plan" %}</h3>
+                <p>{% trans "Access your personalized travel plan anytime." %}</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="testimonials">
+        <h2>{% trans "What Our Users Say" %}</h2>
+        <div class="testimonial-carousel">
+            <div class="testimonial-card active">
+                <div class="quote-icon">"</div>
+                <p>{% trans "TourGuidePro made my trip planning so easy! The itinerary feature is fantastic." %}</p>
+                <div class="user-info">
+                    <img src="{% static 'images/user.png' %}" alt="User" style="width: 50px; height: 50px; border-radius: 50%;">
+                    <div>
+                        <h4>{% trans "Rahul Sharma" %}</h4>
+                        <p>{% trans "Mumbai" %}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-4 mb-4 mb-lg-0">
+                    <h4 class="mb-3"><i class="bi bi-compass me-2"></i>TourGuidePro</h4>
+                    <p>{% trans "Your trusted partner for unforgettable travel experiences. We make travel planning simple and enjoyable." %}</p>
+                    <div class="social-icons mt-4">
+                        <a href="#"><i class="bi bi-facebook"></i></a>
+                        <a href="#"><i class="bi bi-instagram"></i></a>
+                        <a href="#"><i class="bi bi-twitter"></i></a>
+                    </div>
+                </div>
+                <div class="col-lg-2 col-md-6 mb-4 mb-lg-0">
+                    <h5 class="mb-3">{% trans "Quick Links" %}</h5>
+                    <ul class="list-unstyled">
+                        <li class="mb-2"><a href="#" class="text-white text-decoration-none">{% trans "Home" %}</a></li>
+                        <li class="mb-2"><a href="#destinations" class="text-white text-decoration-none">{% trans "Destinations" %}</a></li>
+                        <li class="mb-2"><a href="#services" class="text-white text-decoration-none">{% trans "Services" %}</a></li>
+                        <li class="mb-2"><a href="#testimonials" class="text-white text-decoration-none">{% trans "Testimonials" %}</a></li>
+                        <li><a href="#" class="text-white text-decoration-none">{% trans "FAQ" %}</a></li>
+                        <li><a href="#contact" class="text-white text-decoration-none">{% trans "Contact" %}</a></li>
+                    </ul>
+                </div>
+                <div class="col-lg-3 col-md-6 mb-4 mb-lg-0">
+                    <h5 class="mb-3">{% trans "Services" %}</h5>
+                    <ul class="list-unstyled">
+                        <li class="mb-2"><a href="#" class="text-white text-decoration-none">{% trans "Hotel Booking" %}</a></li>
+                        <li class="mb-2"><a href="#" class="text-white text-decoration-none">{% trans "Cab Services" %}</a></li>
+                        <li class="mb-2"><a href="#" class="text-white text-decoration-none">{% trans "Travel Guides" %}</a></li>
+                        <li class="mb-2"><a href="#" class="text-white text-decoration-none">{% trans "Travel Insurance" %}</a></li>
+                        <li><a href="#" class="text-white text-decoration-none">{% trans "Weather Updates" %}</a></li>
+                    </ul>
+                </div>
+                <div class="col-lg-3">
+                    <h5 class="mb-3">{% trans "Newsletter" %}</h5>
+                    <p>{% trans "Subscribe to get special offers and travel tips." %}</p>
+                    <form class="mt-3">
+                        <div class="input-group">
+                            <input type="email" class="form-control" placeholder="{% trans 'Your email' %}">
+                            <button class="btn btn-outline-light" type="button">{% trans "Subscribe" %}</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <div class="row mt-4 pt-3 border-top">
+                <div class="col-md-6">
+                    <p class="mb-0">&copy; 2025 TourGuidePro. {% trans "All Rights Reserved." %}</p>
+                </div>
+                <div class="col-md-6 text-md-end">
+                    <a href="#" class="text-white text-decoration-none me-3">{% trans "Privacy Policy" %}</a>
+                    <a href="#" class="text-white text-decoration-none">{% trans "Terms of Service" %}</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="{% static 'js/chatbot.js' %}"></script>
+    <script src="{% static 'js/Home.js' %}"></script>
 </body>
 </html>

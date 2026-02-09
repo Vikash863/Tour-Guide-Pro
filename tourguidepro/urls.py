@@ -13,12 +13,16 @@ urlpatterns = [
     path('i18n/', include('django.conf.urls.i18n')),
 ]
 
+# API URLs - NOT under i18n to avoid language prefixes
+urlpatterns += [
+    path('api/', include('api.urls')),
+]
 
-# Main urls with i18n support
+# Main urls with i18n support - for pages only
 urlpatterns += i18n_patterns(
     path('admin/', admin.site.urls),
 
-    path('api/', include('api.urls')),
+    path('profile/', TemplateView.as_view(template_name='profile.html'), name='profile'),
 
     path('', home, name='home'),
     path('home/', home, name='home-alt'),
@@ -38,6 +42,18 @@ urlpatterns += i18n_patterns(
     path('contact/', TemplateView.as_view(template_name='contact.html'), name='contact'),
 
     path('itinerary/', TemplateView.as_view(template_name='iterenary.html'), name='itinerary'),
+    path('features/', TemplateView.as_view(template_name='features.html'), name='features'),
+    
+    # User dropdown routes
+    path('dashboard/', TemplateView.as_view(template_name='dashboard.html'), name='dashboard'),
+    path('history/', TemplateView.as_view(template_name='history.html'), name='history'),
+    path('wishlist/', TemplateView.as_view(template_name='wishlist.html'), name='wishlist'),
+    path('payments/', TemplateView.as_view(template_name='payments.html'), name='payments'),
+    path('gallery/', TemplateView.as_view(template_name='gallery.html'), name='gallery'),
+    path('reviews/', TemplateView.as_view(template_name='reviews.html'), name='reviews'),
+    path('notifications/', TemplateView.as_view(template_name='notifications.html'), name='notifications'),
+    path('settings/', TemplateView.as_view(template_name='settings.html'), name='settings'),
+    path('help/', TemplateView.as_view(template_name='help.html'), name='help'),
 )
 
 

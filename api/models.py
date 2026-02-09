@@ -1,640 +1,386 @@
 from django.db import models
 from django.contrib.auth.models import User
-from django.core.validators import MinValueValidator, MaxValueValidator
+from django.core.validators import MinValueValidator, MaxValueValidator, FileExtensionValidator
+from django.utils import timezone
+import uuid
 
 
-class Destination(models.Model):
-    name = models.CharField(max_length=100, unique=True)
+class TimeStampMixin(models.Model):
+    """Abstract base model with timestamps"""
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    
+    class Meta:
+        abstract = True
+
+
+class UserProfile(TimeStampMixin):
+    """Extended user profile with photo and details"""
+    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='profile')
+    bio = models.TextField(max_length=500, blank=True)
+    phone = models.CharField(max_length=20, blank=True)
+    date_of_birth = models.DateField(null=True, blank=True)
+    gender = models.CharField(max_length=20, choices=[('male', 'Male'), ('female', 'Female'), ('other', 'Other'), ('prefer_not', 'Prefer not to say')], blank=True)
+    address = models.TextField(blank=True)
+    city = models.CharField(max_length=100, blank=True)
+    state = models.CharField(max_length=100, blank=True)
+    country = models.CharField(max_length=100, blank=True)
+    pincode = models.CharField(max_length=20, blank=True)
+    profile_photo = models.ImageField(upload_to='profile_photos/', null=True, blank=True, validators=[FileExtensionValidator(['jpg', 'jpeg', 'png', 'webp'])])
+    cover_photo = models.ImageField(upload_to='cover_photos/', null=True, blank=True)
+    is_verified = models.BooleanField(default=False)
+    is_public_profile = models.BooleanField(default=True)
+    preferred_language = models.CharField(max_length=10, default='en')
+    notification_preferences = models.JSONField(default=dict)
+    
+    class Meta:
+        db_table = 'user_profiles'
+    
+    def __str__(self):
+        return f"{self.user.username}'s Profile"
+
+
+class UserRole(models.TextChoices):
+    USER = 'user', 'User'
+    ADMIN = 'admin', 'Admin'
+    GUIDE = 'guide', 'Local Guide'
+    MODERATOR = 'moderator', 'Moderator'
+
+
+class UserAccount(TimeStampMixin):
+    """User account settings and status"""
+    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='account')
+    role = models.CharField(max_length=20, choices=UserRole.choices, default=UserRole.USER)
+    is_active = models.BooleanField(default=True)
+    is_suspended = models.BooleanField(default=False)
+    suspension_reason = models.TextField(blank=True)
+    suspended_at = models.DateTimeField(null=True, blank=True)
+    suspended_until = models.DateTimeField(null=True, blank=True)
+    last_login_at = models.DateTimeField(null=True, blank=True)
+    last_activity_at = models.DateTimeField(null=True, blank=True)
+    login_count = models.IntegerField(default=0)
+    referral_code = models.CharField(max_length=20, unique=True, blank=True)
+    referred_by = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True, related_name='referred_users')
+    total_points = models.IntegerField(default=0)
+    level = models.IntegerField(default=1)
+    
+    class Meta:
+        db_table = 'user_accounts'
+    
+    def __str__(self):
+        return f"{self.user.username} - {self.role}"
+
+
+class Destination(TimeStampMixin):
+    """Travel destinations"""
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    name = models.CharField(max_length=200, unique=True)
+    slug = models.SlugField(max_length=200, unique=True)
     description = models.TextField()
-    image = models.ImageField(upload_to='destinations/', blank=True, null=True)
-    city = models.CharField(max_length=50)
-    state = models.CharField(max_length=50)
-    country = models.CharField(max_length=50)
-    best_time_to_visit = models.CharField(max_length=100)
+    short_description = models.CharField(max_length=500, blank=True)
+    image = models.ImageField(upload_to='destinations/', null=True, blank=True)
+    images = models.JSONField(default=list)
+    city = models.CharField(max_length=100)
+    state = models.CharField(max_length=100)
+    country = models.CharField(max_length=100)
+    latitude = models.FloatField(null=True, blank=True)
+    longitude = models.FloatField(null=True, blank=True)
+    best_time_to_visit = models.CharField(max_length=200)
     attractions = models.JSONField(default=list)
-    average_cost = models.IntegerField()
+    activities = models.JSONField(default=list)
+    average_cost = models.DecimalField(max_digits=10, decimal_places=2, default=0)
+    currency = models.CharField(max_length=10, default='INR')
     rating = models.FloatField(default=0, validators=[MinValueValidator(0), MaxValueValidator(5)])
-    created_at = models.DateTimeField(auto_now_add=True)
-
+    review_count = models.IntegerField(default=0)
+    is_featured = models.BooleanField(default=False)
+    is_active = models.BooleanField(default=True)
+    weather_info = models.JSONField(default=dict, blank=True)
+    safety_tips = models.JSONField(default=list, blank=True)
+    emergency_contacts = models.JSONField(default=dict, blank=True)
+    
     class Meta:
+        db_table = 'destinations'
         ordering = ['-created_at']
-
+    
     def __str__(self):
         return self.name
 
 
-class Hotel(models.Model):
-    name = models.CharField(max_length=100)
-    location = models.CharField(max_length=100)
-    destination = models.ForeignKey(Destination, on_delete=models.CASCADE, null=True, blank=True)
+class Hotel(TimeStampMixin):
+    """Hotel listings"""
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    name = models.CharField(max_length=200)
+    slug = models.SlugField(max_length=200, blank=True)
     description = models.TextField()
-    image = models.ImageField(upload_to='hotels/', blank=True, null=True)
-    price_per_night = models.IntegerField()
+    image = models.ImageField(upload_to='hotels/', null=True, blank=True)
+    images = models.JSONField(default=list)
+    destination = models.ForeignKey(Destination, on_delete=models.CASCADE, null=True, blank=True)
+    address = models.TextField()
+    city = models.CharField(max_length=100)
+    state = models.CharField(max_length=100)
+    country = models.CharField(max_length=100)
+    latitude = models.FloatField(null=True, blank=True)
+    longitude = models.FloatField(null=True, blank=True)
+    price_per_night = models.DecimalField(max_digits=10, decimal_places=2)
+    currency = models.CharField(max_length=10, default='INR')
     rating = models.FloatField(default=0, validators=[MinValueValidator(0), MaxValueValidator(5)])
+    review_count = models.IntegerField(default=0)
     amenities = models.JSONField(default=list)
-    available_rooms = models.IntegerField()
-    total_rooms = models.IntegerField()
+    room_types = models.JSONField(default=list)
+    available_rooms = models.IntegerField(default=0)
+    total_rooms = models.IntegerField(default=0)
+    check_in_time = models.TimeField(default='14:00:00')
+    check_out_time = models.TimeField(default='11:00:00')
     phone = models.CharField(max_length=20, blank=True)
     email = models.EmailField(blank=True)
-    created_at = models.DateTimeField(auto_now_add=True)
-
+    website = models.URLField(blank=True)
+    policies = models.JSONField(default=dict, blank=True)
+    is_featured = models.BooleanField(default=False)
+    is_active = models.BooleanField(default=True)
+    
     class Meta:
+        db_table = 'hotels'
         ordering = ['-created_at']
-
+    
     def __str__(self):
         return self.name
 
 
-class Cab(models.Model):
-    VEHICLE_TYPES = [
-        ('economy', 'Economy'),
-        ('premium', 'Premium'),
-        ('luxury', 'Luxury'),
-        ('van', 'Van'),
-    ]
-
-    company_name = models.CharField(max_length=100)
-    vehicle_type = models.CharField(max_length=20, choices=VEHICLE_TYPES)
-    price_per_km = models.FloatField()
-    price_per_hour = models.IntegerField()
-    capacity = models.IntegerField()
-    image = models.ImageField(upload_to='cabs/', blank=True, null=True)
-    rating = models.FloatField(default=0, validators=[MinValueValidator(0), MaxValueValidator(5)])
-    available_cars = models.IntegerField()
-    description = models.TextField(blank=True)
-    phone = models.CharField(max_length=20, blank=True)
-    email = models.EmailField(blank=True)
-    created_at = models.DateTimeField(auto_now_add=True)
-
-    class Meta:
-        ordering = ['-created_at']
-
-    def __str__(self):
-        return f"{self.company_name} - {self.get_vehicle_type_display()}"
-
-
-class Booking(models.Model):
+class Booking(TimeStampMixin):
+    """Tour booking records"""
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     BOOKING_TYPES = [
         ('hotel', 'Hotel'),
         ('cab', 'Cab'),
-        ('destination', 'Destination'),
+        ('tour', 'Tour Package'),
+        ('guide', 'Local Guide'),
     ]
-
+    
     STATUS_CHOICES = [
         ('pending', 'Pending'),
         ('confirmed', 'Confirmed'),
         ('cancelled', 'Cancelled'),
         ('completed', 'Completed'),
+        ('no_show', 'No Show'),
     ]
-
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    
+    PAYMENT_STATUS = [
+        ('pending', 'Pending'),
+        ('paid', 'Paid'),
+        ('refunded', 'Refunded'),
+        ('failed', 'Failed'),
+    ]
+    
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='bookings')
     booking_type = models.CharField(max_length=20, choices=BOOKING_TYPES)
-    hotel = models.ForeignKey(Hotel, on_delete=models.CASCADE, null=True, blank=True)
-    cab = models.ForeignKey(Cab, on_delete=models.CASCADE, null=True, blank=True)
-    destination = models.ForeignKey(Destination, on_delete=models.CASCADE, null=True, blank=True)
+    booking_reference = models.CharField(max_length=50, unique=True)
+    hotel = models.ForeignKey(Hotel, on_delete=models.SET_NULL, null=True, blank=True)
+    destination = models.ForeignKey(Destination, on_delete=models.SET_NULL, null=True, blank=True)
     check_in_date = models.DateField(null=True, blank=True)
     check_out_date = models.DateField(null=True, blank=True)
-    number_of_guests = models.IntegerField(null=True, blank=True)
-    number_of_rooms = models.IntegerField(null=True, blank=True)
-    total_price = models.IntegerField()
-    payment_status = models.CharField(max_length=20, default='pending')
-    booking_status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='confirmed')
-    booking_date = models.DateTimeField(auto_now_add=True)
-
-    class Meta:
-        ordering = ['-booking_date']
-
-    def __str__(self):
-        return f"{self.user.username} - {self.booking_type}"
-
-
-class HotelBooking(models.Model):
-    hotel_name = models.CharField(max_length=200)
-    name = models.CharField(max_length=100)
-    checkin = models.DateField()
-    checkout = models.DateField()
-    guests = models.IntegerField()
-    rooms = models.IntegerField()
-    created_at = models.DateTimeField(auto_now_add=True)
-
-    def __str__(self):
-        return self.hotel_name
-
-
-class Contact(models.Model):
-    STATUS_CHOICES = [
-        ('new', 'New'),
-        ('read', 'Read'),
-        ('resolved', 'Resolved'),
-    ]
-
-    name = models.CharField(max_length=100)
-    email = models.EmailField()
-    phone = models.CharField(max_length=20, blank=True)
-    subject = models.CharField(max_length=200)
-    message = models.TextField()
-    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='new')
-    created_at = models.DateTimeField(auto_now_add=True)
-
-    class Meta:
-        ordering = ['-created_at']
-
-    def __str__(self):
-        return f"{self.name} - {self.subject}"
-
-
-# ==================== FEATURES MODELS ====================
-
-# 1) SMART TRIP ASSISTANT (AI)
-class TripPlan(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-    destination = models.ForeignKey(Destination, on_delete=models.CASCADE, null=True, blank=True)
-    destination_name = models.CharField(max_length=100)
-    start_date = models.DateField()
-    end_date = models.DateField()
-    budget = models.IntegerField()
-    interests = models.JSONField(default=list)
-    trip_type = models.CharField(max_length=50)
-    days = models.IntegerField()
-    itinerary = models.JSONField()
-    ai_generated = models.BooleanField(default=True)
-    status = models.CharField(max_length=20, default='draft')
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
-
-    class Meta:
-        ordering = ['-created_at']
-
-    def __str__(self):
-        return f"{self.user.username} - {self.destination_name}"
-
-
-class TripPreference(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-    preferred_destinations = models.JSONField(default=list)
-    preferred_activities = models.JSONField(default=list)
-    budget_range = models.CharField(max_length=50)
-    travel_style = models.CharField(max_length=50)
-    food_preferences = models.JSONField(default=list)
-    accommodation_type = models.CharField(max_length=50)
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
-
-    def __str__(self):
-        return f"Preferences: {self.user.username}"
-
-
-# 2) TRIP BUDGET CALCULATOR
-class BudgetTracker(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-    trip_plan = models.ForeignKey(TripPlan, on_delete=models.CASCADE, null=True, blank=True)
-    trip_name = models.CharField(max_length=100)
-    total_budget = models.IntegerField()
-    transport_cost = models.IntegerField(default=0)
-    hotel_cost = models.IntegerField(default=0)
-    food_cost = models.IntegerField(default=0)
-    activities_cost = models.IntegerField(default=0)
-    shopping_cost = models.IntegerField(default=0)
-    miscellaneous_cost = models.IntegerField(default=0)
+    travel_date = models.DateField(null=True, blank=True)
+    number_of_guests = models.IntegerField(default=1)
+    number_of_rooms = models.IntegerField(default=1)
+    guest_details = models.JSONField(default=list, blank=True)
+    special_requests = models.TextField(blank=True)
+    total_price = models.DecimalField(max_digits=10, decimal_places=2)
     currency = models.CharField(max_length=10, default='INR')
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
-
+    discount = models.DecimalField(max_digits=10, decimal_places=2, default=0)
+    tax_amount = models.DecimalField(max_digits=10, decimal_places=2, default=0)
+    final_amount = models.DecimalField(max_digits=10, decimal_places=2)
+    payment_status = models.CharField(max_length=20, choices=PAYMENT_STATUS, default='pending')
+    payment_method = models.CharField(max_length=50, blank=True)
+    payment_reference = models.CharField(max_length=100, blank=True)
+    booking_status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='pending')
+    cancellation_reason = models.TextField(blank=True)
+    cancelled_at = models.DateTimeField(null=True, blank=True)
+    confirmed_at = models.DateTimeField(null=True, blank=True)
+    completed_at = models.DateTimeField(null=True, blank=True)
+    qr_code = models.TextField(blank=True)
+    booking_notes = models.TextField(blank=True)
+    invoice_number = models.CharField(max_length=50, blank=True)
+    invoice_generated = models.BooleanField(default=False)
+    
     class Meta:
+        db_table = 'bookings'
         ordering = ['-created_at']
-
-    @property
-    def total_spent(self):
-        return sum([self.transport_cost, self.hotel_cost, self.food_cost, 
-                    self.activities_cost, self.shopping_cost, self.miscellaneous_cost])
-
-    @property
-    def remaining_budget(self):
-        return self.total_budget - self.total_spent
+    
+    def __str__(self):
+        return f"{self.user.username} - {self.booking_reference}"
 
 
-# 3) NEARBY PLACES FINDER
-class SavedPlace(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-    name = models.CharField(max_length=100)
-    place_id = models.CharField(max_length=200)
-    address = models.TextField()
-    latitude = models.FloatField()
-    longitude = models.FloatField()
-    place_type = models.CharField(max_length=50)
-    distance = models.FloatField()
-    rating = models.FloatField(default=0)
-    photo_url = models.TextField(blank=True)
-    created_at = models.DateTimeField(auto_now_add=True)
-
+class Payment(TimeStampMixin):
+    """Payment records"""
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    PAYMENT_METHODS = [
+        ('credit_card', 'Credit Card'),
+        ('debit_card', 'Debit Card'),
+        ('net_banking', 'Net Banking'),
+        ('upi', 'UPI'),
+        ('wallet', 'Wallet'),
+        ('paypal', 'PayPal'),
+    ]
+    
+    STATUS_CHOICES = [
+        ('pending', 'Pending'),
+        ('processing', 'Processing'),
+        ('success', 'Success'),
+        ('failed', 'Failed'),
+        ('refunded', 'Refunded'),
+        ('partially_refunded', 'Partially Refunded'),
+    ]
+    
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='payments')
+    booking = models.ForeignKey(Booking, on_delete=models.CASCADE, related_name='payments', null=True, blank=True)
+    amount = models.DecimalField(max_digits=10, decimal_places=2)
+    currency = models.CharField(max_length=10, default='INR')
+    payment_method = models.CharField(max_length=50, choices=PAYMENT_METHODS)
+    transaction_id = models.CharField(max_length=100, unique=True)
+    gateway_response = models.JSONField(default=dict, blank=True)
+    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='pending')
+    failure_reason = models.TextField(blank=True)
+    refunded_amount = models.DecimalField(max_digits=10, decimal_places=2, default=0)
+    refunded_at = models.DateTimeField(null=True, blank=True)
+    refund_reference = models.CharField(max_length=100, blank=True)
+    invoice_url = models.URLField(blank=True)
+    receipt_url = models.URLField(blank=True)
+    
     class Meta:
-        ordering = ['distance']
+        db_table = 'payments'
+        ordering = ['-created_at']
+    
+    def __str__(self):
+        return f"{self.user.username} - {self.transaction_id}"
 
 
-# 4) OFFLINE TRAVEL GUIDE
-class OfflineGuide(models.Model):
-    destination = models.ForeignKey(Destination, on_delete=models.CASCADE)
-    title = models.CharField(max_length=100)
-    content = models.TextField()
-    pdf_file = models.FileField(upload_to='offline_guides/', null=True, blank=True)
-    map_image = models.ImageField(upload_to='offline_maps/', null=True, blank=True)
-    language = models.CharField(max_length=10, default='en')
-    version = models.CharField(max_length=20, default='1.0')
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
-
-
-class TripChecklist(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-    trip_plan = models.ForeignKey(TripPlan, on_delete=models.CASCADE, null=True, blank=True)
-    name = models.CharField(max_length=100)
-    items = models.JSONField(default=list)
-    is_completed = models.BooleanField(default=False)
-    created_at = models.DateTimeField(auto_now_add=True)
-
-
-# 5) TRAVEL MEMORY SCRAPBOOK
-class TravelMemory(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-    trip_plan = models.ForeignKey(TripPlan, on_delete=models.CASCADE, null=True, blank=True)
-    title = models.CharField(max_length=100)
-    description = models.TextField(blank=True)
-    location = models.CharField(max_length=100)
-    visit_date = models.DateField()
-    created_at = models.DateTimeField(auto_now_add=True)
-
-
-class TravelPhoto(models.Model):
-    memory = models.ForeignKey(TravelMemory, on_delete=models.CASCADE)
-    photo = models.ImageField(upload_to='travel_photos/')
-    caption = models.CharField(max_length=200, blank=True)
-    uploaded_at = models.DateTimeField(auto_now_add=True)
-
-
-# 6) GROUP TRIP PLANNER
-class GroupTrip(models.Model):
-    owner = models.ForeignKey(User, on_delete=models.CASCADE, related_name='owned_trips')
-    destination = models.CharField(max_length=100)
+class TourHistory(TimeStampMixin):
+    """Permanent tour history"""
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='tour_histories')
+    booking = models.ForeignKey(Booking, on_delete=models.SET_NULL, null=True, blank=True)
+    destination = models.ForeignKey(Destination, on_delete=models.SET_NULL, null=True, blank=True)
+    hotel = models.ForeignKey(Hotel, on_delete=models.SET_NULL, null=True, blank=True)
+    trip_name = models.CharField(max_length=200)
+    destination_name = models.CharField(max_length=200)
     start_date = models.DateField()
     end_date = models.DateField()
+    total_cost = models.DecimalField(max_digits=10, decimal_places=2)
+    currency = models.CharField(max_length=10, default='INR')
+    rating_given = models.FloatField(null=True, blank=True)
+    review_given = models.BooleanField(default=False)
+    photos_count = models.IntegerField(default=0)
+    notes = models.TextField(blank=True)
+    memories = models.JSONField(default=list, blank=True)
+    is_favorite = models.BooleanField(default=False)
+    share_count = models.IntegerField(default=0)
+    
+    class Meta:
+        db_table = 'tour_histories'
+        ordering = ['-start_date']
+    
+    def __str__(self):
+        return f"{self.user.username} - {self.trip_name}"
+
+
+class Wishlist(TimeStampMixin):
+    """Saved trips and wishlist"""
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='wishlists')
+    destination = models.ForeignKey(Destination, on_delete=models.CASCADE, null=True, blank=True)
+    hotel = models.ForeignKey(Hotel, on_delete=models.CASCADE, null=True, blank=True)
+    name = models.CharField(max_length=200)
     description = models.TextField(blank=True)
-    is_public = models.BooleanField(default=False)
-    status = models.CharField(max_length=20, default='planning')
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
-
-
-class GroupTripMember(models.Model):
-    group_trip = models.ForeignKey(GroupTrip, on_delete=models.CASCADE, related_name='members')
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-    role = models.CharField(max_length=20, default='member')
-    status = models.CharField(max_length=20, default='pending')
-    invited_at = models.DateTimeField(auto_now_add=True)
-
+    image = models.URLField(blank=True)
+    estimated_cost = models.DecimalField(max_digits=10, decimal_places=2, default=0)
+    currency = models.CharField(max_length=10, default='INR')
+    priority = models.IntegerField(default=1)  # 1=high, 2=medium, 3=low
+    target_date = models.DateField(null=True, blank=True)
+    is_visited = models.BooleanField(default=False)
+    visited_at = models.DateTimeField(null=True, blank=True)
+    notes = models.TextField(blank=True)
+    tags = models.JSONField(default=list, blank=True)
+    
     class Meta:
-        unique_together = ['group_trip', 'user']
+        db_table = 'wishlists'
+        ordering = ['priority', '-created_at']
+    
+    def __str__(self):
+        return f"{self.user.username} - {self.name}"
 
 
-class GroupPoll(models.Model):
-    group_trip = models.ForeignKey(GroupTrip, on_delete=models.CASCADE)
-    question = models.CharField(max_length=200)
-    poll_type = models.CharField(max_length=50)
-    options = models.JSONField()
-    is_active = models.BooleanField(default=True)
-    created_at = models.DateTimeField(auto_now_add=True)
-    expires_at = models.DateTimeField()
-
-
-class GroupExpense(models.Model):
-    group_trip = models.ForeignKey(GroupTrip, on_delete=models.CASCADE, related_name='expenses')
-    paid_by = models.ForeignKey(User, on_delete=models.CASCADE)
-    description = models.CharField(max_length=200)
-    amount = models.IntegerField()
-    split_type = models.CharField(max_length=20, default='equal')
-    created_at = models.DateTimeField(auto_now_add=True)
-
-
-# 7) RECOMMENDATION ENGINE
-class UserRecommendation(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-    recommendation_type = models.CharField(max_length=50)
-    item_id = models.IntegerField()
-    item_name = models.CharField(max_length=100)
-    item_type = models.CharField(max_length=50)
-    reason = models.TextField()
-    score = models.FloatField()
-    is_viewed = models.BooleanField(default=False)
-    is_clicked = models.BooleanField(default=False)
-    created_at = models.DateTimeField(auto_now_add=True)
-
-    class Meta:
-        ordering = ['-score']
-
-
-# 8) SMART NOTIFICATIONS
-class Notification(models.Model):
+class Notification(TimeStampMixin):
+    """User notifications"""
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     TYPES = [
-        ('price_drop', 'Price Drop'),
-        ('weather_alert', 'Weather Alert'),
-        ('booking_reminder', 'Booking Reminder'),
-        ('trip_update', 'Trip Update'),
-        ('group_invite', 'Group Invite'),
-        ('recommendation', 'Recommendation'),
+        ('booking', 'Booking'),
+        ('payment', 'Payment'),
+        ('reminder', 'Reminder'),
+        ('promotion', 'Promotion'),
         ('system', 'System'),
+        ('review', 'Review'),
+        ('referral', 'Referral'),
+        ('price_drop', 'Price Drop'),
+        ('weather', 'Weather Alert'),
     ]
-
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-    notification_type = models.CharField(max_length=50, choices=TYPES)
+    
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='notifications')
+    notification_type = models.CharField(max_length=20, choices=TYPES)
     title = models.CharField(max_length=200)
     message = models.TextField()
     is_read = models.BooleanField(default=False)
-    link = models.CharField(max_length=200, blank=True)
-    created_at = models.DateTimeField(auto_now_add=True)
-
-    class Meta:
-        ordering = ['-created_at']
-
-
-class PriceAlert(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-    item_type = models.CharField(max_length=50)
-    item_id = models.IntegerField()
-    item_name = models.CharField(max_length=100)
-    target_price = models.IntegerField()
-    current_price = models.IntegerField()
-    is_active = models.BooleanField(default=True)
-    is_triggered = models.BooleanField(default=False)
-    created_at = models.DateTimeField(auto_now_add=True)
-
-
-# 9) WEATHER INTEGRATION
-class WeatherCache(models.Model):
-    city = models.CharField(max_length=100)
-    country = models.CharField(max_length=50)
-    latitude = models.FloatField()
-    longitude = models.FloatField()
-    temperature = models.FloatField()
-    humidity = models.IntegerField()
-    description = models.CharField(max_length=200)
-    icon = models.CharField(max_length=10)
-    wind_speed = models.FloatField()
-    forecast_date = models.DateField()
-    cached_at = models.DateTimeField(auto_now=True)
-
-
-# 10) SAFETY & EMERGENCY
-class EmergencyInfo(models.Model):
-    destination = models.ForeignKey(Destination, on_delete=models.CASCADE)
-    country_code = models.CharField(max_length=10)
-    police = models.CharField(max_length=20)
-    ambulance = models.CharField(max_length=20)
-    fire = models.CharField(max_length=20)
-    tourist_police = models.CharField(max_length=20, blank=True)
-    embassy_phone = models.CharField(max_length=20, blank=True)
-    embassy_address = models.TextField(blank=True)
-    general_safety_tips = models.JSONField(default=list)
-    health_advisories = models.JSONField(default=list)
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
-
-
-# 11) QR BASED TICKETS
-class QRTicket(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-    booking = models.ForeignKey(Booking, on_delete=models.CASCADE, null=True, blank=True)
-    trip_plan = models.ForeignKey(TripPlan, on_delete=models.CASCADE, null=True, blank=True)
-    ticket_type = models.CharField(max_length=50)
-    ticket_id = models.CharField(max_length=100, unique=True)
-    qr_code = models.TextField()
-    valid_from = models.DateTimeField()
-    valid_until = models.DateTimeField()
-    is_used = models.BooleanField(default=False)
-    used_at = models.DateTimeField(null=True, blank=True)
-    scan_count = models.IntegerField(default=0)
-    created_at = models.DateTimeField(auto_now_add=True)
-
-
-# 12) GAMIFICATION
-class UserBadge(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-    badge_name = models.CharField(max_length=100)
-    badge_description = models.TextField()
-    badge_icon = models.CharField(max_length=200, blank=True)
-    badge_type = models.CharField(max_length=50)
-    earned_at = models.DateTimeField(auto_now_add=True)
-    is_displayed = models.BooleanField(default=True)
-
-    class Meta:
-        unique_together = ['user', 'badge_name']
-
-
-class UserPoints(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='points')
-    total_points = models.IntegerField(default=0)
-    level = models.IntegerField(default=1)
-    trips_completed = models.IntegerField(default=0)
-    countries_visited = models.IntegerField(default=0)
-    total_distance = models.FloatField(default=0)
-    total_spent = models.IntegerField(default=0)
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
-
-
-class Leaderboard(models.Model):
-    PERIODS = [
-        ('daily', 'Daily'),
-        ('weekly', 'Weekly'),
-        ('monthly', 'Monthly'),
-        ('all_time', 'All Time'),
-    ]
-
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-    period = models.CharField(max_length=20, choices=PERIODS)
-    rank = models.IntegerField()
-    points = models.IntegerField()
-    trips_count = models.IntegerField(default=0)
-    last_updated = models.DateTimeField(auto_now=True)
-
-    class Meta:
-        unique_together = ['user', 'period']
-
-    def __str__(self):
-        return f"{self.user.username} - #{self.rank} ({self.period})"
-
-
-# 13) COMMUNITY FORUM
-class ForumPost(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-    title = models.CharField(max_length=200)
-    content = models.TextField()
-    category = models.CharField(max_length=50)
-    tags = models.JSONField(default=list)
-    is_pinned = models.BooleanField(default=False)
-    is_locked = models.BooleanField(default=False)
-    view_count = models.IntegerField(default=0)
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
-
-    class Meta:
-        ordering = ['-created_at']
-
-    def __str__(self):
-        return self.title
-
-
-class ForumComment(models.Model):
-    post = models.ForeignKey(ForumPost, on_delete=models.CASCADE, related_name='comments')
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-    content = models.TextField()
-    parent = models.ForeignKey('self', on_delete=models.CASCADE, null=True, blank=True, related_name='replies')
-    is_accepted = models.BooleanField(default=False)
-    upvotes = models.IntegerField(default=0)
-    downvotes = models.IntegerField(default=0)
-    created_at = models.DateTimeField(auto_now_add=True)
-
-
-# 14) LOCAL GUIDE MARKETPLACE
-class LocalGuide(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
-    guide_id = models.CharField(max_length=50, unique=True)
-    full_name = models.CharField(max_length=100)
-    bio = models.TextField()
-    languages = models.JSONField(default=list)
-    locations = models.JSONField(default=list)
-    specializations = models.JSONField(default=list)
-    experience_years = models.IntegerField(default=0)
-    rating = models.FloatField(default=0, validators=[MinValueValidator(0), MaxValueValidator(5)])
-    total_reviews = models.IntegerField(default=0)
-    hourly_rate = models.IntegerField()
-    daily_rate = models.IntegerField()
-    is_verified = models.BooleanField(default=False)
-    is_available = models.BooleanField(default=True)
-    photo = models.ImageField(upload_to='guides/', null=True, blank=True)
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
-
-    def __str__(self):
-        return self.full_name
-
-
-class GuideBooking(models.Model):
-    STATUS_CHOICES = [
-        ('pending', 'Pending'),
-        ('confirmed', 'Confirmed'),
-        ('completed', 'Completed'),
-        ('cancelled', 'Cancelled'),
-    ]
-
-    guide = models.ForeignKey(LocalGuide, on_delete=models.CASCADE)
-    tourist = models.ForeignKey(User, on_delete=models.CASCADE)
-    tour_name = models.CharField(max_length=100)
-    location = models.CharField(max_length=100)
-    start_date = models.DateField()
-    end_date = models.DateField()
-    hours_per_day = models.IntegerField(default=8)
-    total_hours = models.IntegerField()
-    hourly_rate = models.IntegerField()
-    total_price = models.IntegerField()
-    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='pending')
-    notes = models.TextField(blank=True)
-    created_at = models.DateTimeField(auto_now_add=True)
-
-
-class GuideReview(models.Model):
-    guide = models.ForeignKey(LocalGuide, on_delete=models.CASCADE, related_name='reviews')
-    tourist = models.ForeignKey(User, on_delete=models.CASCADE)
-    rating = models.IntegerField(validators=[MinValueValidator(1), MaxValueValidator(5)])
-    title = models.CharField(max_length=200, blank=True)
-    content = models.TextField()
-    is_verified = models.BooleanField(default=False)
-    created_at = models.DateTimeField(auto_now_add=True)
-
-
-# 15) ADMIN AUTOMATION
-class Package(models.Model):
-    STATUS_CHOICES = [
-        ('pending', 'Pending Approval'),
-        ('approved', 'Approved'),
-        ('rejected', 'Rejected'),
-        ('active', 'Active'),
-        ('inactive', 'Inactive'),
-    ]
-
-    name = models.CharField(max_length=100)
-    destination = models.ForeignKey(Destination, on_delete=models.CASCADE, null=True, blank=True)
-    description = models.TextField()
-    duration_days = models.IntegerField()
-    base_price = models.IntegerField()
-    max_persons = models.IntegerField()
-    included_services = models.JSONField(default=list)
-    excluded_services = models.JSONField(default=list)
-    itinerary = models.JSONField()
-    images = models.JSONField(default=list)
-    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='pending')
-    approved_by = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True, related_name='approved_packages')
-    approved_at = models.DateTimeField(null=True, blank=True)
-    created_by = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, related_name='created_packages')
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
-
-    def __str__(self):
-        return self.name
-
-
-class PackageApproval(models.Model):
-    ACTION_TYPES = [
-        ('submit', 'Submitted'),
-        ('approve', 'Approved'),
-        ('reject', 'Rejected'),
-        ('revise', 'Requested Revision'),
-    ]
-
-    package = models.ForeignKey(Package, on_delete=models.CASCADE)
-    action_type = models.CharField(max_length=20, choices=ACTION_TYPES)
-    action_by = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
-    comments = models.TextField(blank=True)
-    created_at = models.DateTimeField(auto_now_add=True)
-
-
-class UserModeration(models.Model):
-    MODERATION_TYPES = [
-        ('warning', 'Warning'),
-        ('suspend', 'Suspension'),
-        ('ban', 'Ban'),
-        ('verify', 'Verify'),
-    ]
-
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-    moderation_type = models.CharField(max_length=20, choices=MODERATION_TYPES)
-    reason = models.TextField()
-    moderated_by = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, related_name='moderation_actions')
+    read_at = models.DateTimeField(null=True, blank=True)
+    link = models.URLField(blank=True)
+    link_text = models.CharField(max_length=100, blank=True)
+    data = models.JSONField(default=dict, blank=True)
+    priority = models.IntegerField(default=1)  # 1=high, 2=normal, 3=low
     expires_at = models.DateTimeField(null=True, blank=True)
-    is_active = models.BooleanField(default=True)
-    created_at = models.DateTimeField(auto_now_add=True)
+    email_sent = models.BooleanField(default=False)
+    push_sent = models.BooleanField(default=False)
+    
+    class Meta:
+        db_table = 'notifications'
+        ordering = ['-created_at']
+    
+    def __str__(self):
+        return f"{self.user.username} - {self.title}"
 
 
-class UserReport(models.Model):
-    REPORT_TYPES = [
-        ('spam', 'Spam'),
-        ('harassment', 'Harassment'),
-        ('fake', 'Fake Profile'),
-        ('inappropriate', 'Inappropriate Content'),
-        ('scam', 'Scam'),
-        ('other', 'Other'),
-    ]
+class TravelGallery(TimeStampMixin):
+    """User travel photos and memories"""
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='gallery_items')
+    tour_history = models.ForeignKey(TourHistory, on_delete=models.SET_NULL, null=True, blank=True, related_name='gallery_items')
+    title = models.CharField(max_length=200)
+    description = models.TextField(blank=True)
+    image = models.ImageField(upload_to='gallery/')
+    thumbnail = models.ImageField(upload_to='gallery/thumbnails/', null=True, blank=True)
+    image_url = models.URLField(blank=True)
+    thumbnail_url = models.URLField(blank=True)
+    location = models.CharField(max_length=200, blank=True)
+    latitude = models.FloatField(null=True, blank=True)
+    longitude = models.FloatField(null=True, blank=True)
+    date_taken = models.DateField()
+    is_public = models.BooleanField(default=False)
+    likes_count = models.IntegerField(default=0)
+    tags = models.JSONField(default=list, blank=True)
+    album = models.CharField(max_length=100, blank=True)
+    cloudinary_public_id = models.CharField(max_length=200, blank=True)
+    size_bytes = models.BigIntegerField(default=0)
+    
+    class Meta:
+        db_table = 'travel_gallery'
+        ordering = ['-date_taken']
+    
+    def __str__(self):
+        return f"{self.user.username} - {self.title}"
 
-    STATUS_CHOICES = [
-        ('pending', 'Pending'),
-        ('reviewed', 'Reviewed'),
-        ('resolved', 'Resolved'),
-        ('dismissed', 'Dismissed'),
-    ]
 
-    reporter = models.ForeignKey(User, on_delete=models.CASCADE, related_name='reports_filed')
-    reported_user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='reports_received')
-    report_type = models.CharField(max_length=20, choices=REPORT_TYPES)
-    description = models.TextField()
-    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='pending')
-    reviewed_by = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True)
-    reviewed_at = models.DateTimeField(null=True, blank=True)
-    created_at = models.DateTimeField(auto_now_add=True)
+class Review(TimeStampMixin):
+    """User reviews and ratings"""
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='reviews_given')
+    destination = models.ForeignKey(Destination, on_delete=models.CASCADE, null=True, blank=True, related_name='reviews')
+    hotel = models.ForeignKey(Hotel, on_delete=models.CASCADE, null=True, blank=True, related_name='reviews')
+    booking = models.ForeignKey(Booking, on_delete=models.SET_NULL, null=True, blank=True, related_name='review')
+    tour_history = models.ForeignKey(TourHistory, on_delete=models.SET_NULL, null=True, blank=True, related_name='reviews')
+   
