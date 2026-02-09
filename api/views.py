@@ -10,8 +10,7 @@ from rest_framework.decorators import action
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework.response import Response
 from rest_framework.filters import SearchFilter, OrderingFilter
-from rest_framework.authtoken.models import Token
-from rest_framework.authtoken.views import ObtainAuthToken
+from rest_framework.authtoken.models import Token as AuthToken
 
 from .models import Booking
 
@@ -76,7 +75,7 @@ class UserViewSet(viewsets.ModelViewSet):
                 status=status.HTTP_401_UNAUTHORIZED
             )
         
-        token, created = Token.objects.get_or_create(user=user)
+        token, created = AuthToken.objects.get_or_create(user=user)
         
         return Response({
             'message': 'Login successful',
