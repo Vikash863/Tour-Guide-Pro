@@ -13,7 +13,56 @@
     <link rel="stylesheet" href="{% static 'css/chatbot.css' %}">
 </head>
 <body>
-    {% include 'navbar.html' %}
+    <header>
+        <nav class="navbar animated-header d-flex justify-content-between align-items-center px-3 py-2">
+            <!-- Logo -->
+            <div class="logo-container d-flex align-items-center gap-2">
+                <img src="{% static 'images/TourGuidePrologo.jpg' %}" alt="TourGuidePro Logo" class="logo-img" />
+                <span class="logo-text">TourGuidePro</span>
+            </div>
+            
+            <!-- Navigation Links -->
+            <ul class="nav-links d-flex gap-3 list-unstyled mb-0">
+                <li><a href="/">{% trans "Home" %}</a></li>
+                <li><a href="/cab/">{% trans "Cab Booking" %}</a></li>
+                <li><a href="/hotel/">{% trans "Hotels" %}</a></li>
+                <li><a href="/destination/">{% trans "Destinations" %}</a></li>
+                <li><a href="/itinerary/">{% trans "Itinerary" %}</a></li>
+                <li><a href="/contact/">{% trans "Contact" %}</a></li>
+            </ul>
+            
+            <!-- Auth & Language Section -->
+            <div class="d-flex align-items-center gap-3">
+                <!-- User Icon & Dropdown -->
+                <div class="auth-icon position-relative" id="authIcon">
+                    <img src="{% static 'images/user.png' %}" alt="Login Icon" id="loginIcon" class="login-img" title="{% trans 'Login / Sign Up' %}" />
+                    <div class="user-dropdown position-absolute end-0 mt-2" id="userDropdown">
+                        <span id="userNameDisplay" style="padding: 10px 15px; display: block;"></span>
+                        <a href="/itinerary/">{% trans "My Bookings" %}</a>
+                        <a href="#" onclick="auth.logout(); return false;">{% trans "Logout" %}</a>
+                    </div>
+                </div>
+                
+                <!-- Language Switcher -->
+                <form action="{% url 'set_language' %}" method="post" class="d-inline">
+                    {% csrf_token %}
+                    <select name="language" onchange="this.form.submit()" class="form-select form-select-sm">
+                        <option value="en" {% if LANGUAGE_CODE == 'en' %}selected{% endif %}>English</option>
+                        <option value="hi" {% if LANGUAGE_CODE == 'hi' %}selected{% endif %}>हिन्दी</option>
+                        <option value="ta" {% if LANGUAGE_CODE == 'ta' %}selected{% endif %}>தமிழ்</option>
+                        <option value="pa" {% if LANGUAGE_CODE == 'pa' %}selected{% endif %}>ਪੰਜਾਬੀ</option>
+                        <option value="bn" {% if LANGUAGE_CODE == 'bn' %}selected{% endif %}>বাংলা</option>
+                        <option value="mr" {% if LANGUAGE_CODE == 'mr' %}selected{% endif %}>मराठी</option>
+                        <option value="gu" {% if LANGUAGE_CODE == 'gu' %}selected{% endif %}>ગુજરાતી</option>
+                        <option value="te" {% if LANGUAGE_CODE == 'te' %}selected{% endif %}>తెలుగు</option>
+                        <option value="kn" {% if LANGUAGE_CODE == 'kn' %}selected{% endif %}>ಕನ್ನಡ</option>
+                        <option value="ml" {% if LANGUAGE_CODE == 'ml' %}selected{% endif %}>മലയാളം</option>
+                        <option value="ur" {% if LANGUAGE_CODE == 'ur' %}selected{% endif %}>اردو</option>
+                    </select>
+                </form>
+            </div>
+        </nav>
+    </header>
 
     <section class="hero-section">
         <h1>{% trans "Plan Your Perfect Trip" %}</h1>
