@@ -7,6 +7,7 @@ import os
 from datetime import timedelta
 import cloudinary
 import cloudinary_storage
+from django.utils.translation import gettext_lazy as _
 
 # Build paths inside the project
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -25,6 +26,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework',
+    'rest_framework.authtoken',
     'rest_framework_simplejwt',
     'rest_framework_simplejwt.token_blacklist',
     'corsheaders',
@@ -93,6 +95,22 @@ LANGUAGE_CODE = 'en-us'
 TIME_ZONE = 'UTC'
 USE_I18N = True
 USE_TZ = True
+
+# Internationalization
+# Ensure translations are discovered in the `locale/` directory
+LANGUAGE_CODE = 'en'
+
+# Available languages for the UI
+LANGUAGES = [
+    ('en', _('English')),
+    ('hi', _('Hindi')),
+    ('fr', _('French')),
+]
+
+# Path where .po/.mo files will be stored
+LOCALE_PATHS = [
+    BASE_DIR / 'locale',
+]
 
 # Static files
 STATIC_URL = '/static/'

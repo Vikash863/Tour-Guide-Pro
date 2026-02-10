@@ -1,27 +1,8 @@
+{% extends 'base.html' %}
 {% load static %}
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sign Up - TourGuidePro</title>
-    <link rel="stylesheet" href="{% static 'css/signup.css' %}">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <style>
-        body {
-            font-family: 'Poppins', sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
-            margin: 0;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-    </style>
-</head>
-<body>
-    <div class="auth-container">
+
+{% block content %}
+<div class="auth-container">
         <div class="auth-form">
             <a href="/" class="back-link"><i class="fas fa-arrow-left"></i> Back to Home</a>
             <i class="fas fa-user-plus logo-icon"></i>
@@ -161,5 +142,19 @@
             window.location.href = '/profile/';
         }
     </script>
-</body>
-</html>
+
+<style>
+    body {
+        font-family: 'Poppins', sans-serif;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
+        min-height: 100vh;
+    }
+    
+    main {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        min-height: calc(100vh - 80px);
+    }
+</style>
+{% endblock %}

@@ -1,3 +1,103 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: TOURGUIDEPRO\n"
+"POT-Creation-Date: 2026-02-10 00:00+0000\n"
+"PO-Revision-Date: 2026-02-10 00:00+0000\n"
+"Language: hi\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+# Homepage and navigation
+msgid "Home"
+msgstr "होम"
+
+msgid "Cab Booking"
+msgstr "कैब बुकिंग"
+
+msgid "Hotels"
+msgstr "होटल"
+
+msgid "Destinations"
+msgstr "गंतव्य"
+
+msgid "Itinerary"
+msgstr "यात्रा कार्यक्रम"
+
+msgid "Contact"
+msgstr "संपर्क"
+
+msgid "Login / Sign Up"
+msgstr "लॉगिन / साइन अप"
+
+msgid "Plan Your Perfect Trip"
+msgstr "अपनी परफेक्ट यात्रा प्लान करें"
+
+msgid "Explore destinations, book cabs and hotels, and build your itinerary—all in one place."
+msgstr "गंतव्यों का अन्वेषण करें, कैब और होटल बुक करें, और अपना यात्रा कार्यक्रम बनाएं—सब एक ही जगह पर।"
+
+msgid "Start Planning"
+msgstr "योजना शुरू करें"
+
+msgid "Explore Destinations"
+msgstr "गंतव्य देखें"
+
+msgid "Popular Destinations"
+msgstr "लोकप्रिय गंतव्य"
+
+msgid "How It Works"
+msgstr "यह कैसे काम करता है"
+
+msgid "Choose Destination"
+msgstr "गंतव्य चुनें"
+
+msgid "Book Cab & Hotel"
+msgstr "कैब और होटल बुक करें"
+
+msgid "Weather & Food Info"
+msgstr "मौसम और भोजन की जानकारी"
+
+msgid "View Trip Plan"
+msgstr "यात्रा योजना देखें"
+
+msgid "What Our Users Say"
+msgstr "हमारे उपयोगकर्ता क्या कहते हैं"
+
+msgid "Subscribe to get special offers and travel tips."
+msgstr "विशेष ऑफर और यात्रा सुझाव पाने के लिए सदस्यता लें।"
+
+msgid "Your trusted partner for unforgettable travel experiences. We make travel planning simple and enjoyable."
+msgstr "अविस्मरणीय यात्रा अनुभवों के लिए आपका भरोसेमंद साथी। हम यात्रा योजना को सरल और आनंददायक बनाते हैं।"
+
+msgid "Quick Links"
+msgstr "त्वरित लिंक"
+
+msgid "Services"
+msgstr "सेवाएँ"
+
+msgid "Hotel Booking"
+msgstr "होटल बुकिंग"
+
+msgid "Cab Services"
+msgstr "कैब सेवाएँ"
+
+msgid "Travel Guides"
+msgstr "यात्रा मार्गदर्शक"
+
+msgid "Travel Insurance"
+msgstr "यात्रा बीमा"
+
+msgid "Weather Updates"
+msgstr "मौसम अपडेट"
+
+msgid "All Rights Reserved."
+msgstr "सर्वाधिकार सुरक्षित।"
+
+msgid "Privacy Policy"
+msgstr "गोपनीयता नीति"
+
+msgid "Terms of Service"
+msgstr "सेवा की शर्तें"
 # Hindi translations for TourGuidePro
 # Copyright (C) 2026 TourGuidePro
 # This file is distributed under the same license as the PACKAGE package.
