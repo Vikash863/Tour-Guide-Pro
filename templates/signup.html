@@ -1,10 +1,11 @@
 {% load static %}
+{% load i18n %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sign Up - TourGuidePro</title>
+    <title>{% trans "Sign Up - TourGuidePro" %}</title>
     <link rel="stylesheet" href="{% static 'css/signup.css' %}">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -23,33 +24,33 @@
 <body>
     <div class="auth-container">
         <div class="auth-form">
-            <a href="/" class="back-link"><i class="fas fa-arrow-left"></i> Back to Home</a>
+            <a href="/" class="back-link"><i class="fas fa-arrow-left"></i> {% trans "Back to Home" %}</a>
             <i class="fas fa-user-plus logo-icon"></i>
-            <h2>Create Account</h2>
-            <p class="subtitle">Join us and start your journey</p>
+            <h2>{% trans "Create Account" %}</h2>
+            <p class="subtitle">{% trans "Join us and start your journey" %}</p>
             <form id="signupForm">
                 {% csrf_token %}
                 <div class="form-group">
                     <i class="fas fa-user"></i>
-                    <input type="text" id="username" placeholder="Username" required />
+                    <input type="text" id="username" placeholder="{% trans 'Username' %}" required />
                 </div>
                 <div class="form-group">
                     <i class="fas fa-envelope"></i>
-                    <input type="email" id="email" placeholder="Email" required />
+                    <input type="email" id="email" placeholder="{% trans 'Email' %}" required />
                 </div>
                 <div class="form-group">
                     <i class="fas fa-lock"></i>
-                    <input type="password" id="password" placeholder="Password" required />
+                    <input type="password" id="password" placeholder="{% trans 'Password' %}" required />
                 </div>
                 <div class="form-group">
                     <i class="fas fa-lock"></i>
-                    <input type="password" id="password_confirm" placeholder="Confirm Password" required />
+                    <input type="password" id="password_confirm" placeholder="{% trans 'Confirm Password' %}" required />
                 </div>
-                <button type="submit" id="signupBtn">Sign Up</button>
+                <button type="submit" id="signupBtn">{% trans "Sign Up" %}</button>
                 <div id="errorMessage" style="color: red; margin-top: 15px; display: none; text-align: center;"></div>
                 <div id="successMessage" style="color: green; margin-top: 15px; display: none; text-align: center;"></div>
             </form>
-            <p>Already have an account? <a href="/login/">Login here</a></p>
+            <p>{% trans "Already have an account?" %} <a href="/login/">{% trans "Login here" %}</a></p>
         </div>
     </div>
 

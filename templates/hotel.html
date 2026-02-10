@@ -1,10 +1,11 @@
 {% load static %}
+{% load i18n %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Hotels | TourGuidePro</title>
+  <title>{% trans "Hotels | TourGuidePro" %}</title>
   <link rel="stylesheet" href="{% static 'css/hotel.css' %}" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
@@ -15,11 +16,11 @@
         <i class="fas fa-plane-departure"></i> TourGuidePro
       </div>
       <ul class="nav-links">
-        <li><a href="/"><i class="fas fa-home"></i> Home</a></li>
-        <li><a href="/cab/"><i class="fas fa-taxi"></i> Cab Booking</a></li>
-        <li><a href="/destination/"><i class="fas fa-map-marker-alt"></i> Destinations</a></li>
-        <li><a href="/itinerary/"><i class="fas fa-route"></i> Itinerary</a></li>
-        <li><a href="/contact/"><i class="fas fa-envelope"></i> Contact</a></li>
+        <li><a href="/"><i class="fas fa-home"></i> {% trans "Home" %}</a></li>
+        <li><a href="/cab/"><i class="fas fa-taxi"></i> {% trans "Cab Booking" %}</a></li>
+        <li><a href="/destination/"><i class="fas fa-map-marker-alt"></i> {% trans "Destinations" %}</a></li>
+        <li><a href="/itinerary/"><i class="fas fa-route"></i> {% trans "Itinerary" %}</a></li>
+        <li><a href="/contact/"><i class="fas fa-envelope"></i> {% trans "Contact" %}</a></li>
       </ul>
       <div class="mobile-menu">
         <i class="fas fa-bars"></i>
@@ -31,8 +32,8 @@
     <!-- Hero Section -->
     <section class="hero">
       <div class="hero-content">
-        <h1><i class="fas fa-hotel"></i> Find Perfect Hotels</h1>
-        <p>Discover luxury stays and budget-friendly options near your favorite destinations</p>
+        <h1><i class="fas fa-hotel"></i> {% trans "Find Perfect Hotels" %}</h1>
+        <p>{% trans "Discover luxury stays and budget-friendly options near your favorite destinations" %}</p>
       </div>
     </section>
 
@@ -42,9 +43,9 @@
         <form id="hotelSearchForm">
           <div class="search-box">
             <i class="fas fa-search location-icon"></i>
-            <input type="text" id="location" placeholder="Enter a destination (e.g., Manali, Goa, Jaipur)" required />
+            <input type="text" id="location" placeholder="{% trans 'Enter a destination (e.g., Manali, Goa, Jaipur)' %}" required />
             <button type="submit" class="search-btn">
-              <i class="fas fa-search"></i> Search Hotels
+              <i class="fas fa-search"></i> {% trans "Search Hotels" %}
             </button>
           </div>
         </form>
@@ -53,33 +54,33 @@
       <!-- Filters -->
       <div class="filters-container">
         <div class="filter-group">
-          <label><i class="fas fa-star"></i> Rating</label>
+          <label><i class="fas fa-star"></i> {% trans "Rating" %}</label>
           <select id="ratingFilter">
-            <option value="all">All Ratings</option>
-            <option value="4">4+ Stars</option>
-            <option value="3">3+ Stars</option>
-            <option value="2">2+ Stars</option>
+            <option value="all">{% trans "All Ratings" %}</option>
+            <option value="4">{% trans "4+ Stars" %}</option>
+            <option value="3">{% trans "3+ Stars" %}</option>
+            <option value="2">{% trans "2+ Stars" %}</option>
           </select>
         </div>
         <div class="filter-group">
-          <label><i class="fas fa-dollar-sign"></i> Price</label>
+          <label><i class="fas fa-dollar-sign"></i> {% trans "Price" %}</label>
           <select id="priceFilter">
-            <option value="all">Any Price</option>
-            <option value="budget">Budget (< $50)</option>
-            <option value="mid">Mid-Range ($50-$150)</option>
-            <option value="luxury">Luxury (> $150)</option>
+            <option value="all">{% trans "Any Price" %}</option>
+            <option value="budget">{% trans "Budget (< $50)" %}</option>
+            <option value="mid">{% trans "Mid-Range ($50-$150)" %}</option>
+            <option value="luxury">{% trans "Luxury (> $150)" %}</option>
           </select>
         </div>
         <div class="filter-group">
-          <label><i class="fas fa-sort"></i> Sort By</label>
+          <label><i class="fas fa-sort"></i> {% trans "Sort By" %}</label>
           <select id="sortFilter">
-            <option value="rating">Highest Rated</option>
-            <option value="distance">Nearest</option>
-            <option value="name">Name (A-Z)</option>
+            <option value="rating">{% trans "Highest Rated" %}</option>
+            <option value="distance">{% trans "Nearest" %}</option>
+            <option value="name">{% trans "Name (A-Z)" %}</option>
           </select>
         </div>
         <button class="reset-btn" onclick="resetFilters()">
-          <i class="fas fa-redo"></i> Reset
+          <i class="fas fa-redo"></i> {% trans "Reset" %}
         </button>
       </div>
     </section>
@@ -88,7 +89,7 @@
     <div class="stats-bar">
       <div class="stat-item">
         <i class="fas fa-building"></i>
-        <span id="hotelCount">0</span> Hotels Found
+        <span id="hotelCount">0</span> {% trans "Hotels Found" %}
       </div>
       <div class="stat-item">
         <i class="fas fa-map-pin"></i>
@@ -100,13 +101,13 @@
     <section id="hotelResults" class="hotel-cards">
       <div class="placeholder-message">
         <i class="fas fa-search-location"></i>
-        <h3>Search for Hotels</h3>
-        <p>Enter a destination above to find amazing hotels nearby</p>
+        <h3>{% trans "Search for Hotels" %}</h3>
+        <p>{% trans "Enter a destination above to find amazing hotels nearby" %}</p>
       </div>
     </section>
     
     <section id="restaurantResults" class="restaurant-section">
-      <h2 class="section-title"><i class="fas fa-utensils"></i> Nearby Restaurants</h2>
+      <h2 class="section-title"><i class="fas fa-utensils"></i> {% trans "Nearby Restaurants" %}</h2>
       <div class="hotel-cards"></div>
     </section>
   </main>
@@ -114,10 +115,10 @@
   <!-- Quick Actions Footer -->
   <div class="quick-actions">
     <a href="/book-hotel" class="action-btn primary">
-      <i class="fas fa-calendar-check"></i> Quick Booking
+      <i class="fas fa-calendar-check"></i> {% trans "Quick Booking" %}
     </a>
     <a href="/destination" class="action-btn secondary">
-      <i class="fas fa-compass"></i> Explore Destinations
+      <i class="fas fa-compass"></i> {% trans "Explore Destinations" %}
     </a>
   </div>
 

@@ -1,7 +1,8 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Hotel Booking</title>
+    {% load i18n %}
+    <title>{% trans "Hotel Booking" %}</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -55,36 +56,36 @@
 <body>
 
 <div class="card">
-    <h1>Booking for {{ hotel_name }}</h1>
+    <h1>{% blocktrans %}Booking for {{ hotel_name }}{% endblocktrans %}</h1>
 
     <form method="POST">
         {% csrf_token %}
         <input type="hidden" name="hotel_name" value="{{ hotel_name }}">
 
-        <label>Your Name</label>
-        <input type="text" name="name" placeholder="Enter your name" required>
+        <label>{% trans "Your Name" %}</label>
+        <input type="text" name="name" placeholder="{% trans 'Enter your name' %}" required>
 
-        <label>Check In</label>
+        <label>{% trans "Check In" %}</label>
         <input type="date" name="checkin" id="checkin" required>
 
-        <label>Check Out</label>
+        <label>{% trans "Check Out" %}</label>
         <input type="date" name="checkout" id="checkout" required>
 
-        <label>Guests</label>
+        <label>{% trans "Guests" %}</label>
         <input type="number" name="guests" id="guests" value="1" min="1" required>
 
-        <label>Rooms</label>
+        <label>{% trans "Rooms" %}</label>
         <select name="rooms" id="rooms">
-            <option value="1">1 Room</option>
-            <option value="2">2 Rooms</option>
-            <option value="3">3 Rooms</option>
+            <option value="1">{% trans "1 Room" %}</option>
+            <option value="2">{% trans "2 Rooms" %}</option>
+            <option value="3">{% trans "3 Rooms" %}</option>
         </select>
 
         <div class="price" id="totalPrice">
-            Total: ₹0
+            {% trans "Total:" %} ₹0
         </div>
 
-        <button type="submit">Confirm Booking</button>
+        <button type="submit">{% trans "Confirm Booking" %}</button>
     </form>
 </div>
 
@@ -103,7 +104,9 @@
             const days = (d2 - d1) / (1000 * 60 * 60 * 24);
             if (days > 0) {
                 let total = days * pricePerNight * rooms.value;
-                priceBox.innerText = "Total: ₹" + total;
+                // Update price display with translation label
+                const totalLabel = document.querySelector('html').lang === 'hi' || localStorage.getItem('language') === 'hi' ? 'कुल:' : 'Total:';
+                priceBox.innerText = totalLabel + " ₹" + total;
             }
         }
     }

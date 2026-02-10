@@ -1,10 +1,11 @@
 {% load static %}
+{% load i18n %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>My Itinerary | TourGuidePro</title>
+  <title>{% trans "My Itinerary | TourGuidePro" %}</title>
   
   <!-- Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -29,11 +30,11 @@
         TourGuidePro
       </div>
       <ul class="nav-links">
-        <li><a href="/">Home</a></li>
-        <li><a href="/cab/">Cab Booking</a></li>
-        <li><a href="/hotel/">Hotels</a></li>
-        <li><a href="/destination/">Destinations</a></li>
-        <li><a href="/contact/">Contact</a></li>
+        <li><a href="/">{% trans "Home" %}</a></li>
+        <li><a href="/cab/">{% trans "Cab Booking" %}</a></li>
+        <li><a href="/hotel/">{% trans "Hotels" %}</a></li>
+        <li><a href="/destination/">{% trans "Destinations" %}</a></li>
+        <li><a href="/contact/">{% trans "Contact" %}</a></li>
       </ul>
     </nav>
   </header>
@@ -43,10 +44,10 @@
     <div class="hero-content">
       <div class="hero-badge">
         <i class="ti ti-luggage"></i>
-        Travel Plans
+        {% trans "Travel Plans" %}
       </div>
-      <h1 class="hero-title">My Itinerary</h1>
-      <p class="hero-subtitle">Your complete travel schedule at a glance</p>
+      <h1 class="hero-title">{% trans "My Itinerary" %}</h1>
+      <p class="hero-subtitle">{% trans "Your complete travel schedule at a glance" %}</p>
     </div>
   </section>
 

@@ -1,10 +1,11 @@
 {% load static %}
+{% load i18n %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Book Your Ride | TourGuidePro</title>
+  <title>{% trans "Book Your Ride | TourGuidePro" %}</title>
   
   <!-- Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -29,11 +30,11 @@
         TourGuidePro
       </div>
       <ul class="nav-links">
-        <li><a href="/">Home</a></li>
-        <li><a href="/hotel/">Hotels</a></li>
-        <li><a href="/destination/">Destinations</a></li>
-        <li><a href="/itinerary/">Itinerary</a></li>
-        <li><a href="/contact/">Contact</a></li>
+        <li><a href="/">{% trans "Home" %}</a></li>
+        <li><a href="/hotel/">{% trans "Hotels" %}</a></li>
+        <li><a href="/destination/">{% trans "Destinations" %}</a></li>
+        <li><a href="/itinerary/">{% trans "Itinerary" %}</a></li>
+        <li><a href="/contact/">{% trans "Contact" %}</a></li>
       </ul>
     </nav>
   </header>
@@ -43,10 +44,10 @@
     <div class="hero-content">
       <div class="hero-badge">
         <i class="ti ti-route"></i>
-        Premium Rides
+        {% trans "Premium Rides" %}
       </div>
-      <h1 class="hero-title">Book Your Ride</h1>
-      <p class="hero-subtitle">Choose your perfect ride for your journey</p>
+      <h1 class="hero-title">{% trans "Book Your Ride" %}</h1>
+      <p class="hero-subtitle">{% trans "Choose your perfect ride for your journey" %}</p>
     </div>
   </section>
 
@@ -61,7 +62,7 @@
           <!-- Cab Type Selection -->
           <h2 class="section-heading">
             <i class="ti ti-car"></i>
-            Choose Cab Type
+            {% trans "Choose Cab Type" %}
           </h2>
           
           <div class="cab-types-grid">
@@ -69,8 +70,8 @@
               <div class="cab-type-icon">
                 <i class="ti ti-car"></i>
               </div>
-              <h3 class="cab-type-name">Hourly</h3>
-              <p class="cab-type-desc">Perfect for city tours</p>
+              <h3 class="cab-type-name">{% trans "Hourly" %}</h3>
+              <p class="cab-type-desc">{% trans "Perfect for city tours" %}</p>
               <p class="cab-type-price">₹15/hour</p>
             </div>
             
@@ -78,8 +79,8 @@
               <div class="cab-type-icon">
                 <i class="ti ti-car-suv"></i>
               </div>
-              <h3 class="cab-type-name">Daily</h3>
-              <p class="cab-type-desc">Best for long trips</p>
+              <h3 class="cab-type-name">{% trans "Daily" %}</h3>
+              <p class="cab-type-desc">{% trans "Best for long trips" %}</p>
               <p class="cab-type-price">₹1200/day</p>
             </div>
             
@@ -87,8 +88,8 @@
               <div class="cab-type-icon">
                 <i class="ti ti-route"></i>
               </div>
-              <h3 class="cab-type-name">Per Kilometer</h3>
-              <p class="cab-type-desc">Pay only for distance</p>
+              <h3 class="cab-type-name">{% trans "Per Kilometer" %}</h3>
+              <p class="cab-type-desc">{% trans "Pay only for distance" %}</p>
               <p class="cab-type-price">₹12/km</p>
             </div>
           </div>
@@ -96,7 +97,7 @@
           <!-- Booking Form -->
           <h2 class="section-heading">
             <i class="ti ti-calendar"></i>
-            Booking Details
+            {% trans "Booking Details" %}
           </h2>
           
           <div class="booking-form-card">
@@ -104,14 +105,14 @@
               
               <!-- Pickup Location -->
               <div class="form-group">
-                <label for="pickup">Pickup Location</label>
+                <label for="pickup">{% trans "Pickup Location" %}</label>
                 <div class="input-wrapper">
                   <i class="ti ti-map-pin input-icon"></i>
                   <input 
                     type="text" 
                     id="pickup" 
                     class="form-input" 
-                    placeholder="Enter pickup location" 
+                    placeholder="{% trans 'Enter pickup location' %}" 
                     required 
                   />
                 </div>
@@ -119,14 +120,14 @@
 
               <!-- Drop Location -->
               <div class="form-group">
-                <label for="drop">Drop Location</label>
+                <label for="drop">{% trans "Drop Location" %}</label>
                 <div class="input-wrapper">
                   <i class="ti ti-location-pin input-icon"></i>
                   <input 
                     type="text" 
                     id="drop" 
                     class="form-input" 
-                    placeholder="Enter drop location" 
+                    placeholder="{% trans 'Enter drop location' %}" 
                     required 
                   />
                 </div>
@@ -148,7 +149,7 @@
                 </div>
 
                 <div class="form-group">
-                  <label for="time">Time</label>
+                  <label for="time">{% trans "Time" %}</label>
                   <div class="input-wrapper">
                     <i class="ti ti-clock input-icon"></i>
                     <input 
@@ -164,29 +165,29 @@
               <!-- Passengers & Duration Row -->
               <div class="form-row">
                 <div class="form-group">
-                  <label for="passengers">Number of Passengers</label>
+                  <label for="passengers">{% trans "Number of Passengers" %}</label>
                   <div class="input-wrapper">
                     <i class="ti ti-user input-icon"></i>
                     <select id="passengers" class="form-input" required>
-                      <option value="">Select</option>
-                      <option value="1">1 Passenger</option>
-                      <option value="2">2 Passengers</option>
-                      <option value="3">3 Passengers</option>
-                      <option value="4">4 Passengers</option>
-                      <option value="5">5+ Passengers</option>
+                      <option value="">{% trans "Select" %}</option>
+                      <option value="1">{% trans "1 Passenger" %}</option>
+                      <option value="2">{% trans "2 Passengers" %}</option>
+                      <option value="3">{% trans "3 Passengers" %}</option>
+                      <option value="4">{% trans "4 Passengers" %}</option>
+                      <option value="5">{% trans "5+ Passengers" %}</option>
                     </select>
                   </div>
                 </div>
 
                 <div class="form-group" id="durationGroup">
-                  <label for="duration" id="durationLabel">Duration/Distance</label>
+                  <label for="duration" id="durationLabel">{% trans "Duration/Distance" %}</label>
                   <div class="input-wrapper">
                     <i class="ti ti-route input-icon"></i>
                     <input 
                       type="number" 
                       id="duration" 
                       class="form-input" 
-                      placeholder="Enter value" 
+                      placeholder="{% trans 'Enter value' %}" 
                       min="1"
                       required 
                     />
@@ -197,7 +198,7 @@
               <!-- Submit Button -->
               <button type="submit" class="submit-btn" id="submitBtn">
                 <i class="ti ti-circle-check-filled"></i>
-                Book Now
+                {% trans "Book Now" %}
               </button>
             </form>
           </div>
@@ -210,26 +211,26 @@
               <div class="pricing-icon">
                 <i class="ti ti-currency-rupee"></i>
               </div>
-              <h3 class="pricing-title">Estimated Fare</h3>
+              <h3 class="pricing-title">{% trans "Estimated Fare" %}</h3>
             </div>
             
             <div class="pricing-row">
-              <span class="pricing-label">Cab Type</span>
-              <span class="pricing-value" id="selectedTypeDisplay">Not selected</span>
+              <span class="pricing-label">{% trans "Cab Type" %}</span>
+              <span class="pricing-value" id="selectedTypeDisplay">{% trans "Not selected" %}</span>
             </div>
             
             <div class="pricing-row">
-              <span class="pricing-label">Base Fare</span>
+              <span class="pricing-label">{% trans "Base Fare" %}</span>
               <span class="pricing-value" id="baseFareDisplay">₹0</span>
             </div>
             
             <div class="pricing-row">
-              <span class="pricing-label" id="chargeLabel">Duration/Distance</span>
+              <span class="pricing-label" id="chargeLabel">{% trans "Duration/Distance" %}</span>
               <span class="pricing-value" id="chargeValueDisplay">-</span>
             </div>
             
             <div class="pricing-row pricing-total">
-              <span class="pricing-label">Total Estimate</span>
+              <span class="pricing-label">{% trans "Total Estimate" %}</span>
               <span class="pricing-value" id="totalFareDisplay">₹0</span>
             </div>
             
@@ -249,8 +250,8 @@
       <div class="modal-icon">
         <i class="ti ti-circle-check-filled"></i>
       </div>
-      <h2 class="modal-title">Booking Confirmed!</h2>
-      <p class="modal-message">Your cab has been successfully scheduled</p>
+<h2 class="modal-title">{% trans "Booking Confirmed!" %}</h2>
+      <p class="modal-message">{% trans "Your cab has been successfully scheduled" %}</p>
       
       <div class="modal-details" id="bookingDetails">
         <!-- Details will be inserted by JavaScript -->
@@ -258,10 +259,10 @@
       
       <div class="modal-actions">
         <button class="modal-btn modal-btn-secondary" onclick="closeModal()">
-          Book Another Ride
+          {% trans "Book Another Ride" %}
         </button>
         <button class="modal-btn modal-btn-primary" onclick="window.location.href='/itinerary/'">
-          View Itinerary
+          {% trans "View Itinerary" %}
         </button>
       </div>
     </div>
