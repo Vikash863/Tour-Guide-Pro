@@ -1,9 +1,42 @@
-{% extends 'base.html' %}
 {% load static %}
-
-{% block content %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Discover Destinations | TourGuidePro</title>
+  
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@500;600;700&display=swap" rel="stylesheet">
+  
+  <!-- Lucide Icons -->
+  <link href="https://cdn.jsdelivr.net/npm/lucide-static/font/lucide.css" rel="stylesheet">
+  
+  <!-- Custom Styles -->
+  <link rel="stylesheet" href="{% static 'css/destination.css' %}" />
+</head>
+<body>
   <!-- Animated Background -->
   <div class="animated-bg"></div>
+
+  <!-- Navigation -->
+  <header>
+    <nav class="navbar" id="navbar">
+      <div class="logo">
+        <i class="icon-compass"></i>
+        TourGuidePro
+      </div>
+      <ul class="nav-links">
+        <li><a href="/">Home</a></li>
+        <li><a href="/cab/">Cab Booking</a></li>
+        <li><a href="/hotel/">Hotels</a></li>
+        <li><a href="/itinerary/">Itinerary</a></li>
+        <li><a href="/contact/">Contact</a></li>
+      </ul>
+    </nav>
+  </header>
 
   <!-- Hero Section with Search -->
   <section class="hero-section">
@@ -151,4 +184,5 @@
   </footer>
 
   <script src="{% static 'js/destination.js' %}" defer></script>
-{% endblock %}
+</body>
+</html>

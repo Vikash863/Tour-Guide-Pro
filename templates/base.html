@@ -1,6 +1,6 @@
-{% load static i18n %}
+{% load static %}
 <!DOCTYPE html>
-<html lang="{{ LANGUAGE_CODE }}">
+<html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -9,9 +9,427 @@
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
   <link rel="stylesheet" href="{% static 'css/chatbot.css' %}" />
+  <style>
+    /* User Dropdown Styles */
+    .user-menu { position: relative; }
+    
+    .user-avatar {
+      width: 42px;
+      height: 42px;
+      border-radius: 50%;
+      cursor: pointer;
+      border: 2px solid #667eea;
+      object-fit: cover;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-weight: 600;
+      transition: all 0.3s ease;
+    }
+    
+    .user-avatar:hover {
+      transform: scale(1.05);
+      box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+    }
+    
+    .user-dropdown {
+      position: absolute;
+      right: 0;
+      top: 100%;
+      background: white;
+      border: 1px solid #e0e0e0;
+      border-radius: 16px;
+      min-width: 280px;
+      display: none;
+      z-index: 1000;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.15);
+      padding: 8px 0;
+      margin-top: 10px;
+      animation: slideDown 0.2s ease;
+    }
+    
+    @keyframes slideDown {
+      from { opacity: 0; transform: translateY(-10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    
+    .user-dropdown.active { display: block; }
+    
+    .user-info {
+      padding: 16px 20px;
+      border-bottom: 1px solid #f0f0f0;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    
+    .user-avatar-large {
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-weight: 600;
+      font-size: 20px;
+    }
+    
+    .user-details h6 {
+      margin: 0;
+      font-weight: 600;
+      color: #333;
+    }
+    
+    .user-details p {
+      margin: 2px 0 0;
+      font-size: 12px;
+      color: #888;
+    }
+    
+    .dropdown-section {
+      padding: 8px 0;
+    }
+    
+    .dropdown-section-title {
+      padding: 8px 20px;
+      font-size: 11px;
+      font-weight: 600;
+      color: #888;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    
+    .dropdown-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px 20px;
+      text-decoration: none;
+      color: #444;
+      font-weight: 500;
+      transition: all 0.2s ease;
+      border: none;
+      background: none;
+      width: 100%;
+      text-align: left;
+      cursor: pointer;
+    }
+    
+    .dropdown-item:hover {
+      background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);
+      color: #667eea;
+    }
+    
+    .dropdown-item i {
+      width: 20px;
+      font-size: 18px;
+      text-align: center;
+    }
+    
+    .dropdown-item .badge {
+      margin-left: auto;
+      background: #667eea;
+      color: white;
+      padding: 2px 8px;
+      border-radius: 10px;
+      font-size: 11px;
+    }
+    
+    .dropdown-divider {
+      height: 1px;
+      background: #f0f0f0;
+      margin: 8px 0;
+    }
+    
+    .dropdown-footer {
+      padding: 12px 20px;
+      border-top: 1px solid #f0f0f0;
+      display: flex;
+      gap: 8px;
+    }
+    
+    .btn-dropdown {
+      flex: 1;
+      padding: 10px;
+      border: none;
+      border-radius: 8px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+    
+    .btn-settings {
+      background: #f8f9fa;
+      color: #555;
+    }
+    
+    .btn-settings:hover {
+      background: #e9ecef;
+    }
+    
+    .btn-logout {
+      background: linear-gradient(135deg, #ff6b6b 0%, #ee5a24 100%);
+      color: white;
+    }
+    
+    .btn-logout:hover {
+      opacity: 0.9;
+      transform: translateY(-1px);
+    }
+    
+    /* Navbar Styles */
+    nav.navbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 12px 24px;
+      background-color: #fff;
+      border-bottom: 1px solid #e0e0e0;
+      position: sticky;
+      top: 0;
+      z-index: 999;
+    }
+    
+    .logo-container {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    
+    .logo-img {
+      height: 48px;
+      border-radius: 8px;
+    }
+    
+    .logo-text {
+      font-size: 22px;
+      font-weight: 700;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    
+    .nav-links {
+      list-style: none;
+      display: flex;
+      gap: 8px;
+      margin: 0;
+      padding: 0;
+    }
+    
+    .nav-links li a {
+      text-decoration: none;
+      color: #444;
+      font-weight: 500;
+      padding: 10px 16px;
+      border-radius: 8px;
+      transition: all 0.2s ease;
+    }
+    
+    .nav-links li a:hover {
+      background: rgba(102, 126, 234, 0.1);
+      color: #667eea;
+    }
+    
+    .nav-links li a.active {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+    }
+    
+    .nav-actions {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+    
+    .language-select select {
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      padding: 8px 12px;
+      font-size: 14px;
+      cursor: pointer;
+      background: white;
+    }
+    
+    /* Mobile Responsive */
+    @media (max-width: 992px) {
+      .nav-links {
+        display: none;
+      }
+      
+      .nav-links.active {
+        display: flex;
+        flex-direction: column;
+        position: absolute;
+        top: 100%;
+        left: 0;
+        right: 0;
+        background: white;
+        padding: 16px;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        border-radius: 0 0 12px 12px;
+      }
+      
+      .user-dropdown {
+        min-width: 260px;
+        right: -60px;
+      }
+    }
+    
+    .mobile-menu-btn {
+      display: none;
+      background: none;
+      border: none;
+      font-size: 24px;
+      cursor: pointer;
+      padding: 8px;
+    }
+    
+    @media (max-width: 992px) {
+      .mobile-menu-btn {
+        display: block;
+      }
+    }
+    
+    .user-menu {
+      margin-left: 8px;
+    }
+  </style>
 </head>
 <body>
-  {% include 'navbar.html' %}
+  <header>
+    <nav class="navbar">
+      <div class="logo-container">
+        <img src="{% static 'images/TourGuidePrologo.jpg' %}" alt="TourGuidePro Logo" class="logo-img" />
+        <span class="logo-text">TourGuidePro</span>
+      </div>
+      
+      <button class="mobile-menu-btn" onclick="toggleMobileMenu()">
+        <i class="bi bi-list"></i>
+      </button>
+      
+      <ul class="nav-links" id="navLinks">
+        <li><a href="/" class="active">Home</a></li>
+        <li><a href="/cab/">Cab Booking</a></li>
+        <li><a href="/hotel/">Hotels</a></li>
+        <li><a href="/destination/">Destinations</a></li>
+        <li><a href="/itinerary/">Itinerary</a></li>
+        <li><a href="/features/">Features</a></li>
+        <li><a href="/contact/">Contact</a></li>
+      </ul>
+      
+      <div class="nav-actions">
+        <div class="language-select">
+          <select onchange="this.form.submit()" form="/set-language/" name="language">
+            <option value="en">English</option>
+            <option value="hi">Hindi</option>
+            <option value="ta">Tamil</option>
+          </select>
+        </div>
+        
+        <div class="user-menu">
+          <div class="user-avatar" id="userAvatar" onclick="toggleUserDropdown()">
+            <i class="bi bi-person-fill"></i>
+          </div>
+          
+          <div class="user-dropdown" id="userDropdown">
+            <!-- User Info Section -->
+            <div class="user-info">
+              <div class="user-avatar-large" id="userAvatarLarge">U</div>
+              <div class="user-details">
+                <h6 id="userName">User Name</h6>
+                <p id="userEmail">user@example.com</p>
+              </div>
+            </div>
+            
+            <!-- Main Navigation -->
+            <div class="dropdown-section">
+              <div class="dropdown-section-title">Account</div>
+              <a href="/profile/" class="dropdown-item">
+                <i class="bi bi-person-circle"></i>
+                <span>My Profile</span>
+              </a>
+              <a href="/dashboard/" class="dropdown-item">
+                <i class="bi bi-grid-1x2"></i>
+                <span>Dashboard</span>
+              </a>
+              <a href="/itinerary/" class="dropdown-item">
+                <i class="bi bi-calendar-check"></i>
+                <span>My Bookings</span>
+                <span class="badge">3</span>
+              </a>
+              <a href="/history/" class="dropdown-item">
+                <i class="bi bi-clock-history"></i>
+                <span>Tour History</span>
+              </a>
+              <a href="/wishlist/" class="dropdown-item">
+                <i class="bi bi-heart-fill"></i>
+                <span>Saved Trips</span>
+              </a>
+            </div>
+            
+            <div class="dropdown-divider"></div>
+            
+            <!-- Travel & Media -->
+            <div class="dropdown-section">
+              <div class="dropdown-section-title">Travel</div>
+              <a href="/payments/" class="dropdown-item">
+                <i class="bi bi-credit-card"></i>
+                <span>Payments & Invoices</span>
+              </a>
+              <a href="/gallery/" class="dropdown-item">
+                <i class="bi bi-images"></i>
+                <span>Travel Gallery</span>
+              </a>
+              <a href="/reviews/" class="dropdown-item">
+                <i class="bi bi-star-fill"></i>
+                <span>Reviews & Ratings</span>
+              </a>
+              <a href="/notifications/" class="dropdown-item">
+                <i class="bi bi-bell-fill"></i>
+                <span>Notifications</span>
+                <span class="badge">5</span>
+              </a>
+            </div>
+            
+            <div class="dropdown-divider"></div>
+            
+            <!-- Settings & Support -->
+            <div class="dropdown-section">
+              <div class="dropdown-section-title">Support</div>
+              <a href="/settings/" class="dropdown-item">
+                <i class="bi bi-gear-fill"></i>
+                <span>Settings</span>
+              </a>
+              <a href="/help/" class="dropdown-item">
+                <i class="bi bi-question-circle"></i>
+                <span>Help & Support</span>
+              </a>
+            </div>
+            
+            <!-- Footer Actions -->
+            <div class="dropdown-footer">
+              <button class="btn-dropdown btn-settings" onclick="window.location.href='/settings/'">
+                <i class="bi bi-gear"></i> Settings
+              </button>
+              <button class="btn-dropdown btn-logout" onclick="handleLogout()">
+                <i class="bi bi-box-arrow-right"></i> Logout
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </nav>
+  </header>
   
   <main>{% block content %}{% endblock %}</main>
   
@@ -72,15 +490,4 @@
 
   <script src="{% static 'js/api.js' %}"></script>
   <script src="{% static 'js/Home.js' %}"></script>
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-  <script src="{% static 'js/chatbot.js' %}"></script>
-  <script>
-    function toggleMobileMenu() {
-      const navLinks = document.getElementById('navLinks');
-      if (navLinks) navLinks.classList.toggle('active');
-    }
-    function toggleUserDropdown() {
-      const userDropdown = document.getElementById('userDropdown');
-      if (userDropdown) userDropdown.classList.toggle('active');
-    }
-  </script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js">

@@ -3,7 +3,6 @@ from django.contrib.auth.models import User
 from django.core.validators import MinValueValidator, MaxValueValidator, FileExtensionValidator
 from django.utils import timezone
 import uuid
-from decimal import Decimal
 
 
 class TimeStampMixin(models.Model):
@@ -116,7 +115,7 @@ class Hotel(TimeStampMixin):
     image = models.ImageField(upload_to='hotels/', null=True, blank=True)
     images = models.JSONField(default=list)
     destination = models.ForeignKey(Destination, on_delete=models.CASCADE, null=True, blank=True)
-    address = models.TextField(default='')
+    address = models.TextField()
     city = models.CharField(max_length=100)
     state = models.CharField(max_length=100)
     country = models.CharField(max_length=100)
@@ -174,7 +173,7 @@ class Booking(TimeStampMixin):
     
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='bookings')
     booking_type = models.CharField(max_length=20, choices=BOOKING_TYPES)
-    booking_reference = models.CharField(max_length=50, unique=True, default=uuid.uuid4)
+    booking_reference = models.CharField(max_length=50, unique=True)
     hotel = models.ForeignKey(Hotel, on_delete=models.SET_NULL, null=True, blank=True)
     destination = models.ForeignKey(Destination, on_delete=models.SET_NULL, null=True, blank=True)
     check_in_date = models.DateField(null=True, blank=True)
@@ -188,7 +187,7 @@ class Booking(TimeStampMixin):
     currency = models.CharField(max_length=10, default='INR')
     discount = models.DecimalField(max_digits=10, decimal_places=2, default=0)
     tax_amount = models.DecimalField(max_digits=10, decimal_places=2, default=0)
-    final_amount = models.DecimalField(max_digits=10, decimal_places=2, default=Decimal('0.00'))
+    final_amount = models.DecimalField(max_digits=10, decimal_places=2)
     payment_status = models.CharField(max_length=20, choices=PAYMENT_STATUS, default='pending')
     payment_method = models.CharField(max_length=50, blank=True)
     payment_reference = models.CharField(max_length=100, blank=True)

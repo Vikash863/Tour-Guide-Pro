@@ -1,7 +1,33 @@
-{% extends 'base.html' %}
 {% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Book Your Ride | TourGuidePro</title>
+  
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@500;600;700&display=swap" rel="stylesheet">
+  
+  <!-- Tabler Icons -->
+  <link href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont/tabler-icons.min.css" rel="stylesheet">
+  
+  <!-- Custom Styles -->
+  <link rel="stylesheet" href="{% static 'css/cab.css' %}" />
+</head>
+<body>
+  <!-- Animated Background -->
+  <div class="animated-bg"></div>
 
-{% block content %}
+  <!-- Navigation -->
+  <header>
+    <nav class="navbar" id="navbar">
+      <div class="logo">
+        <i class="ti ti-car"></i>
+        TourGuidePro
+      </div>
       <ul class="nav-links">
         <li><a href="/">Home</a></li>
         <li><a href="/hotel/">Hotels</a></li>
@@ -253,4 +279,5 @@
   </footer>
 
   <script src="{% static 'js/cab.js' %}" defer></script>
-{% endblock %}
+</body>
+</html>

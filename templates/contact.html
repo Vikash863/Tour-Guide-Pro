@@ -1,13 +1,40 @@
-{% extends 'base.html' %}
 {% load static %}
-
-{% block content %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Contact & Help | TourGuidePro</title>
+  <link rel="stylesheet" href="{% static 'css/contact.css' %}" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
   <!-- Animated Background -->
   <div class="animated-background">
     <div class="circle circle-1"></div>
     <div class="circle circle-2"></div>
     <div class="circle circle-3"></div>
   </div>
+
+  <header>
+    <nav class="navbar">
+      <div class="logo">
+        <i class="fas fa-map-marked-alt"></i>
+        TourGuidePro
+      </div>
+      <ul class="nav-links">
+        <li><a href="/"><i class="fas fa-home"></i> Home</a></li>
+        <li><a href="/cab/"><i class="fas fa-taxi"></i> Cab Booking</a></li>
+        <li><a href="/hotel/"><i class="fas fa-hotel"></i> Hotels</a></li>
+        <li><a href="/destination/"><i class="fas fa-map-marker-alt"></i> Destinations</a></li>
+        <li><a href="/itinerary/"><i class="fas fa-route"></i> Itinerary</a></li>
+      </ul>
+      <div class="burger-menu">
+        <i class="fas fa-bars"></i>
+      </div>
+    </nav>
+  </header>
 
   <main class="contact-container">
     <!-- Hero Section -->
@@ -370,4 +397,5 @@
 
   <script src="{% static 'js/api.js' %}"></script>
   <script src="{% static 'js/contact.js' %}" defer></script>
-{% endblock %}
+</body>
+</html>

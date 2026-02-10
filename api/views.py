@@ -86,13 +86,17 @@ class UserViewSet(viewsets.ModelViewSet):
     @action(detail=False, methods=['post'])
     def logout(self, request):
         """User logout"""
-        # Safely delete token if it exists to avoid AttributeError when
-        # the user has no associated auth_token (e.g., anonymous or JWT-only users)
-        if hasattr(request.user, 'auth_token') and request.user.auth_token:
+        try:
             request.user.auth_token.delete()
-            return Response({'message': 'Logout successful'}, status=status.HTTP_200_OK)
-
-        return Response({'error': 'Logout failed or no token present'}, status=status.HTTP_400_BAD_REQUEST)
+            return Response(
+                {'message': 'Logout successful'},
+                status=status.HTTP_200_OK
+            )
+        except:
+            return Response(
+                {'error': 'Logout failed'},
+                status=status.HTTP_400_BAD_REQUEST
+            )
 
     @action(detail=False, methods=['get'], permission_classes=[IsAuthenticated])
     def me(self, request):

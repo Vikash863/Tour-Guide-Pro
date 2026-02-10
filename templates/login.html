@@ -1,131 +1,135 @@
-{% extends 'base.html' %}
 {% load static %}
-
-{% block content %}
-<div class="auth-container">
-    <div class="auth-form">
-        <a href="/" class="back-link"><i class="fas fa-arrow-left"></i> Back to Home</a>
-        <i class="fas fa-plane-departure logo-icon"></i>
-        <h2>Welcome Back!</h2>
-        <p class="subtitle">Login to continue your journey</p>
-        <form id="loginForm">
-            {% csrf_token %}
-            <div class="form-group">
-                <i class="fas fa-envelope"></i>
-                <input type="text" id="username" placeholder="Username" required />
-            </div>
-            <div class="form-group">
-                <i class="fas fa-lock"></i>
-                <input type="password" id="password" placeholder="Password" required />
-            </div>
-            <button type="submit" id="loginBtn">Login</button>
-            <div id="errorMessage" style="color: red; margin-top: 15px; display: none; text-align: center;"></div>
-            <div id="successMessage" style="color: green; margin-top: 15px; display: none; text-align: center;"></div>
-        </form>
-        <p>Don't have an account? <a href="/signup/">Sign up here</a></p>
-    </div>
-</div>
-
-<script>
-    async function login(event) {
-        event.preventDefault();
-        
-        const username = document.getElementById('username').value.trim();
-        const password = document.getElementById('password').value;
-        const errorDiv = document.getElementById('errorMessage');
-        const successDiv = document.getElementById('successMessage');
-        const loginBtn = document.getElementById('loginBtn');
-        
-        // Clear previous messages
-        errorDiv.style.display = 'none';
-        successDiv.style.display = 'none';
-        
-        // Basic validation
-        if (!username || !password) {
-            errorDiv.textContent = 'Please enter both username and password';
-            errorDiv.style.display = 'block';
-            return;
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - TourGuidePro</title>
+    <link rel="stylesheet" href="{% static 'css/login.css' %}">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            margin: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
-        
-        // Show loading
-        loginBtn.textContent = 'Logging in...';
-        loginBtn.disabled = true;
-        
-        try {
-            const response = await fetch('/api/users/login/', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    username: username,
-                    password: password
-                })
-            });
+    </style>
+</head>
+<body>
+    <div class="auth-container">
+        <div class="auth-form">
+            <a href="/" class="back-link"><i class="fas fa-arrow-left"></i> Back to Home</a>
+            <i class="fas fa-plane-departure logo-icon"></i>
+            <h2>Welcome Back!</h2>
+            <p class="subtitle">Login to continue your journey</p>
+            <form id="loginForm">
+                {% csrf_token %}
+                <div class="form-group">
+                    <i class="fas fa-envelope"></i>
+                    <input type="text" id="username" placeholder="Username" required />
+                </div>
+                <div class="form-group">
+                    <i class="fas fa-lock"></i>
+                    <input type="password" id="password" placeholder="Password" required />
+                </div>
+                <button type="submit" id="loginBtn">Login</button>
+                <div id="errorMessage" style="color: red; margin-top: 15px; display: none; text-align: center;"></div>
+                <div id="successMessage" style="color: green; margin-top: 15px; display: none; text-align: center;"></div>
+            </form>
+            <p>Don't have an account? <a href="/signup/">Sign up here</a></p>
+        </div>
+    </div>
+
+    <script>
+        async function login(event) {
+            event.preventDefault();
             
-            // Check if response is HTML (error page) instead of JSON
-            const contentType = response.headers.get('content-type');
-            if (!contentType || !contentType.includes('application/json')) {
-                const text = await response.text();
-                errorDiv.textContent = 'Server error. Please try again or contact support.';
+            const username = document.getElementById('username').value.trim();
+            const password = document.getElementById('password').value;
+            const errorDiv = document.getElementById('errorMessage');
+            const successDiv = document.getElementById('successMessage');
+            const loginBtn = document.getElementById('loginBtn');
+            
+            // Clear previous messages
+            errorDiv.style.display = 'none';
+            successDiv.style.display = 'none';
+            
+            // Basic validation
+            if (!username || !password) {
+                errorDiv.textContent = 'Please enter both username and password';
                 errorDiv.style.display = 'block';
-                loginBtn.textContent = 'Login';
-                loginBtn.disabled = false;
-                console.error('Non-JSON response:', text.substring(0, 200));
                 return;
             }
             
-            const data = await response.json();
+            // Show loading
+            loginBtn.textContent = 'Logging in...';
+            loginBtn.disabled = true;
             
-            if (response.ok && data.token) {
-                // Store auth data
-                localStorage.setItem('authToken', data.token);
-                localStorage.setItem('user', JSON.stringify(data.user));
+            try {
+                const response = await fetch('/api/users/login/', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        username: username,
+                        password: password
+                    })
+                });
                 
-                successDiv.textContent = 'Login successful! Redirecting...';
-                successDiv.style.display = 'block';
+                // Check if response is HTML (error page) instead of JSON
+                const contentType = response.headers.get('content-type');
+                if (!contentType || !contentType.includes('application/json')) {
+                    const text = await response.text();
+                    errorDiv.textContent = 'Server error. Please try again or contact support.';
+                    errorDiv.style.display = 'block';
+                    loginBtn.textContent = 'Login';
+                    loginBtn.disabled = false;
+                    console.error('Non-JSON response:', text.substring(0, 200));
+                    return;
+                }
                 
-                // Redirect to profile or home
-                setTimeout(() => {
-                    window.location.href = '/profile/';
-                }, 1000);
-            } else {
-                // Show error
-                errorDiv.textContent = data.error || 'Login failed. Please check your credentials.';
+                const data = await response.json();
+                
+                if (response.ok && data.token) {
+                    // Store auth data
+                    localStorage.setItem('authToken', data.token);
+                    localStorage.setItem('user', JSON.stringify(data.user));
+                    
+                    successDiv.textContent = 'Login successful! Redirecting...';
+                    successDiv.style.display = 'block';
+                    
+                    // Redirect to profile or home
+                    setTimeout(() => {
+                        window.location.href = '/profile/';
+                    }, 1000);
+                } else {
+                    // Show error
+                    errorDiv.textContent = data.error || 'Login failed. Please check your credentials.';
+                    errorDiv.style.display = 'block';
+                    loginBtn.textContent = 'Login';
+                    loginBtn.disabled = false;
+                }
+            } catch (e) {
+                errorDiv.textContent = 'Error: ' + e.message + '. Please check your connection.';
                 errorDiv.style.display = 'block';
                 loginBtn.textContent = 'Login';
                 loginBtn.disabled = false;
+                console.error('Login error:', e);
             }
-        } catch (e) {
-            errorDiv.textContent = 'Error: ' + e.message + '. Please check your connection.';
-            errorDiv.style.display = 'block';
-            loginBtn.textContent = 'Login';
-            loginBtn.disabled = false;
-            console.error('Login error:', e);
         }
-    }
-    
-    document.getElementById('loginForm').addEventListener('submit', login);
-    
-    // Check if already logged in
-    if (localStorage.getItem('authToken')) {
-        window.location.href = '/profile/';
-    }
-</script>
-
-<style>
-    body {
-        font-family: 'Poppins', sans-serif;
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
-        min-height: 100vh;
-    }
-    
-    main {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        min-height: calc(100vh - 80px);
-    }
-</style>
-{% endblock %}
-
+        
+        document.getElementById('loginForm').addEventListener('submit', login);
+        
+        // Check if already logged in
+        if (localStorage.getItem('authToken')) {
+            window.location.href = '/profile/';
+        }
+    </script>
+</body>
+</html>
